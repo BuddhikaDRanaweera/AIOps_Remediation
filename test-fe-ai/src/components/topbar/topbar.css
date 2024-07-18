@@ -1,0 +1,29 @@
+.top-bar {
+  background: #444a4e;
+  height: 75px;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #252525;
+  margin-bottom: 15px;
+}
+
+.logo img {
+  height: 30px;
+  margin-left: 20px;
+  margin-top: 10px;
+}
+
+.icons-container {
+  display: flex;
+  align-items: center;
+}
+
+.backto-home {
+  color: #e4e4e4;
+  font-size: 22px;
+  cursor: pointer;
+  margin-right: 25px; /* Reduce margin to bring icons closer */
+  margin-top: 11px;
+}

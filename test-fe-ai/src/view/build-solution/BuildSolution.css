@@ -1,0 +1,455 @@
+/* .build-solution-container {
+  width: 98%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 2px auto;
+} */
+
+.build-solution-header {
+  background-color: #0f0f80;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.build-solution-header h2 {
+  margin: 0;
+}
+
+.build-solution-content h2 {
+  margin-top: 15px;
+  margin-bottom: 8px;
+  margin-left: 10px;
+  text-align: left;
+}
+
+.build-solution-actions {
+  display: flex;
+  justify-content: space-around;
+  /* Adjust as needed */
+  margin-top: 10px;
+}
+
+.build-solution-action {
+  flex: 1;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 15px;
+  cursor: pointer;
+  background-color: #f0f0f0;
+  margin: 0 5px;
+  max-width: 300px;
+}
+
+.build-solution-action.selected {
+  color: rgb(0, 0, 0);
+  border-color: #0f0f80;
+  border-width: 2px;
+}
+
+
+
+.build-solution-action h4 {
+  margin: 0;
+}
+
+.build-solution-action p {
+  font-size: smaller;
+}
+
+.build-solution-description {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 15px;
+  margin-top: 20px;
+  text-align: center;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+
+
+
+/* //////////////////////////// */
+.create-custom-script-container {
+  display: flex;
+  height: 100vh;
+  /* Adjust this as needed */
+  width: 100%;
+}
+
+.create-custom-script-left-panel {
+  width: 60%;
+  height: 95%;
+  padding: 20px;
+  /* Add padding if needed */
+  box-sizing: border-box;
+}
+
+.create-custom-script-right-panel {
+  width: 40%;
+  height: 95%;
+  padding: 20px;
+  /* Add padding if needed */
+  box-sizing: border-box;
+}
+
+.custom-script {
+  width: auto;
+  height: 95%;
+  margin: 0;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.custom-script h2 {
+  text-align: center;
+  margin-top: 5px;
+}
+
+.custom-script p {
+  text-align: left;
+  margin-bottom: 15px;
+}
+
+.custom-script-editor {
+  width: 97%;
+  height: 65%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: vertical;
+  /* background-color: black;
+  color: #f0f0f0; */
+}
+
+.custom-script-button {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+/* button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #0f0f80;
+  color: white;
+  margin-top: 0px;
+} */
+
+
+
+/* //////////////////////// */
+.build-solution-with-library {
+  width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.library-search-bar {
+  margin-bottom: 20px;
+}
+
+.library-search-bar input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.library-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.library-item {
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f8f8f8;
+}
+
+.library-item-header {
+  display: flex;
+  /* justify-content: space-between; */
+  align-items: center;
+  cursor: pointer;
+}
+
+.library-item-icon {
+  margin-right: 15px;
+  font-size: 20px;
+}
+
+.library-item-title {
+  font-weight: bold;
+}
+
+.library-item-toggle {
+  font-size: 16px;
+  font-weight: bold;
+  margin-left: auto;
+}
+
+.library-item-content {
+  display: flex;
+  align-items: flex-start;
+  /* Adjust alignment to start to stack elements vertically */
+  flex-direction: column;
+  /* Change to column direction to stack items vertically */
+  margin-top: 10px;
+  /* Add space between header and content */
+}
+
+.library-item-input {
+  display: flex;
+  flex-direction: column;
+  /* Stack children vertically */
+  align-items: flex-start;
+  /* Align children to the start of the container */
+  width: 100%;
+}
+
+.input-wrapper {
+  width: 100%;
+  /* Make input wrapper take full width */
+}
+
+.library-item-input input {
+  width: 100%;
+  /* Make input take full width */
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+  /* Add space between input and button */
+}
+
+.button-wrapper {
+  width: 30%;
+  /* Make button wrapper take full width */
+  margin-left: auto;
+}
+
+.add-to-solution-button {
+  width: 100%;
+  /* Make button take full width */
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #0f0f80;
+  color: white;
+  cursor: pointer;
+}
+
+
+.selected-libraries {
+  margin-top: 20px;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f8f8f8;
+}
+
+.selected-libraries h2 {
+  margin-bottom: 10px;
+}
+
+.selected-libraries ul {
+  list-style: none;
+  padding: 0;
+}
+
+.selected-libraries li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.build-review {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.build-button,
+.review-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #0f0f80;
+  color: white;
+  cursor: pointer;
+}
+
+.reset-save {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.reset-button,
+.save-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #0f0f80;
+  color: white;
+  cursor: pointer;
+}
+
+
+
+/* //////////////////////////////////////// */
+.solution-repository-container {
+  display: flex;
+  flex-direction: column;
+  /* align-items: center;
+  text-align: center; */
+  /* width: 900px; */
+  width: auto;
+  height: 95%;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  overflow: auto;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 2px;
+  font-size: large;
+}
+
+h2 {
+  align-self: flex-start;
+  text-align: left;
+  width: 100%;
+}
+
+.solution-repository-container p {
+  margin-top: 2px;
+  text-align: center;
+}
+
+.solution-repository-search-bar {
+  /* width: 98%; */
+  margin: 35px 3px 20px 3px;
+}
+
+.solution-repository-search-bar input {
+  width: 95%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+
+.solution-repository-categories {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+}
+
+.tab {
+  cursor: pointer;
+  margin: 0 10px;
+}
+
+.tabcontent {
+  display: none;
+}
+
+.solution-repository-solutions {
+  margin-top: 20px;
+}
+
+.solution-repository-solution {
+  width: 30%;
+  text-align: center;
+  display: inline-block;
+  vertical-align: top;
+  margin: 0 30px 30px;
+  /* Adjusted margin to increase the gap between boxes */
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+.solution-box {
+  width: 100%;
+  height: 100px;
+  border: 1px solid #ccc;
+  background-color: white;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+}
+
+
+.solution-box i {
+  font-size: 36px;
+  /* Adjust the size of the icon as needed */
+  color: #0f0f80;
+}
+
+.solution-repository-solution h3 {
+
+  text-align: center;
+}
+
+/* Default open tab */
+#tab-all {
+  display: block;
+}
+
+.solution-repository-solution-view {
+  justify-self: start;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+ul li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+ul li i {
+  margin-right: 15px;
+  cursor: pointer;
+  color: #0f0f80;
+}
+
+ul li span {
+  justify-self: start;
+  cursor: pointer;
+}

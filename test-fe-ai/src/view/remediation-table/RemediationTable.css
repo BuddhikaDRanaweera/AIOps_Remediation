@@ -1,0 +1,48 @@
+/* execution-dashboard.css */
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.table-name-description {
+  flex-grow: 1;
+}
+.remediation-table-description {
+  font-size: 14px;
+  color: #c0c0c0;
+  margin-top: 5px;
+}
+
+.filters {
+  display: flex;
+  gap: 10px;
+}
+
+.container {
+  overflow-x: auto;
+}
+
+#execution-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#execution-table th,
+#execution-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#execution-table th {
+  background-color: #f2f2f2;
+  text-align: left;
+}
+
+.edit-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #007bff;
+}
