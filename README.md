@@ -1,15 +1,35 @@
 # AIOps Application Setup and Configuration Guide
 
 ## Introduction
-This guide provides instructions to set up the AIOps application. Follow the steps below to create the necessary database, configure the Flask app with Dynatrace integration, and start the Car microservice.
+This guide provides instructions to set up the AIOps application. Follow the steps below to install necessary packages, create the database, configure the Flask app with Dynatrace integration, and start the Car microservice.
 
 ## Prerequisites
-- MySQL Server installed
-- Flask installed
-- Dynatrace account
-- Java installed
+- Ubuntu operating system
+- Root or sudo access
 
-## Step 1: Create the Database
+## Step 1: Install Required Packages
+
+1. **Update Package List:**
+    ```sh
+    sudo apt-get update
+    ```
+
+2. **Install Apache2:**
+    ```sh
+    sudo apt-get install apache2 -y
+    ```
+
+3. **Install MySQL:**
+    ```sh
+    sudo apt-get install mysql-server -y
+    ```
+
+4. **Install Python and pip:**
+    ```sh
+    sudo apt-get install python3 python3-pip python3-venv -y
+    ```
+
+## Step 2: Create the Database
 
 1. Open MySQL command line or a MySQL client tool.
 2. Execute the following command to create the `aiops` database:
@@ -24,7 +44,24 @@ This guide provides instructions to set up the AIOps application. Follow the ste
     ```
 4. All necessary tables will be automatically created when the application is run for the first time.
 
-## Step 2: Configure Flask App for Dynatrace Integration
+## Step 3: Set Up and Run the Flask App
+
+1. Navigate to the directory containing the Flask application.
+2. Create and activate a virtual environment:
+    ```sh
+    python3 -m venv venv
+    source venv/bin/activate
+    ```
+3. Install the required Python packages:
+    ```sh
+    pip install -r requirements.txt
+    ```
+4. Run the Flask app:
+    ```sh
+    python run.py
+    ```
+
+## Step 4: Configure Flask App for Dynatrace Integration
 
 1. Determine the IP address of the machine where the Flask app is running.
 2. Update the Dynatrace integration webhook URL with the Flask app IP:
@@ -33,7 +70,7 @@ This guide provides instructions to set up the AIOps application. Follow the ste
     ```
     Replace `<IP>` with the actual IP address of your Flask app.
 
-## Step 3: Start Car Microservice
+## Step 5: Start Car Microservice
 
 1. Navigate to the `troubleshoot` directory:
     ```sh
@@ -53,7 +90,3 @@ This guide provides instructions to set up the AIOps application. Follow the ste
 ## Conclusion
 
 By following these steps, you should have the AIOps application up and running with the necessary database, Dynatrace integration, and Car microservice. For further assistance, refer to the application's documentation or contact support.
-
----
-
-Feel free to reach out if you need any additional help!
