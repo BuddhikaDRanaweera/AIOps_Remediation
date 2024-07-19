@@ -155,3 +155,37 @@ def save_solution_as_draft():
     except Exception as e:
         logger.error(f"Error processing request: {e}")
         return jsonify({"status": "error", "message": "Error processing request"}), 500
+
+
+@script_bp.route('/v2/save-as-rule-direct', methods=['POST'])
+def save_solution_as_rule_direct():
+    try:
+        # Parse the incoming JSON data
+        data = request.json
+        file_name = data.get('fileName', 'default_solution')
+        description = data.get('description',"No")
+        script = data.get('content')
+        parameter = data.get('parameter',None)
+        parameterValues = data.get('parameterValues',None)
+        recommendation_text = data.get('recommendation')
+        service_name = data.get('serviceName')
+        problem_id = data.get('problemId')
+        problem_title = data.get('problemTitle')
+        print(script)
+        # Save the data to a JSON file
+        file_path = save_script_to_directory("sh", file_name, script)
+
+        if file_path:
+            saveScriptToLib(file_name,description,parameter,parameterValues,scriptPath=file_path,category="")
+            if(execute_script_ssh(file_path, parameterValues)):
+                create_remediation(recommendation_text, file_path, problem_id, parameterValues)
+                update_status_by_id(problem_id)
+                update_in_progress_records_in_Audit_manual_exe(service_name, problem_id, problem_title)
+                return "Remediation & Script Saved Successfully", 201
+            else:
+                return "Cannot run script", 403
+        else:
+            return jsonify({"status": "error", "message": "Failed to save data"}), 500
+    except Exception as e:
+        logger.error(f"Error processing request: {e}")
+        return jsonify({"status": "error", "message": "Error processing request"}), 500
