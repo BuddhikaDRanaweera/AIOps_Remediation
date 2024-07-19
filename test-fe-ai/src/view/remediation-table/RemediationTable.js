@@ -4,7 +4,7 @@ import { FaEdit } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import RemediationConfirmation from "../../components/modal/RemediationConfirmation";
 import useFetch_GET from "../../services/http/Get";
-import "./RemediationTable.css";
+// import "./RemediationTable.css";
 
 const RemediationTable = () => {
   const [data, setData] = useState([]);
@@ -41,10 +41,10 @@ const RemediationTable = () => {
           remediationId={deleteObj?.remediationId}
         />
       )}
-      <div className="table-header">
-        <div>
-          <h2 className="table-name">Remediation Records</h2>
-          <p className="remediation-table-description">
+      <div>
+        <div className="text-start px-5 py-2">
+          <h2 className="font-semibold text-lg">Remediation Records</h2>
+          <p className=" text-sm">
             View the details of remediation actions.
           </p>
         </div>
@@ -61,34 +61,34 @@ const RemediationTable = () => {
           </select>
         </div> */}
       </div>
-      <div className="container">
-        <table id="execution-table">
-          <thead>
-            <tr>
-              <th>ProblemId</th>
-              <th>Problem Title</th>
-              <th>Sub-problem</th>
-              <th>Resolution Script</th>
-              <th>Recommendation</th>
-              <th>Create Date</th>
-              <th>Last Update</th>
-              <th>Owner</th>
-              <th>Edit</th>
-              <th>Delete</th>
+      <div className="px-5 py-2 w-full">
+        <table className="w-full bg-white  rounded-md overflow-hidden shadow-sm shadow-slate-400 text-sm text-left rtl:text-right text-gray-500">
+          <thead className="text-xs bg-main text-white uppercase ">
+            <tr className="">
+              <th className="px-6 py-3">ProblemId</th>
+              <th className="px-6 py-3">Problem Title</th>
+              <th className="px-6 py-3">Sub-problem</th>
+              <th className="px-6 py-3">Resolution Script</th>
+              <th className="px-6 py-3">Recommendation</th>
+              <th className="px-6 py-3">Create Date</th>
+              <th className="px-6 py-3">Last Update</th>
+              <th className="px-6 py-3">Owner</th>
+              <th className="px-6 py-3">Edit</th>
+              <th className="px-6 py-3">Delete</th>
             </tr>
           </thead>
           <tbody>
             {filteredData?.map((item) => (
-              <tr key={item.id}>
-                <td>{item.problemId}</td>
-                <td>{item.problemTitle}</td>
-                <td>{item.subProblemTitle || "N/A"}</td>
-                <td>{item.scriptPath}</td>
-                <td>{item.recommendationText}</td>
-                <td>{item.createdAt}</td>
-                <td>{item.lastUpdateAt}</td>
-                <td>{item.Owner} John</td>
-                <td>
+              <tr className="" key={item.id}>
+                <td className="p-2 text-center">{item.problemId}</td>
+                <td className="p-2 text-start">{item.problemTitle}</td>
+                <td className="p-2 text-start">{item.subProblemTitle || "N/A"}</td>
+                <td className="p-2 text-start">{item.scriptPath}</td>
+                <td className="p-2 text-start">{item.recommendationText}</td>
+                <td className="p-2 text-start">{item.createdAt}</td>
+                <td className="p-2 text-start">{item.lastUpdateAt}</td>
+                <td className="p-2 text-start">{item.Owner} John</td>
+                <td className="p-2 text-center">
                   <button
                     className="edit-button"
                     onClick={() => {
@@ -97,10 +97,10 @@ const RemediationTable = () => {
                       );
                     }}
                   >
-                    <FaEdit />
+                    <FaEdit className="text-2xl hover:text-main" />
                   </button>
                 </td>
-                <td>
+                <td className="p-2 text-center">
                   <button
                     className="edit-button"
                     onClick={() => {
@@ -111,7 +111,7 @@ const RemediationTable = () => {
                       });
                     }}
                   >
-                    <DeleteIcon />
+                    <DeleteIcon  className="text-2xl hover:text-main"  />
                   </button>
                 </td>
               </tr>

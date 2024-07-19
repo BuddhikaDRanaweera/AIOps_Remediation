@@ -5,7 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
 import useFetch_GET from "../../services/http/Get";
 import useFetch_POST from "../../services/http/Post";
-import "./RemidiationForm.css";
+
 
 const EditRuleForm = () => {
   const { isLoading, error, data, postData } = useFetch_POST();

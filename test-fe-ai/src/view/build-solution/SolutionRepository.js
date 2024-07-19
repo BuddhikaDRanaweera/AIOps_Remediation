@@ -7,6 +7,7 @@ import useFetch_POST from "../../services/http/Post";
 // import "./BuildSolution.css";
 
 function SolutionRepository({ handleInputChange, setPath }) {
+
   const { isLoading, error, data, getData } = useFetch_GET();
   let {
     isLoading: postLoading,
@@ -18,6 +19,7 @@ function SolutionRepository({ handleInputChange, setPath }) {
   const [activeSolution, setActiveSolution] = useState(null);
 
   const [parm, setParm] = useState([]);
+  
   const openTab = (tabName) => {
     setActiveTab(tabName);
     setActiveSolution(null); // Reset active solution when changing tabs
@@ -104,6 +106,7 @@ function SolutionRepository({ handleInputChange, setPath }) {
             </form>
           </div>
         </div>
+
         <div className="h-[calc(100vh-240px)] overflow-auto">
           {data && (
             <>

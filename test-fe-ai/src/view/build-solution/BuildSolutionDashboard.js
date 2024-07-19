@@ -32,12 +32,12 @@ const QuickActions = () => {
   return (
     <>
       {selectedAction == "not selected" && (
-        <div className="px-5">
+        <div className="p-5">
           <h1 className=" text-3xl font-semibold text-start">Build Solution</h1>
           <div className="w-full flex flex-col gap-5 p-5">
             <div
               onClick={() => setSelectedAction((prev) => "customFix")}
-              className="w-full border-2 flex h-52 shadow-md cursor-pointer hover:bg-main hover:text-white shadow-slate-400 text-main p-5 rounded-md m-auto"
+              className="w-full bg-white border-2 flex h-52 shadow-md cursor-pointer hover:bg-main hover:text-white shadow-slate-400 text-main p-5 rounded-md m-auto"
             >
               <div className="my-auto text-start">
                 <h4 className=" text-3xl">Write a Custom Fix</h4>
@@ -46,7 +46,7 @@ const QuickActions = () => {
             </div>
             <div
               onClick={() => setSelectedAction((prev) => "libraryIntegration")}
-              className="w-full border-2 flex h-52 shadow-md cursor-pointer hover:bg-main hover:text-white shadow-slate-400 text-main p-5 rounded-md m-auto"
+              className="w-full border-2 bg-white flex h-52 shadow-md cursor-pointer hover:bg-main hover:text-white shadow-slate-400 text-main p-5 rounded-md m-auto"
             >
               <div className="my-auto text-start">
                 <h4 className=" text-3xl">Library Integration</h4>

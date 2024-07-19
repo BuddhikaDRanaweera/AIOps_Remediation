@@ -159,7 +159,7 @@ function BuildSolutionWithLibraries({ back }) {
     return (
       <div className="overflow-y-auto bg-blur flex overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-lvh">
         <div class="relative p-4 w-full">
-          <div class="relative bg-white rounded-lg shadow-sm shadow-black p-2 h-cust">
+          <div class="relative bg-white rounded-lg shadow-sm shadow-black p-2 h-[calc(100vh-60px)]">
             <div className="flex justify-between bg-main px-2 py-1">
               <h3 className="text-lg text-slate-500 text-start"></h3>
               <button
@@ -198,11 +198,17 @@ function BuildSolutionWithLibraries({ back }) {
               }}
             />
 
-            <div className="flex justify-end ">
-              <div class="flex justify-end gap-2 p-2 w-[500px]">
+            <div className="flex justify-between ">
+              <div className="mt-3 p-2">
+                 <h3 className="text-start font-semibold">Parameters</h3>
+                 <div className="flex gap-3">
+                    {parameters?.map((item) => (<h3 className="bg-slate-100 p-2 rounded-md">{item}</h3>))}
+                 </div>
+              </div>
+              <div class="flex mt-3 justify-end gap-2 p-2 w-[500px]">
                 <label
                   for="file"
-                  className="w-[20%] block mb-2 text-sm font-medium text-gray-900"
+                  className="w-[20%] my-auto block mb-2 text-sm font-medium text-gray-900"
                 >
                   File Name
                 </label>
@@ -211,7 +217,7 @@ function BuildSolutionWithLibraries({ back }) {
                   value={fileName}
                   type="text"
                   id="file"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:outline-none focus:ring-third block w-[50%] p-2.5"
+                  className="bg-gray-50 my-auto border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:outline-none focus:ring-third block w-[50%] p-2.5"
                   // value={value}
                   // onChange={(event) => onChange(event.target.value)}
                 />

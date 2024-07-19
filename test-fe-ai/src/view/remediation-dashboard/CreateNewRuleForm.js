@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import useFetch_POST from "../../services/http/Post";
-import "./RemidiationForm.css";
 
 const CreateNewRuleForm = () => {
   const { isLoading, error, data, postData } = useFetch_POST();
@@ -44,165 +43,148 @@ const CreateNewRuleForm = () => {
     values["status"] = "resolved";
     postData(`/save_problem`, values);
   };
+
   if (data?.status === 201) navigate("/recommendation");
 
   return (
-    <div className="middle-panel">
-      <div className="table-header">Add New Recommendation</div>
+    <div className="flex justify-center h-body ">
+      <div className="m-auto w-[50%] rounded-md overflow-hidden bg-white shadow-sm shadow-slate-400">
+        <div className="flex justify-start bg-second p-2">
+          <h3 className=" text-white">New Recommendation</h3>
+        </div>
+        <div className="p-5 mb-5">
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
+            innerRef={formikRef}
+          >
+            {({ isSubmitting }) => (
+              <Form>
+                <div className=" mb-2 md:max-w-md mx-auto">
+                  <div className="flex justify-start">
+                    <h3 className=" text-sm font-semibold">Problem Title:</h3>
+                  </div>
+                  <div>
+                    <Field
+                      className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2  focus:outline-none focus:ring-second block w-full p-2.5"
+                      name="problemTitle"
+                      type="text"
+                      title="Problem title"
+                    />
+                  </div>
+                  <div>
+                    <ErrorMessage
+                      name="problemTitle"
+                      component="div"
+                      className="text-red-500 text-xs text-start"
+                    />
+                  </div>
+                </div>
 
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={handleSubmit}
-        innerRef={formikRef}
-      >
-        {({ isSubmitting }) => (
-          <Form>
-            <div className="middle-panel-text">
-              <div className="form-value">
-                <div style={{ width: "20%", marginTop: "10px" }}>
-                  <p className="recommendation-title">
-                    <strong>Problem Title: </strong>
-                  </p>
+                <div className="flex flex-col mb-2 md:max-w-md mx-auto">
+                  <div className="flex justify-start">
+                    <h3 className=" text-sm font-semibold">Sub-Problem:</h3>
+                  </div>
+                  <div>
+                    <Field
+                      className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2  focus:outline-none focus:ring-second block w-full p-2.5"
+                      name="subProblemTitle"
+                      type="text"
+                      title="Sub-Problem"
+                    />
+                  </div>
+                  <div>
+                    <ErrorMessage
+                      name="subProblemTitle"
+                      component="div"
+                      className="text-red-500 text-xs text-start"
+                    />
+                  </div>
                 </div>
-                <div
-                  style={{
-                    width: "80%",
-                    display: "flex",
-                    justifyContent: "start",
-                    marginTop: "10px",
-                  }}
+
+                <div className="flex flex-col mb-2  md:max-w-md mx-auto">
+                  <div className="flex justify-start">
+                    <h3 className=" text-sm font-semibold">Service Name:</h3>
+                  </div>
+                  <div>
+                    <Field
+                      className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2  focus:outline-none focus:ring-second block w-full p-2.5"
+                      name="serviceName"
+                      type="text"
+                      title="Service-Name"
+                    />
+                  </div>
+                  <div>
+                    <ErrorMessage
+                      name="serviceName"
+                      component="div"
+                      className="text-red-500 text-xs text-start"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex flex-col mb-2 md:max-w-md mx-auto">
+                  <div className="flex justify-start">
+                    <h3 className=" text-sm font-semibold">Resolution Script:</h3>
+                  </div>
+                  <div>
+                    <Field
+                      className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2  focus:outline-none focus:ring-second block w-full p-2.5"
+                      name="resolutionScript"
+                      type="text"
+                      title="Resolution script"
+                    />
+                  </div>
+                  <div>
+                    <ErrorMessage
+                      name="resolutionScript"
+                      component="div"
+                      className="text-red-500 text-xs  text-start"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex flex-col mb-4 md:max-w-md mx-auto">
+                  <div className="flex justify-start">
+                    <h3 className=" text-sm font-semibold">Recommendation:</h3>
+                  </div>
+                  <div>
+                    <Field
+                      className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2  focus:outline-none focus:ring-second block w-full p-2.5"
+                      name="recommendation"
+                      type="text"
+                      title="Recommendation"
+                    />
+                  </div>
+                  <div>
+                    <ErrorMessage
+                      name="recommendation"
+                      component="div"
+                      className="text-red-500 text-xs text-start"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex flex-col mb-2  md:max-w-md mx-auto">
+                <button
+                  type="submit"
+                  className="text-white w-full bg-main hover:bg-indigo-900 focus:ring-2 focus:outline-none focus:ring-indigo-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  disabled={isSubmitting}
                 >
-                  <Field
-                    className="new-rule-input-box"
-                    name="problemTitle"
-                    type="text"
-                    title="Problem title"
-                  />
-                  <ErrorMessage
-                    name="problemTitle"
-                    component="div"
-                    className="error"
-                  />
+                  Submit
+                </button>
                 </div>
-              </div>
-              <div className="form-value">
-                <div style={{ width: "20%", marginTop: "10px" }}>
-                  <p className="recommendation-title">
-                    <strong>Sub-Problem: </strong>
-                  </p>
-                </div>
-                <div
-                  style={{
-                    width: "80%",
-                    display: "flex",
-                    justifyContent: "start",
-                    marginTop: "10px",
-                  }}
-                >
-                  <Field
-                    className="new-rule-input-box"
-                    name="subProblemTitle"
-                    type="text"
-                    title="Sub-Problem"
-                  />
-                  <ErrorMessage
-                    name="subProblemTitle"
-                    component="div"
-                    className="error"
-                  />
-                </div>
-              </div>
-              <div className="form-value">
-                <div style={{ width: "20%", marginTop: "10px" }}>
-                  <p className="recommendation-title">
-                    <strong>Service Name: </strong>
-                  </p>
-                </div>
-                <div
-                  style={{
-                    width: "80%",
-                    display: "flex",
-                    justifyContent: "start",
-                    marginTop: "10px",
-                  }}
-                >
-                  <Field
-                    className="new-rule-input-box"
-                    name="serviceName"
-                    type="text"
-                    title="Service-Name"
-                  />
-                  <ErrorMessage
-                    name="serviceName"
-                    component="div"
-                    className="error"
-                  />
-                </div>
-              </div>
-              <div className="form-value">
-                <div style={{ width: "20%", marginTop: "10px" }}>
-                  <p className="recommendation-title">
-                    <strong>Resolution Script: </strong>
-                  </p>
-                </div>
-                <div
-                  style={{
-                    width: "80%",
-                    display: "flex",
-                    justifyContent: "start",
-                    marginTop: "10px",
-                  }}
-                >
-                  <Field
-                    className="new-rule-input-box"
-                    name="resolutionScript"
-                    type="text"
-                    title="Resolution script"
-                  />
-                  <ErrorMessage
-                    name="resolutionScript"
-                    component="div"
-                    className="error"
-                  />
-                </div>
-              </div>
-              <div className="form-value">
-                <div style={{ width: "20%", marginTop: "10px" }}>
-                  <p className="recommendation-title">
-                    <strong>Recommendation: </strong>
-                  </p>
-                </div>
-                <div
-                  style={{
-                    width: "80%",
-                    display: "flex",
-                    justifyContent: "start",
-                    marginTop: "10px",
-                  }}
-                >
-                  <Field
-                    className="new-rule-input-box"
-                    name="recommendation"
-                    type="text"
-                    title="Recommendation"
-                  />
-                  <ErrorMessage
-                    name="recommendation"
-                    component="div"
-                    className="error"
-                  />
-                </div>
-              </div>
-            </div>
-            <button type="submit" className="button" disabled={isSubmitting}>
-              Submit
-            </button>
-          </Form>
-        )}
-      </Formik>
+
+
+              </Form>
+            )}
+          </Formik>
+        </div>
+      </div>
     </div>
   );
 };
 
 export default CreateNewRuleForm;
+

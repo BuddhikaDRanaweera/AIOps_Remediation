@@ -1,25 +1,17 @@
-import {
-  Button,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { FaPenClip } from "react-icons/fa6";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   clearGlobalLoading,
   setGlobalLoading,
 } from "../../app/features/loading/LoadingSlice";
-import ProblemOverviewCard from "../../components/cards/ProblemOverviewCard";
 import useFetch_GET from "../../services/http/Get";
-import "./ProblemDetail.css";
+import { MdSettingsSuggest } from "react-icons/md";
+import { IoIosApps } from "react-icons/io";
+import { GrServices } from "react-icons/gr";
+import { FaServer } from "react-icons/fa";
+import { FaEdit } from "react-icons/fa";
 
 const ProblemDetail = () => {
   const { PID, ExecutionId } = useParams();
@@ -29,9 +21,10 @@ const ProblemDetail = () => {
   const navigate = useNavigate();
   const [data, setData] = useState();
   console.log(apiData);
-  const url = `https://zvq81199.live.dynatrace.com/api/v2/problems/${PID}`;
+  const url = `https://xdy01853.live.dynatrace.com/api/v2/problems/${PID}`;
+  // https://xdy01853.live.dynatrace.com/api/v2/apiTokens
   const apiKey =
-    "dt0c01.LR6CLRORJDDG566FNMMHLZ3M.VRNMEMKK4OSEQGVYJ4YFPK7KIBXV7IFZGFMODWOSNQHODGSHCSELGCQ7XSJBGF67";
+    "dt0c01.G3D2TIY7NMUIHB7EA3HIWHZJ.RPT7F6SRAJGFZRKS3K5BLVCC7RQKE3HRAHUNEWNUNZY7QMF5W3WMFKRHYMDTWFOV";
 
   const getDate = (time) => {
     const date = new Date(time);
@@ -71,7 +64,7 @@ const ProblemDetail = () => {
             "Api-Token": apiKey,
           },
         });
-        console.log(response.data);
+        console.log(response.data, "incident data");
         setData(response.data);
       } catch (error) {
         alert(error.message);
@@ -88,236 +81,196 @@ const ProblemDetail = () => {
     getData(`/problem_recommendations/${ExecutionId}/${PID}`);
   }, [data]);
   return (
-    <div>
-      {/* Row 1 */}
-      <div className="problem-id">
-        <strong>ID: </strong>
-        <label id="displayId" name="displayId">
-          {data?.displayId}
-        </label>
-      </div>
-      <section className="section">
-        <div className="two-column-layout">
-          <TableContainer component={Paper} sx={{ maxWidth: "40%" }}>
-            <Table>
-              <TableBody>
-                <TableRow>
-                  <TableCell sx={{ borderBottom: "none", width: "30%" }}>
-                    <strong>Title:</strong>
-                  </TableCell>
-                  <TableCell sx={{ borderBottom: "none", width: "75%" }}>
-                    {data?.title}
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell sx={{ borderBottom: "none" }}>
-                    <strong>Problem ID:</strong>
-                  </TableCell>
-                  <TableCell sx={{ borderBottom: "none" }}>
-                    {data?.displayId}
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell sx={{ borderBottom: "none" }}>
-                    <strong>Problem Detected Time:</strong>
-                  </TableCell>
-                  <TableCell sx={{ borderBottom: "none" }}>
-                    {data && getDate(data?.startTime)}
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell sx={{ borderBottom: "none" }}>
-                    <strong>Problem Analysis End Date:</strong>
-                  </TableCell>
-                  <TableCell sx={{ borderBottom: "none" }}>
-                    {data &&
-                      (data?.endTime == "-1" ? "-" : getDate(data?.endTime))}
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell sx={{ borderBottom: "none" }}>
-                    <strong>Total Down Time:</strong>
-                  </TableCell>
-                  <TableCell sx={{ borderBottom: "none" }}>
-                    {data && getDownTime()}
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell sx={{ borderBottom: "none" }}>
-                    <strong>Impact Level:</strong>
-                  </TableCell>
-                  <TableCell sx={{ borderBottom: "none" }}>
-                    {data?.impactLevel}
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell sx={{ borderBottom: "none" }}>
-                    <strong>Severity Level:</strong>
-                  </TableCell>
-                  <TableCell sx={{ borderBottom: "none" }}>
-                    {data?.severityLevel}
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell sx={{ borderBottom: "none" }}>
-                    <strong>Status:</strong>
-                  </TableCell>
-                  <TableCell sx={{ borderBottom: "none" }}>
-                    {data?.status}
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell sx={{ borderBottom: "none" }}>
-                    <strong>Root Cause ID:</strong>
-                  </TableCell>
-                  <TableCell sx={{ borderBottom: "none" }}>
-                    {data?.rootCauseEntity?.entityId?.id || "-"}
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell sx={{ borderBottom: "none" }}>
-                    <strong>Entity Name:</strong>
-                  </TableCell>
-                  <TableCell sx={{ borderBottom: "none" }}>
-                    {data?.rootCauseEntity?.name || "-"}
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <div className="additional-content">
-            {/* Add your additional content here */}
-            <ProblemOverviewCard data={data} />
-            {/* <ImpactedCardComponent data={data} /> */}
-          </div>
-        </div>
-      </section>
+    <div className=" flex flex-col gap-1 justify-start">
+      <div className="flex flex-row justify-between gap-2 px-5 pt-5 pb-5">
+        <div className="w-[75%]">
+          <div className="mx-auto p-5 w-full bg-white rounded-lg shadow-sm shadow-slate-400">
+            <div className="flex gap-2 mb-5 text-start text-lg text-main font-semibold">
+              <MdSettingsSuggest className="my-auto text-3xl" />
+              <h3 className=" text-xl my-auto">
+                {data?.impactedEntities[0].name} {data?.title}
+              </h3>
+            </div>
+            <div className="flex flex-wrap gap-10">
+              <div>
+                <h3 className="text-start text-xs font-semibold">Problem Id</h3>
+                <h3 className=" text-start text-lg">{data?.displayId}</h3>
+              </div>
 
-      {/* <section className="section-2">
-        <div className="affected-sections">
-          <div className="affected-section">
-            <div className="section-content">
-              <img
-                src={applicationsIcon}
-                alt="Applications Icon"
-                width="24"
-                height="24"
-              />
-              <label htmlfor="title">
-                <strong>Affected applications:</strong>
-              </label>
-            </div>
-            <div className="section-label">
-              <p>
-                <b>ID:</b> {data?.affectedEntities[0].entityId.id}
-              </p>
-              <p>
-                <b>Type:</b> {data?.affectedEntities[0].entityId.type}
-              </p>
-              <p>
-                <b>Name:</b> {data?.affectedEntities[0].name}
-              </p>
-            </div>
-          </div>
-          <div className="affected-section">
-            <div className="section-content">
-              <img
-                src={servicesIcon}
-                alt="Services Icon"
-                width="24"
-                height="24"
-              />
-              <label htmlfor="title">
-                <strong>Affected services:</strong>
-              </label>
-            </div>
-            <div className="section-label">
-              <p>ID: Type:</p>
-              <p>Name</p>
-            </div>
-          </div>
-          <div className="affected-section">
-            <div className="section-content">
-              <img
-                src={infrastructureIcon}
-                alt="Infrastructure Icon"
-                width="24"
-                height="24"
-              />
-              <label htmlfor="title">
-                <strong>Affected infrastructure:</strong>
-              </label>
-            </div>
-            <div className="section-label">
-              <p>ID: Type:</p>
-              <p>Name</p>
+              <div>
+                <h3 className="text-start text-xs font-semibold">
+                  Detected Time
+                </h3>
+                <h3 className=" text-start text-lg">
+                  {data && getDate(data?.startTime)}
+                </h3>
+              </div>
+
+              <div>
+                <h3 className="text-start text-xs font-semibold">
+                  Analysis End Date
+                </h3>
+                <h3 className=" text-start text-lg">
+                  {data &&
+                    (data?.endTime == "-1" ? "-" : getDate(data?.endTime))}
+                </h3>
+              </div>
+
+              <div>
+                <h3 className="text-start text-xs font-semibold">
+                  Total Down Time
+                </h3>
+                <h3 className=" text-start text-lg">{data && getDownTime()}</h3>
+              </div>
+
+              <div>
+                <h3 className="text-start text-xs font-semibold">
+                  Impact Level
+                </h3>
+                <h3 className=" text-start text-lg">{data?.impactLevel}</h3>
+              </div>
+
+              <div>
+                <h3 className="text-start text-xs font-semibold">
+                  Severity Level
+                </h3>
+                <h3 className=" text-start text-lg">{data?.severityLevel}</h3>
+              </div>
+
+              <div>
+                <h3 className="text-start text-xs font-semibold">Status</h3>
+                <h3 className=" text-start text-lg">{data?.status}</h3>
+              </div>
+
+              <div>
+                <h3 className="text-start text-xs font-semibold">
+                  Root Cause ID
+                </h3>
+                <h3 className=" text-start text-lg">
+                  {data?.rootCauseEntity?.entityId?.id || "-"}
+                </h3>
+              </div>
+
+              <div>
+                <h3 className="text-start text-xs font-semibold">
+                  Entity Name
+                </h3>
+                <h3 className=" text-start text-lg">
+                  {data?.rootCauseEntity?.name || "-"}
+                </h3>
+              </div>
+
+              <div>
+                <h3 className="text-start text-xs font-semibold">
+                  Problem description
+                </h3>
+                <h3 className=" text-start text-lg">
+                  {data?.evidenceDetails?.details[0]?.data?.properties[0].value}
+                </h3>
+              </div>
             </div>
           </div>
         </div>
-      </section> */}
-      <section className="section-3">
-        <h3>Remediation Details</h3>
-        <br />
-        <div className="table-container">
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 400 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>
-                    <strong>Problem Title</strong>
-                  </TableCell>
-                  <TableCell>
-                    <strong>Recommendation</strong>
-                  </TableCell>
-                  <TableCell>
-                    <strong>Service Name</strong>
-                  </TableCell>
-                  <TableCell>
-                    <strong>Sub Problem Title</strong>
-                  </TableCell>
-                  <TableCell>
-                    <strong>Remediation Execution Start Time</strong>
-                  </TableCell>
-                  <TableCell>
-                    <strong>Remediation Execution End Time</strong>
-                  </TableCell>
-                  {/* <TableCell>ID</TableCell> */}
-                  <TableCell>
-                    <strong>Script Path</strong>
-                  </TableCell>
-                  <TableCell>
-                    <strong>Edit</strong>
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {apiData?.map((item, index) => (
-                  <TableRow key={index}>
-                    <TableCell>{item.problemTitle}</TableCell>
-                    <TableCell>{item.recommendationText}</TableCell>
-                    <TableCell>{item.serviceName}</TableCell>
-                    <TableCell>{item.subProblemTitle}</TableCell>
-                    <TableCell>{item.scriptExecutionStartAt}</TableCell>
-                    <TableCell>{item.problemEndAt}</TableCell>
-                    <TableCell>{item.scriptPath}</TableCell>
-                    <TableCell>
-                      <Button
-                        onClick={() => {
-                          navigate(
-                            `/recommendation/${item.remediationId}/${item.problemId}`
-                          );
-                        }}
-                      >
-                        <FaPenClip />
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+        <div className="w-[25%] flex">
+          <div className="mx-auto p-5 w-full bg-white rounded-lg shadow-sm shadow-slate-400">
+          <div className="flex flex-col justify-between gap-5 w-full">
+                <div className="flex justify-start gap-2">
+                  <div className=" flex w-16 h-16 rounded-md border border-main">
+                    <IoIosApps className=" text-3xl m-auto text-main" />
+                  </div>
+                  <div>
+                    <h3 className=" text-xs font-semibold text-start">Affected applications</h3>
+                    <p className="text-start">
+                      {data?.impactLevel === "APPLICATIONS"
+                        ? data?.affectedEntities.length
+                        : 0}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex justify-start gap-2">
+                  <div className=" flex w-16 h-16 rounded-md border border-main">
+                    <GrServices className=" text-3xl m-auto text-main" />
+                  </div>
+                  <div>
+                    <h3 className=" text-xs font-semibold text-start">Affected services</h3>
+                    <p className="text-start">
+                    {data?.impactLevel === "SERVICES"
+                ? data?.affectedEntities.length
+                : 0}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex justify-start gap-2">
+                  <div className=" flex w-16 h-16 rounded-md border border-main">
+                    <FaServer className=" text-3xl m-auto text-main" />
+                  </div>
+                  <div>
+                    <h3 className=" text-xs font-semibold text-start">Affected infrastructure</h3>
+                    <p className="text-start">
+                    {data?.impactLevel === "INFRASTRUCTURE"
+                ? data?.affectedEntities.length
+                : 0}
+                    </p>
+                  </div>
+                </div>
+              </div>
+          </div>
         </div>
-      </section>
+      </div>
+
+{apiData ? (      <div className="px-5">
+      <h3 className=" text-lg font-semibold text-start">Remediation Details</h3>
+      <div className="py-2 w-full">
+        <table className="w-full bg-white  rounded-md overflow-hidden shadow-sm shadow-slate-400 text-sm text-left rtl:text-right text-gray-500">
+          <thead className="text-xs bg-main text-white uppercase ">
+            <tr className="">
+              <th className="px-6 py-3">Problem Title</th>
+              <th className="px-6 py-3">Recommendation</th>
+              <th className="px-6 py-3">Service Name</th>
+              <th className="px-6 py-3">Sub Problem Title</th>
+              <th className="px-6 py-3">Remediation Execution Start Time</th>
+              <th className="px-6 py-3">Remediation Execution End Time</th>
+              <th className="px-6 py-3">Script Path</th>
+              <th className="px-6 py-3">Edit</th>
+            </tr>
+          </thead>
+          <tbody>
+          {apiData?.map((item, index) => (
+              <tr className="" key={index}>
+                <td className="p-2 text-center">{item.problemTitle}</td>
+                <td className="p-2 text-start">{item.recommendationText}</td>
+                <td className="p-2 text-start">{item.serviceName}</td>
+                <td className="p-2 text-start">{item.subProblemTitle}</td>
+                <td className="p-2 text-start">{item.scriptExecutionStartAt}</td>
+                <td className="p-2 text-start">{item.problemEndAt}</td>
+                <td className="p-2 text-start">{item.scriptPath}</td>
+
+                <td className="p-2 text-center">
+                  <button
+                    className="edit-button"
+                    onClick={() => {
+                      navigate(
+                        `/recommendation/${item.remediationId}/${item.problemId}`
+                      );
+                    }}
+                  >
+                    <FaEdit className="text-2xl hover:text-main" />
+                  </button>
+                </td>
+
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      </div>):(<div className="bg-white flex m-5 rounded-md shadow-sm shadow-slate-400 p-5 h-48">
+        <div className="m-auto flex flex-col justify-center">
+          <h3>Did no sole the problem yet!</h3>
+          <h3 className=" m-1 p-2 text-sm bg-main rounded-lg text-white">go to problem</h3>
+        </div>
+      </div>)}
+
+
     </div>
   );
 };

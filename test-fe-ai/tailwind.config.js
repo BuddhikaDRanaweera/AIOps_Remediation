@@ -11,6 +11,7 @@ module.exports = {
       },
       height: {
         cust: "calc(100vh - 120px)",
+        body: "calc(100vh - 75px)"
       },
     },
   },

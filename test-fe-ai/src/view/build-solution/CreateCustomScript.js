@@ -4,7 +4,7 @@ import { HiDotsHorizontal } from "react-icons/hi";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import useFetch_POST from "../../services/http/Post";
-import "./BuildSolution.css";
+// import "./BuildSolution.css";
 import SolutionRepository from "./SolutionRepository";
 
 function CustomScript({ back }) {
@@ -27,8 +27,11 @@ function CustomScript({ back }) {
   const handleInputChange_ = (event, parm) => {
     console.log(event.data, "handle ___ change");
     console.log(parm, "param in creation");
+
     if (parm) {
       setParameters((prev) => parm);
+    } else {
+      setParameters((prev) => []);
     }
     setScript(event.data);
   };
@@ -226,6 +229,7 @@ function CustomScript({ back }) {
           </ol>
         </nav>
         {/*  */}
+
         <div className="relative flex justify-end bg-main px-3">
           <div className=" hover:bg-blur rounded-md p-1 ">
             <HiDotsHorizontal
@@ -256,14 +260,31 @@ function CustomScript({ back }) {
             </div>
           )}
         </div>
+
         <Editor
-          height="92%"
+          height={`${parameters && parameters.length !== 0 ? "85%" : "92%"} `}
           defaultLanguage="bash"
           theme="vs-dark"
           value={script}
           onChange={handleInputChange}
         />
+
+        {parameters && parameters.length !== 0 && (
+          <div className="bg-white h-10 flex p-2">
+            <div className="my-auto px-5">
+              <h3 className="text-sm font-semibold">Parameters</h3>
+            </div>
+            <div className="flex gap-1">
+              {parameters?.map((item) => (
+                <h3 className="bg-slate-100 rounded-md px-2 font-semibold">
+                  {item}
+                </h3>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
+
       <div className=" w-[40%] pe-2 pt-2">
         <SolutionRepository
           handleInputChange={handleInputChange_}

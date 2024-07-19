@@ -3,6 +3,8 @@ import moment from "moment-timezone";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useFetch_GET from "../../services/http/Get";
+import { useDispatch, useSelector } from "react-redux";
+import { setProblem } from "../../app/features/selected_problem/SelectedProblemSlice";
 
 // import "./HomePage.css";
 
@@ -17,96 +19,12 @@ const HomePage = () => {
     navigate(url);
   };
 
+  const selectedproblem = useSelector((state) => state.selectedproblem.selectedproblem);
+  const dispatch = useDispatch();
+
   useEffect(() => {
     getData("/audit-status");
   }, []);
-
-  // const incidents = [
-  //   {
-  //     problemTitle: "Server Unavallable",
-  //     serviceName: "Apache",
-  //     actionType: "unvallable server",
-  //     status: "shutdown",
-  //     ProblemDetectedAt: "Today 11.33",
-  //   },
-  //   {
-  //     problemTitle: "Server Unavallable",
-  //     serviceName: "Apache",
-  //     actionType: "unvallable server",
-  //     status: "shutdown",
-  //     ProblemDetectedAt: "Today 11.33",
-  //   },
-  //   {
-  //     problemTitle: "Server Unavallable",
-  //     serviceName: "Apache",
-  //     actionType: "unvallable server",
-  //     status: "shutdown",
-  //     ProblemDetectedAt: "Today 11.33",
-  //   },
-  //   {
-  //     problemTitle: "Server Unavallable",
-  //     serviceName: "Apache",
-  //     actionType: "unvallable server",
-  //     status: "shutdown",
-  //     ProblemDetectedAt: "Today 11.33",
-  //   },
-  //   {
-  //     problemTitle: "Server Unavallable",
-  //     serviceName: "Apache",
-  //     actionType: "unvallable server",
-  //     status: "shutdown",
-  //     ProblemDetectedAt: "Today 11.33",
-  //   },
-  //   {
-  //     problemTitle: "Server Unavallable",
-  //     serviceName: "Apache",
-  //     actionType: "unvallable server",
-  //     status: "shutdown",
-  //     ProblemDetectedAt: "Today 11.33",
-  //   },
-  //   {
-  //     problemTitle: "Server Unavallable",
-  //     serviceName: "Apache",
-  //     actionType: "unvallable server",
-  //     status: "shutdown",
-  //     ProblemDetectedAt: "Today 11.33",
-  //   },
-  //   {
-  //     problemTitle: "Server Unavallable",
-  //     serviceName: "Apache",
-  //     actionType: "unvallable server",
-  //     status: "shutdown",
-  //     ProblemDetectedAt: "Today 11.33",
-  //   },
-  //   {
-  //     problemTitle: "Server Unavallable",
-  //     serviceName: "Apache",
-  //     actionType: "unvallable server",
-  //     status: "shutdown",
-  //     ProblemDetectedAt: "Today 11.33",
-  //   },
-  //   {
-  //     problemTitle: "Server Unavallable",
-  //     serviceName: "Apache",
-  //     actionType: "unvallable server",
-  //     status: "shutdown",
-  //     ProblemDetectedAt: "Today 11.33",
-  //   },
-  //   {
-  //     problemTitle: "Server Unavallable",
-  //     serviceName: "Apache",
-  //     actionType: "unvallable server",
-  //     status: "shutdown",
-  //     ProblemDetectedAt: "Today 11.33",
-  //   },
-  //   {
-  //     problemTitle: "Server Unavallable",
-  //     serviceName: "Apache",
-  //     actionType: "unvallable server",
-  //     status: "shutdown",
-  //     ProblemDetectedAt: "Today 11.33",
-  //   },
-  // ];
 
   const manage = [
     {
@@ -174,10 +92,15 @@ const HomePage = () => {
     }
   }, [data]);
 
+  const setSelectedProblem = (title, serviceName) => {
+      dispatch(setProblem({title, serviceName}));
+      navigate('/new-problem');
+  }
+
   return (
     <div
-      style={{ height: "calc(100vh - 100px)" }}
-      className=" px-5 flex flex-col justify-between"
+      
+      className=" p-5 flex flex-col justify-between h-body "
     >
       {/*  */}
 
@@ -213,8 +136,8 @@ const HomePage = () => {
                   <h3 className=" font-semibold">Servirity Level</h3>
                 </div>
                 <div className="pt-2">
-                  {newProblems?.map((item) => (
-                    <div className="flex justify-between hover:bg-slate-100 m-0.5 p-2  rounded-full">
+                  {newProblems?.map((item, index) => (
+                    <div key={index} onClick={() => setSelectedProblem(item?.problemTitle,item?.serviceName)} className="flex justify-between hover:bg-slate-100 m-0.5 p-2  rounded-full">
                       <h3 className=" text-start text-sm my-auto">
                         {item?.problemTitle} for {item?.serviceName}
                       </h3>
