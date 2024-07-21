@@ -22,11 +22,11 @@ const Dashboard = () => {
   const transformData = (value) => {
     const result = {};
     value.forEach(item => {
-      const { problemTitle, serviceName } = item;
+      const { problemTitle, serviceName, id } = item;
       if (!result[problemTitle]) {
         result[problemTitle] = [];
       }
-      result[problemTitle].push(serviceName);
+      result[problemTitle].push({id,serviceName});
     });
 
     return result;

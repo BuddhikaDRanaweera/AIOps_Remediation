@@ -23,15 +23,14 @@ const RemidiationForm = ({ data }) => {
 
   const handleProblemChange = (event) => {
     if(event.target.value !== ''){
-      console.log('kariya ...');
       setSelectedProblem((prev) => event.target.value);
     }
   };
 
   const handleSubProblemChange = (event) => {
      if(selectedProblem !== ''){
-      console.log('pakaya ...');
-      dispatch(setProblem({problemTitle: selectedProblem, subProblemTitle: event.target.value, problemId: "", serviceName: event.target.value,}))
+      const filter = data[selectedProblem].find(item => item.serviceName == event.target.value);
+      dispatch(setProblem({problemTitle: selectedProblem, subProblemTitle: event.target.value, problemId: filter.id, serviceName: event.target.value,}))
      }
   };
 
@@ -90,8 +89,8 @@ const RemidiationForm = ({ data }) => {
               </option>
 
               {data[selectedProblem]?.map((item, index) => (
-                <option key={index} value={item}>
-                  {item}
+                <option key={index} value={item.serviceName}>
+                  {item.serviceName}
                 </option>
               ))}
             </select>
@@ -109,7 +108,7 @@ const RemidiationForm = ({ data }) => {
               className="bg-gray-50 border border-gray-300 text-gray-900 mb-2 text-sm rounded-lg focus:ring-2  focus:outline-none focus:ring-second block w-full p-2.5"
             >
               <option disabled>Select Recommendation</option>
-              {["Recommendation 1", "Recommendation 2", "Recommendation 3"].map(
+              {["Start Service", "Recommendation 2", "Recommendation 3"].map(
                 (item, index) => (
                   <option key={index}>{item}</option>
                 )

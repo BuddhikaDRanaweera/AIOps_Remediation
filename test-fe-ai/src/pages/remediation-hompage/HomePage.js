@@ -13,6 +13,7 @@ import { setProblem } from "../../app/features/problem/ProblemSlice";
 const HomePage = () => {
   const navigate = useNavigate();
   const { isLoading, error, data, getData } = useFetch_GET();
+  const { isLoading:isLoadingActiveProblems, error:errorActiveProblems, data:dataActiveProblems, getData:getDataActiveProblems } = useFetch_GET();
 
   const [quickViewServirityLevel, setQuickViewServirityLevel] = useState(false);
 
@@ -22,10 +23,19 @@ const HomePage = () => {
   };
 
 
+  const getPID = (serviceName) => {
+    if(data){
+     const find = data?.activity?.find(item => item.serviceName == serviceName);
+     return find.pid;
+    }
+  }
+
+
 
   const dispatch = useDispatch();
 
   useEffect(() => {
+    getDataActiveProblems("/get_new_problems");
     getData("/audit-status");
   }, []);
 
@@ -80,19 +90,11 @@ const HomePage = () => {
     return <span>{relativeTime.replace("in about ", "")}</span>;
   };
 
-  useEffect(() => {
-    if (data) {
-      const filter = data?.activity?.filter(
-        (incident) => incident.status == "IN_PROGRESS"
-      );
-      setNewProblem((prev) => filter);
-    }
-  }, [data]);
-
-  const setSelectedProblem = (title, serviceName) => {
+ 
+  const setSelectedProblem = (title, serviceName, id) => {
       
       navigate('/new-problem');
-      dispatch(setProblem({problemTitle: title, subProblemTitle: serviceName, problemId: "", serviceName: serviceName,}))
+      dispatch(setProblem({problemTitle: title, subProblemTitle: serviceName, problemId: id, serviceName: serviceName,}))
   }
 
   return (
@@ -136,8 +138,8 @@ const HomePage = () => {
                   <h3 className=" font-semibold">Servirity Level</h3>
                 </div>
                 <div className="pt-2">
-                  {newProblems?.map((item, index) => (
-                    <div key={index} onClick={() => setSelectedProblem(item?.problemTitle,item?.serviceName)} className="flex justify-between hover:bg-slate-100 m-0.5 p-2  rounded-full">
+                  {dataActiveProblems?.map((item, index) => (
+                    <div key={index} onClick={() => setSelectedProblem(item?.problemTitle,item?.serviceName,item.id)} className="flex justify-between hover:bg-slate-100 m-0.5 p-2  rounded-full">
                       <h3 className=" text-start text-sm my-auto">
                         {item?.problemTitle} for {item?.serviceName}
                       </h3>
@@ -175,7 +177,7 @@ const HomePage = () => {
               onClick={() => {
                 dispatch(setNewRemediation(true))
               }}
-              className=" text-[#310078] flex w-[25%] rounded-md  bg-white p-2 shadow-sm shadow-slate-400 hover:text-white hover:bg-[#310078]"
+              className=" text-[#310078] flex w-[25%] rounded-md  bg-white p-5 shadow-sm shadow-slate-400 hover:text-white hover:bg-[#310078]"
             >
               <div className=" w-[25%] my-auto">
                 <i className={` fa fa-plus-square text-3xl`} aria-hidden="true"></i>
@@ -191,7 +193,7 @@ const HomePage = () => {
               onClick={() => {
                 navigateTo(item?.path);
               }}
-              className=" text-[#310078] flex w-[25%] rounded-md  bg-white p-2 shadow-sm shadow-slate-400 hover:text-white hover:bg-[#310078]"
+              className=" text-[#310078] flex w-[25%] rounded-md  bg-white p-5 shadow-sm shadow-slate-400 hover:text-white hover:bg-[#310078]"
             >
               <div className=" w-[25%] my-auto">
                 <i className={` ${item?.icon} text-3xl`} aria-hidden="true"></i>
