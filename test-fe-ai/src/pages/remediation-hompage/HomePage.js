@@ -3,8 +3,10 @@ import moment from "moment-timezone";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useFetch_GET from "../../services/http/Get";
-import { useDispatch, useSelector } from "react-redux";
-import { setProblem } from "../../app/features/selected_problem/SelectedProblemSlice";
+import { useDispatch } from "react-redux";
+
+import { setNewRemediation } from "../../app/features/modals_view/modal";
+import { setProblem } from "../../app/features/problem/ProblemSlice";
 
 // import "./HomePage.css";
 
@@ -19,7 +21,8 @@ const HomePage = () => {
     navigate(url);
   };
 
-  const selectedproblem = useSelector((state) => state.selectedproblem.selectedproblem);
+
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -27,13 +30,7 @@ const HomePage = () => {
   }, []);
 
   const manage = [
-    {
-      id: 1,
-      path: "/new-rule",
-      title: "Create Self-healing Rule",
-      des: "Define rules to identify problems",
-      icon: "fa fa-plus-square",
-    },
+
     {
       id: 2,
       path: "/recommendation",
@@ -93,8 +90,9 @@ const HomePage = () => {
   }, [data]);
 
   const setSelectedProblem = (title, serviceName) => {
-      dispatch(setProblem({title, serviceName}));
+      
       navigate('/new-problem');
+      dispatch(setProblem({problemTitle: title, subProblemTitle: serviceName, problemId: "", serviceName: serviceName,}))
   }
 
   return (
@@ -103,6 +101,8 @@ const HomePage = () => {
       className=" p-5 flex flex-col justify-between h-body "
     >
       {/*  */}
+
+      
 
       {quickViewServirityLevel && (
         <div className="overflow-y-auto overflow-x-hidden bg-blur flex  fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
@@ -171,6 +171,20 @@ const HomePage = () => {
       <div className="h-[95%] flex flex-col justify-between">
         {/* mange */}
         <div className=" cursor-pointer flex gap-2 justify-between my-5 ">
+        <div
+              onClick={() => {
+                dispatch(setNewRemediation(true))
+              }}
+              className=" text-[#310078] flex w-[25%] rounded-md  bg-white p-2 shadow-sm shadow-slate-400 hover:text-white hover:bg-[#310078]"
+            >
+              <div className=" w-[25%] my-auto">
+                <i className={` fa fa-plus-square text-3xl`} aria-hidden="true"></i>
+              </div>
+              <div className=" w-[75%] text-start m-auto">
+                <p className="text-md">Create Self-healing Rule</p>
+                <p className="text-xs">Define rules to identify problems</p>
+              </div>
+            </div>
           {manage?.map((item) => (
             <div
               key={item.id}

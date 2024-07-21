@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  problemTitle: "",
-  subProblemTitle: "",
-  problemId: "",
-  serviceName: "",
+  problemTitle: null,
+  subProblemTitle: null,
+  problemId: null,
+  serviceName: null,
 };
 
 const ProblemSlice = createSlice({
@@ -12,8 +12,8 @@ const ProblemSlice = createSlice({
   initialState,
   reducers: {
     setProblem: (state, action) => {
-      state.problemTitle = action.payload.main;
-      state.subProblemTitle = action.payload.subproblemname;
+      state.problemTitle = action.payload.problemTitle;
+      state.subProblemTitle = action.payload.subProblemTitle;
       state.problemId = action.payload.problemId;
       state.serviceName = action.payload.serviceName;
     },

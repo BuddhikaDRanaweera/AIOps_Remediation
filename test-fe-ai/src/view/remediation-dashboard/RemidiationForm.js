@@ -3,70 +3,36 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setProblem } from "../../app/features/problem/ProblemSlice";
 
-
 const RemidiationForm = ({ data }) => {
-  const problem = useSelector((state) => state.problem);
-  const selectedproblem = useSelector((state) => state.selectedproblem.selectedproblem);
-  // const { isLoading, error, data, postData } = useFetch_POST();
+  const problemTitle = useSelector((state) => state.problem.problemTitle);
+  const subProblemTitle = useSelector((state) => state.problem.subProblemTitle);
+  useEffect(()=>{
+    if(problemTitle){
+      console.log(problemTitle, 'kkk')
+      setSelectedProblem((prev) => problemTitle);
+    }
+  },[problemTitle])
 
-
-  useEffect(() => {
-  setSelectedProblem({ main: selectedProblem?.title, sub: selectedproblem?.serviceName });
-  },[selectedproblem])
-  
-  useEffect(() => {
-    console.log(problem, "jjsjsj");
-  }, [problem]);
   const navigate = useNavigate();
   const navigateTo = (url) => {
     navigate(url);
   };
-
-  const [selectedProblem, setSelectedProblem] = useState({
-    main: "",
-    sub: "",
-    id: "",
-  });
-  const [subProblems, setSubProblems] = useState([]);
-
-  // const onSubmitData = (data) => {
-  //   onSubmit(data);
-  // };
+  const [selectedProblem, setSelectedProblem] = useState("");
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (selectedProblem.main) {
-      // console.log(data);
-      const filteredSubProblems = data
-        .filter(
-          (item) =>
-            item.problemTitle === selectedProblem.main && item.subProblemTitle
-        )
-        .map((item) => [item.subProblemTitle, item.id, item.serviceName]);
-      setSubProblems(filteredSubProblems);
-      // console.log(
-      //   filteredSubProblems[0],
-      //   filteredSubProblems[1],
-      //   filteredSubProblems[2]
-      // );
-    } else {
-      setSubProblems([]);
-    }
-  }, [selectedProblem.main, data, selectedproblem]);
 
   const handleProblemChange = (event) => {
-    setSelectedProblem({ main: event.target.value, sub: "" });
+    if(event.target.value !== ''){
+      console.log('kariya ...');
+      setSelectedProblem((prev) => event.target.value);
+    }
   };
 
   const handleSubProblemChange = (event) => {
-    const [subproblemname, problemId, serviceName] = JSON.parse(
-      event.target.value
-    );
-
-    console.log(subproblemname, problemId, serviceName);
-
-    let main = selectedProblem.main;
-    dispatch(setProblem({ main, subproblemname, problemId, serviceName }));
+     if(selectedProblem !== ''){
+      console.log('pakaya ...');
+      dispatch(setProblem({problemTitle: selectedProblem, subProblemTitle: event.target.value, problemId: "", serviceName: event.target.value,}))
+     }
   };
 
   return (
@@ -79,7 +45,7 @@ const RemidiationForm = ({ data }) => {
         <div className="w-[40%]">
           <div className="flex flex-col">
             <label
-              for="default"
+             
               className="flex justify-start mb-1 text-sm font-medium text-gray-900"
             >
               Problem Title:
@@ -87,17 +53,17 @@ const RemidiationForm = ({ data }) => {
             <select
               id="problem-title"
               onChange={handleProblemChange}
-              value={selectedproblem ? selectedproblem.title : selectedProblem.main}
+              defaultValue={''}
+              value={problemTitle}
+              
               className="bg-gray-50 border border-gray-300 text-gray-900 mb-2 text-sm rounded-lg focus:ring-2  focus:outline-none focus:ring-second block w-full p-2.5"
             >
-              <option disabled value="">
+              <option value="" disabled>
                 Select Problem
               </option>
-              {Array.from(
-                new Set(data?.map((problem) => problem.problemTitle))
-              ).map((title, index) => (
-                <option key={index} value={title}>
-                  {title}
+              {Object.keys(data)?.map((item, index) => (
+                <option key={index} value={item}>
+                  {item}
                 </option>
               ))}
             </select>
@@ -105,24 +71,27 @@ const RemidiationForm = ({ data }) => {
 
           <div className="flex flex-col">
             <label
-              for="default"
+              
               className="flex justify-start mb-1 text-sm font-medium text-gray-900"
             >
               Sub-Problem:
             </label>
             <select
+              disabled={selectedProblem == ""}
               id="sub-problem"
               onChange={handleSubProblemChange}
-              value={selectedproblem ? selectedproblem.serviceName : problem.ServiceName}
+              defaultValue={""}
+              value={subProblemTitle}
+              
               className="bg-gray-50 border border-gray-300 text-gray-900 mb-2 text-sm rounded-lg focus:ring-2  focus:outline-none focus:ring-second block w-full p-2.5"
             >
-              <option value={''}>Select Service</option>
-              {subProblems.map(([subProblemName, id, ServiceName], index) => (
-                <option
-                  key={index}
-                  value={JSON.stringify([subProblemName, id, ServiceName])}
-                >
-                  {ServiceName + " Service"}
+              <option value={""} disabled>
+                Select Service
+              </option>
+
+              {data[selectedProblem]?.map((item, index) => (
+                <option key={index} value={item}>
+                  {item}
                 </option>
               ))}
             </select>
@@ -130,7 +99,7 @@ const RemidiationForm = ({ data }) => {
 
           <div className="flex flex-col">
             <label
-              for="default"
+              
               className="flex justify-start mb-1 text-sm font-medium text-gray-900"
             >
               Recommendation:
@@ -157,7 +126,7 @@ const RemidiationForm = ({ data }) => {
                 navigateTo("/assisted-analysis");
               }}
             >
-              <i class="fa-solid fa-chart-line text-4xl"></i>
+              <i className="fa-solid fa-chart-line text-4xl"></i>
               <p className="active-problem-option-title">
                 <strong>Assisted Analysis</strong>
               </p>
@@ -170,7 +139,7 @@ const RemidiationForm = ({ data }) => {
                 navigateTo("/build-solution");
               }}
             >
-              <i class="fa-solid fa-puzzle-piece text-4xl"></i>
+              <i className="fa-solid fa-puzzle-piece text-4xl"></i>
               <p className="active-problem-option-title">
                 <strong>Build Solution</strong>
               </p>

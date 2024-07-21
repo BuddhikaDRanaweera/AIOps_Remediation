@@ -3,6 +3,8 @@ import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import logo from "./../../assest/virtusa.png";
 import { IoChevronBack } from "react-icons/io5";
+import { useSelector } from "react-redux";
+import CreateNewRuleForm from "../../view/remediation-dashboard/CreateNewRuleForm";
 
 const TopBar = () => {
   const navigate = useNavigate();
@@ -17,8 +19,11 @@ const TopBar = () => {
     "/",
   ];
   const shouldHideIcons = hiddenPaths.includes(location.pathname);
+  const isViewedNewRemediaton = useSelector(state => state.modal.newRemediation);
   return (
+  
     <div className=" h-[75px] py-[10px] px-[20px] bg-[#444a4e] flex justify-between">
+        {isViewedNewRemediaton && <CreateNewRuleForm />}
       <div className="my-auto">
         <img src={logo} alt="Company Logo" />
       </div>

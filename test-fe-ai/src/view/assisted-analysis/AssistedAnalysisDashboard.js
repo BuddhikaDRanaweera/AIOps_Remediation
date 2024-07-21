@@ -68,7 +68,7 @@ function AssistedAnalysis() {
   ]);
 
   return (
-    <div className='p-2'>
+    <div className='p-5'>
        <div className='bg-white p-2 rounded-md'>
          <div className=''></div>
        </div>

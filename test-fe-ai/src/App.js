@@ -1,5 +1,5 @@
-import { Suspense, lazy } from "react";
-import { useSelector } from "react-redux";
+import { Suspense, lazy, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import AlertComponent from "./components/alert/Alert.js";
@@ -11,6 +11,7 @@ import QuickActions from "./view/build-solution/BuildSolutionDashboard.js";
 import CustomScript from "./view/build-solution/CreateCustomScript.js";
 import BuildSolutionWithLibraries from "./view/build-solution/LibraryIntegration.js";
 import SolutionRepository from "./view/build-solution/SolutionRepository.js";
+import { clearProblem } from "./app/features/problem/ProblemSlice.js";
 
 const HomePage = lazy(() => import("./pages/remediation-hompage/HomePage.js"));
 const EditRuleForm = lazy(() =>
@@ -31,8 +32,12 @@ const RemediationTable = lazy(() =>
 );
 
 function App() {
+  const dispatch = useDispatch();
   let loading = useSelector((state) => state.loading.loading);
   let alert = useSelector((state) => state.alert);
+   useEffect(() => {
+     dispatch(clearProblem());
+   },[])
 
   return (
     <div className="App">
