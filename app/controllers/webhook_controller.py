@@ -73,7 +73,7 @@ def webhook():
                         problemTitle, subProblemTitle, impactedEntity, problemImpact,
                         problemSeverity, problemURL, problemDetectedAt, serviceName, pid,
                         executedProblemId, displayId, actionType="MANUAL", status="IN_PROGRESS",
-                        comments="Waiting for manual instructions", problemEndAt=None, scriptExecutionStartAt=None
+                        comments="The new problem will be identified/was identified and the remediation will take /took place with manual instructions", problemEndAt=None, scriptExecutionStartAt=None
                     )
                     return "Problem Recorded Sucessfully", 201
             else:
