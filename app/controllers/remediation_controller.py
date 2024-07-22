@@ -30,7 +30,7 @@ def create_remediation_controller():
     if not all([recommendation_text, script_path, problem_id, service_name, problem_title]):
         logger.error("Missing required fields in request data")
         return jsonify({"error": "Missing required fields"}), 400
-    scriptExecutionStartAt = datetime.now(ist_timezone)
+    scriptExecutionStartAt = datetime.datetime.now(ist_timezone)
     
     if(execute_script_ssh(script_path, parametersValues)):
         create_remediation(recommendation_text, script_path, problem_id, parametersValues)
