@@ -146,7 +146,7 @@ def update_in_progress_problems_in_Audit(serviceName, displayId, probId, problem
         print(f"An error occurred: {e}")
 
         
-def update_in_progress_records_in_Audit_manual_exe(serviceName, probId, problemTitle):
+def update_in_progress_records_in_Audit_manual_exe(serviceName, probId, problemTitle, scriptExecutionStartAt):
     """
     Updates all "IN_PROGRESS" records with the specified serviceName and displayId
     to have their executedProblemId set to probId.
@@ -164,7 +164,7 @@ def update_in_progress_records_in_Audit_manual_exe(serviceName, probId, problemT
             Audit.status == "IN_PROGRESS",
             Audit.problemTitle == problemTitle,
             
-        ).update({Audit.executedProblemId: probId, Audit.status : "CLOSED", Audit.problemEndAt:datetime.datetime.now(ist_timezone).strftime('%Y-%m-%d %H:%M:%S'),Audit.executedProblemId : probId,})
+        ).update({Audit.executedProblemId: probId, Audit.status : "CLOSED", Audit.problemEndAt:datetime.datetime.now(ist_timezone).strftime('%Y-%m-%d %H:%M:%S'),Audit.executedProblemId : probId, Audit.scriptExecutionStartAt:scriptExecutionStartAt})
 
         # Commit the changes to the database
         db.session.commit()

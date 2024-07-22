@@ -4,6 +4,7 @@ from app.services.remediation_service import create_remediation, get_problem_wit
 from app.services.problem_service import update_status_by_id
 from app.services.audit_service import update_in_progress_records_in_Audit_manual_exe, get_audit_record_by_id
 from app.util.execute_script import execute_script_ssh
+from pytz import timezone
 
 import logging
 
@@ -23,14 +24,18 @@ def create_remediation_controller():
     problem_title = data.get('problemTitle')
     parameters = data.get('parameters',None)
     parametersValues = data.get('parametersValue',None)
+    ist_timezone = timezone('Asia/Kolkata')
+    
     print(data)
     if not all([recommendation_text, script_path, problem_id, service_name, problem_title]):
         logger.error("Missing required fields in request data")
         return jsonify({"error": "Missing required fields"}), 400
+    scriptExecutionStartAt = datetime.now(ist_timezone)
+    
     if(execute_script_ssh(script_path, parametersValues)):
         create_remediation(recommendation_text, script_path, problem_id, parametersValues)
         update_status_by_id(problem_id)
-        update_in_progress_records_in_Audit_manual_exe(service_name, problem_id, problem_title)
+        update_in_progress_records_in_Audit_manual_exe(service_name, problem_id, problem_title, scriptExecutionStartAt)
         return "Remediation Saved Successfully", 201
     else:
         return "Cannot run script", 403
