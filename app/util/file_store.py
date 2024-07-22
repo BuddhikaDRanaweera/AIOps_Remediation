@@ -31,7 +31,7 @@ def save_script_to_directory(filename, extension, content):
         return None
 
 def combine_json_files(file_paths):
-    combined_data = "#!/bin/bash"
+    combined_data = ""
     for file_path in file_paths:
         try:
             with open(file_path, 'r') as file:
