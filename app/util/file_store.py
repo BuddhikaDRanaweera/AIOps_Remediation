@@ -36,7 +36,7 @@ def combine_json_files(file_paths):
         try:
             with open(file_path, 'r') as file:
                 data = file.read()
-                combined_data +=  "\n" + data + "\n"  # Add a newline between scripts
+                combined_data += data + "\n"  # Add a newline between scripts
         except Exception as e:
             logger.error(f"Error reading file {file_path}: {e}")
             return None
