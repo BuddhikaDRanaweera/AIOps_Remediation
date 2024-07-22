@@ -53,7 +53,7 @@ def get_problem_with_remediation_route(problem_id,pid):
                 "remediationId": remediation.id if remediation else None,
                 "recommendationText": remediation.recommendationText if remediation else None,
                 "scriptPath": remediation.scriptPath if remediation else None,
-                "scriptPath": remediation.parameters if remediation else None,
+                "parameters": remediation.parameters if remediation else None,
                 "createdAt": remediation.createdAt if remediation else None,
                 "lastUpdateAt": remediation.lastUpdateAt if remediation else None,
                 "scriptExecutionStartAt": audit.scriptExecutionStartAt if audit else None,
