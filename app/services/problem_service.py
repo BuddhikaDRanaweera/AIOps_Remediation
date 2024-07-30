@@ -31,6 +31,16 @@ def get_all_problems():
         logger.error(f"Error fetching problems: {str(e)}")
         return {"error": str(e)}
 
+def get_all_problem_titles():
+    try:
+        problem_titles = Problem.query.with_entities(Problem.problemTitle).all()
+        # Extracting the problemTitle from the result tuples
+        titles_list = [title for (title,) in problem_titles]
+        return titles_list
+    except SQLAlchemyError as e:
+        logger.error(f"Error fetching problem titles: {str(e)}")
+        return {"error": str(e)}
+
 #get all remediations
 def get_all_problems_with_remediations():
     try:

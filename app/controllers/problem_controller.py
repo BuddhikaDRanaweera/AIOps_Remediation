@@ -1,6 +1,6 @@
 # app/controllers/problem_controller.py
 from flask import Blueprint, jsonify, request
-from app.services.problem_service import create_problem_auto, get_all_problems, get_all_problems_with_remediations, update_status_by_id, find_problem_id, get_not_resolved_problems
+from app.services.problem_service import create_problem_auto, get_all_problems, get_all_problem_titles, get_all_problems_with_remediations, update_status_by_id, find_problem_id, get_not_resolved_problems
 from app.services.remediation_service import create_remediation
 import logging
 
@@ -14,6 +14,26 @@ logger = logging.getLogger(__name__)
 def get_problems():
     try:
         problems = get_all_problems()
+        problems_list = [
+            {
+                "id": problem.id,
+                "problemTitle": problem.problemTitle,
+                "subProblemTitle": problem.subProblemTitle,
+                "serviceName": problem.serviceName,
+                "status": problem.status
+            } for problem in problems
+        ]
+        logger.info("Fetched all problems successfully")
+        return jsonify(problems_list), 200
+    except Exception as e:
+        logger.error(f"Error fetching problems: {str(e)}")
+        return jsonify({"error": "Error fetching problems"}), 500
+
+#get all problems
+@problem_bp.route('/problem-list', methods=['GET'])
+def get_problem_list():
+    try:
+        problems = get_all_problem_titles()
         problems_list = [
             {
                 "id": problem.id,
