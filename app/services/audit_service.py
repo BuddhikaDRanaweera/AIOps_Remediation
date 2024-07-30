@@ -153,7 +153,7 @@ def update_to_inprogress_manual_exe(serviceName, probId, problemTitle, scriptExe
         # Update the records using SQLAlchemy
         db.session.query(Audit).filter(
             Audit.serviceName == serviceName,
-            Audit.status == "IN_PROGRESS",
+            Audit.status == "OPEN",
             Audit.problemTitle == problemTitle,
             
         ).update({Audit.executedProblemId: probId, Audit.status : "IN_PROGRESS", Audit.problemEndAt:datetime.datetime.now(ist_timezone).strftime('%Y-%m-%d %H:%M:%S'),Audit.executedProblemId : probId, Audit.scriptExecutionStartAt:scriptExecutionStartAt})
