@@ -34,17 +34,9 @@ def get_problems():
 def get_problem_list():
     try:
         problems = get_all_problem_titles()
-        problems_list = [
-            {
-                "id": problem.id,
-                "problemTitle": problem.problemTitle,
-                "subProblemTitle": problem.subProblemTitle,
-                "serviceName": problem.serviceName,
-                "status": problem.status
-            } for problem in problems
-        ]
+        
         logger.info("Fetched all problems successfully")
-        return jsonify(problems_list), 200
+        return jsonify(problems), 200
     except Exception as e:
         logger.error(f"Error fetching problems: {str(e)}")
         return jsonify({"error": "Error fetching problems"}), 500
