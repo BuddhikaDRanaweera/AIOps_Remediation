@@ -108,7 +108,7 @@ def get_audit_status():
         response = {
             "count": open_count + in_progress_count,
             "opencount": open_count,
-            "InProgressCount": open_count,
+            "InProgressCount": in_progress_count,
             "closedCount": closedCount,
             "activity": audit_list
         }
