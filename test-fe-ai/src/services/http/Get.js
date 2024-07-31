@@ -14,8 +14,8 @@ const useFetch_GET = () => {
   const dispatch = useDispatch();
 
   const getData = async (url) => {
-    setIsLoading(true);
-    dispatch(setGlobalLoading({ loading: true }));
+    // setIsLoading(true);
+    // dispatch(setGlobalLoading({ loading: true }));
     try {
       const response = await api.get(url);
       setData(response?.data);

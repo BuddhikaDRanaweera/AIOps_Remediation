@@ -22,10 +22,10 @@ const ProblemDetail = () => {
   const navigate = useNavigate();
   const [data, setData] = useState();
   console.log(apiData);
-  const url = `https://xdy01853.live.dynatrace.com/api/v2/problems/${PID}`;
+  const url = `https://mbx35629.live.dynatrace.com/api/v2/problems/${PID}`;
   // https://xdy01853.live.dynatrace.com/api/v2/apiTokens
   const apiKey =
-    "dt0c01.G3D2TIY7NMUIHB7EA3HIWHZJ.RPT7F6SRAJGFZRKS3K5BLVCC7RQKE3HRAHUNEWNUNZY7QMF5W3WMFKRHYMDTWFOV";
+    "dt0c01.ZOSARGM6P2XHHUVXOSNBWPQ6.Q4B6BBD2K4BMH7JMGTHOKNEEJ5L3LH4ZDOMQ7VISE54PM3YY52QMM7ETDAYIDEDC";
 
   const getDate = (time) => {
     const date = new Date(time);
@@ -90,7 +90,7 @@ const ProblemDetail = () => {
     <div className=" flex flex-col gap-1 justify-between h-body ">
       <div className="flex flex-row justify-between gap-2 px-5 pt-5">
         <div className="w-[75%] flex">
-          <div className="mx-auto p-5 w-full bg-white rounded-lg shadow-sm shadow-slate-400">
+          <div className="mx-auto p-5 w-full bg-white shadow-sm shadow-slate-400">
             <div className="flex gap-2 mb-5 text-start text-lg text-main font-semibold">
               <MdSettingsSuggest className="my-auto text-3xl" />
               <h3 className=" text-xl my-auto">
@@ -178,7 +178,7 @@ const ProblemDetail = () => {
           </div>
         </div>
         <div className="w-[25%] flex">
-          <div className="mx-auto p-5 w-full bg-white rounded-lg shadow-sm shadow-slate-400">
+          <div className="mx-auto p-5 w-full bg-white shadow-sm shadow-slate-400">
             <div className="flex flex-col justify-between gap-5 w-full">
               <div className="flex justify-start gap-2">
                 <div className=" flex w-16 h-16 rounded-md border border-main">
@@ -236,7 +236,7 @@ const ProblemDetail = () => {
             Remediation Details
           </h3>
           <div className="py-2 w-full">
-            <table className="w-full bg-white  rounded-md overflow-hidden shadow-sm shadow-slate-400 text-sm text-left rtl:text-right text-gray-500">
+            <table className="w-full bg-white  overflow-hidden shadow-sm shadow-slate-400 text-sm text-left rtl:text-right text-gray-500">
               <thead className="text-xs bg-main text-white uppercase ">
                 <tr className="">
                   <th className="px-6 py-3">Problem Title</th>

@@ -158,78 +158,13 @@ function CustomScript({ back }) {
   };
 
   return (
-    <div className="flex justify-between h-cust">
+    <div className="flex justify-between">
       <div
         onClick={() => {
           if (isOpenAction) setIsOpenAction(false);
         }}
         className="w-[60%] p-2"
       >
-        {/*  */}
-        <nav
-          className="mb-1 flex px-5 py-3 text-gray-700 border border-gray-200 rounded-lg bg-gray-50"
-          aria-label="Breadcrumb"
-        >
-          <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
-            <li>
-              <div className="flex items-center">
-                <a className="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2">
-                  New Problem
-                </a>
-              </div>
-            </li>
-            <li>
-              <div className="flex items-center">
-                <svg
-                  className="rtl:rotate-180 block w-3 h-3 mx-1 text-gray-400 "
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 6 10"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="m1 9 4-4-4-4"
-                  />
-                </svg>
-                <a
-                  onClick={() => back()}
-                  className="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2"
-                >
-                  Build Solution
-                </a>
-              </div>
-            </li>
-
-            <li aria-current="page">
-              <div class="flex items-center">
-                <svg
-                  class="rtl:rotate-180  w-3 h-3 mx-1 text-gray-400"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 6 10"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="m1 9 4-4-4-4"
-                  />
-                </svg>
-                <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2">
-                  Custom Fix
-                </span>
-              </div>
-            </li>
-          </ol>
-        </nav>
-        {/*  */}
-
         <div className="relative flex justify-end bg-main px-3">
           <div className=" hover:bg-blur rounded-md p-1 ">
             <HiDotsHorizontal
@@ -262,21 +197,21 @@ function CustomScript({ back }) {
         </div>
 
         <Editor
-          height={`${parameters && parameters.length !== 0 ? "85%" : "92%"} `}
+          height={'80%'}
           defaultLanguage="bash"
           theme="vs-dark"
           value={script}
           onChange={handleInputChange}
         />
 
-        {parameters && parameters.length !== 0 && (
+        {parameters?.length !== 0 && (
           <div className="bg-white h-10 flex p-2">
             <div className="my-auto px-5">
               <h3 className="text-sm font-semibold">Parameters</h3>
             </div>
             <div className="flex gap-1">
               {parameters?.map((item) => (
-                <h3 className="bg-slate-100 rounded-md px-2 font-semibold">
+                <h3 className="bg-slate-100 px-2 font-semibold">
                   {item}
                 </h3>
               ))}

@@ -2,16 +2,43 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setProblem } from "../../app/features/problem/ProblemSlice";
+import useFetch_GET from "../../services/http/Get";
 
 const RemidiationForm = ({ data }) => {
   const problemTitle = useSelector((state) => state.problem.problemTitle);
   const subProblemTitle = useSelector((state) => state.problem.subProblemTitle);
+  const { isLoading, error, data:recentProblems, getData } = useFetch_GET();
+
+
+
+  useEffect(()=>{
+    getData("/audit-status");
+    
+  },[]);
+  if(recentProblems)
+    console.log(recentProblems,">>>>>>>");
+  const [pId, setPId] = useState('')
+
   useEffect(()=>{
     if(problemTitle){
       console.log(problemTitle, 'kkk')
       setSelectedProblem((prev) => problemTitle);
     }
-  },[problemTitle])
+  },[problemTitle]);
+
+  useEffect(()=>{
+    console.log(subProblemTitle,"subProblemTitle");
+    if(subProblemTitle && recentProblems){
+      
+      console.log(subProblemTitle, 'mils');
+      console.log(recentProblems,'oo');
+      const filter = recentProblems?.activity?.filter((item) => item?.serviceName == subProblemTitle && item?.status == 'OPEN'
+      );
+      console.log(filter,'po');
+
+      setPId(prev => filter[0]?.pid);
+    }
+  },[subProblemTitle,recentProblems]);
 
   const navigate = useNavigate();
   const navigateTo = (url) => {
@@ -34,17 +61,14 @@ const RemidiationForm = ({ data }) => {
      }
   };
 
-  return (
-    <div className=" bg-white w-full h-[550px] rounded-md overflow-auto">
-      <div className="flex justify-start bg-main">
-        <h3 className="text-white p-2">Active Problem</h3>
-      </div>
+  useEffect(() => {console.log(data, 'data');})
 
-      <div className="flex justify-center gap-5 mt-20 p-10">
-        <div className="w-[40%]">
+  return (
+    <div>
+      <div className="flex flex-col gap-2">
+        <div className=" w-full">
           <div className="flex flex-col">
             <label
-             
               className="flex justify-start mb-1 text-sm font-medium text-gray-900"
             >
               Problem Title:
@@ -55,7 +79,7 @@ const RemidiationForm = ({ data }) => {
               defaultValue={''}
               value={problemTitle}
               
-              className="bg-gray-50 border border-gray-300 text-gray-900 mb-2 text-sm rounded-lg focus:ring-2  focus:outline-none focus:ring-second block w-full p-2.5"
+              className="bg-gray-50 border border-gray-300 text-gray-900 mb-2 text-sm focus:ring-2  focus:outline-none focus:ring-second block w-full p-2.5"
             >
               <option value="" disabled>
                 Select Problem
@@ -70,7 +94,6 @@ const RemidiationForm = ({ data }) => {
 
           <div className="flex flex-col">
             <label
-              
               className="flex justify-start mb-1 text-sm font-medium text-gray-900"
             >
               Sub-Problem:
@@ -82,7 +105,7 @@ const RemidiationForm = ({ data }) => {
               defaultValue={""}
               value={subProblemTitle}
               
-              className="bg-gray-50 border border-gray-300 text-gray-900 mb-2 text-sm rounded-lg focus:ring-2  focus:outline-none focus:ring-second block w-full p-2.5"
+              className="bg-gray-50 border border-gray-300 text-gray-900 mb-2 text-sm focus:ring-2  focus:outline-none focus:ring-second block w-full p-2.5"
             >
               <option value={""} disabled>
                 Select Service
@@ -98,14 +121,13 @@ const RemidiationForm = ({ data }) => {
 
           <div className="flex flex-col">
             <label
-              
               className="flex justify-start mb-1 text-sm font-medium text-gray-900"
             >
               Recommendation:
             </label>
             <select
               id="sub-problem"
-              className="bg-gray-50 border border-gray-300 text-gray-900 mb-2 text-sm rounded-lg focus:ring-2  focus:outline-none focus:ring-second block w-full p-2.5"
+              className="bg-gray-50 border border-gray-300 text-gray-900 mb-2 text-sm focus:ring-2  focus:outline-none focus:ring-second block w-full p-2.5"
             >
               <option disabled>Select Recommendation</option>
               {["Start Service", "Recommendation 2", "Recommendation 3"].map(
@@ -117,7 +139,30 @@ const RemidiationForm = ({ data }) => {
           </div>
         </div>
 
-        <div className="w-[40%] flex flex-col justify-center gap-5">
+        <div className="flex justify-end gap-2">
+        <button
+          id="createRuleButton"
+          className="flex gap-2 focus:outline-none text-black bg-slate-100  hover:bg-slate-200 focus:ring-2  font-medium rounded-sm text-sm px-5 py-2 mb-2"
+          onClick={() => {
+            if(subProblemTitle) navigateTo(`/assisted-analysis/${pId}`);
+          }}
+        >
+          <i className="fa-solid fa-chart-line my-auto"></i>
+          Assisted Analysis
+        </button>
+        <button
+          id="createRuleButton"
+          className="flex gap-2 focus:outline-none text-black bg-slate-100  hover:bg-slate-200 focus:ring-2  font-medium rounded-sm text-sm px-5 py-2 mb-2"
+          onClick={() => {
+            navigateTo("/build-solution");
+          }}
+        >
+          <i className="fa-solid fa-chart-line my-auto"></i>
+          Build Solution
+        </button>
+        </div>
+
+        {/* <div className="w-[40%] flex flex-col justify-center gap-5">
           <div className="mx-auto w-full">
             <div
               className=" hover:bg-main w-full p-5 rounded-md text-main border border-main hover:text-white shadow-sm shadow-slate-400"
@@ -144,7 +189,7 @@ const RemidiationForm = ({ data }) => {
               </p>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

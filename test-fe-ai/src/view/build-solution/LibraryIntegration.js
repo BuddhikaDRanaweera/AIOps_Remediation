@@ -25,9 +25,6 @@ function LibraryItem({
 
   const handleInputChange = (event, item) => {
     const { value } = event.target;
-    console.log(value, "event");
-    console.log(item, "item");
-
     setFormData((prevData) => ({
       ...prevData,
       [item]: value,
@@ -39,10 +36,7 @@ function LibraryItem({
   };
 
   const handleAdd = () => {
-    // console.log(formData, "lll");
-    // const dataArray = Object.values(formData);
-    // console.log(dataArray, "lll2");
-    setparameters(Object.values(formData));
+    setparameters(Object.values(formData), value);
     action(value);
     path(pathValue);
     setInputValue("");
@@ -53,7 +47,7 @@ function LibraryItem({
   };
 
   return (
-    <div className=" bg-slate-100 shadow-sm shadow-slate-400 rounded-md p-3">
+    <div className=" bg-slate-100 shadow-sm shadow-slate-100 p-3">
       <div className="flex flex-row justify-between" onClick={toggleExpand}>
         {/* <div className="library-item-icon">{icon}</div> */}
         <div className="text-sm font-semibold">{title}</div>
@@ -81,7 +75,7 @@ function LibraryItem({
                   id={item.Key}
                   value={formData[item.Key] || ""}
                   onChange={(event) => handleInputChange(event, item.Key)}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-main focus:border-main block w-full p-2.5"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-main focus:border-main block w-full p-2.5"
                 />
               )}
 
@@ -90,7 +84,7 @@ function LibraryItem({
                   id={item.Key}
                   defaultValue={""}
                   onChange={(event) => handleInputChange(event, item.Key)}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-main focus:border-main block w-full p-2.5"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-main focus:border-main block w-full p-2.5"
                 >
                   <option value="" disabled>
                     Select an option
@@ -140,7 +134,9 @@ function BuildSolutionWithLibraries({ back }) {
   const [selectedLibraries, setSelectedLibraries] = useState([]);
 
   const [path, setPath] = useState([]);
+  ////
   const [parameters, setParameters] = useState([]);
+  ////
   const [isOpenPopup, setIsOpenPopup] = useState(false);
 
   useEffect(() => {
@@ -154,6 +150,8 @@ function BuildSolutionWithLibraries({ back }) {
   const changeFileName = (e) => {
     setFileName(e.target.value);
   };
+
+  const [pathKey, setPathKey] = useState([]);
 
   const popup = () => {
     return (
@@ -200,10 +198,12 @@ function BuildSolutionWithLibraries({ back }) {
 
             <div className="flex justify-between ">
               <div className="mt-3 p-2">
-                 <h3 className="text-start font-semibold">Parameters</h3>
-                 <div className="flex gap-3">
-                    {parameters?.map((item) => (<h3 className="bg-slate-100 p-2 rounded-md">{item}</h3>))}
-                 </div>
+                <h3 className="text-start font-semibold">Parameters</h3>
+                <div className="flex gap-3">
+                  {parameters?.map((item) => (
+                    <h3 className="bg-slate-100 p-2 rounded-md">{item}</h3>
+                  ))}
+                </div>
               </div>
               <div class="flex mt-3 justify-end gap-2 p-2 w-[500px]">
                 <label
@@ -241,9 +241,6 @@ function BuildSolutionWithLibraries({ back }) {
     );
   };
 
-  useEffect(() => {
-    console.log(parameters, "param");
-  }, [parameters]);
 
   const { isLoading, error, data, getData } = useFetch_GET();
 
@@ -252,25 +249,30 @@ function BuildSolutionWithLibraries({ back }) {
   };
 
   const buildSolution = () => {
-    console.log("build solution");
     let solution = { filePaths: path };
     postData("/v2/build_script", solution);
   };
 
   const handlesetPath = (data) => {
-    // console.log(data, "dsjhfbvjsd");
-    // data?.map((item) => setPath([...path, item]));
     setPath([...path, data]);
   };
 
-  const handlesetParameters = (data) => {
-    // data?.map((item) => setParameters([...parameters, item]));
-    // setParameters([...parameters, data]);
+  const handlesetParameters = (data, value) => {
+    setPathKey((prev) => [...prev, { key: value, value: data }]);
     const combinedArray = parameters.concat(data);
     setParameters((prev) => combinedArray);
   };
 
   const handleRemoveLibrary = (index) => {
+    const valuesObjToRemove = pathKey.find(
+      (item) => item.key == selectedLibraries[index]
+    );
+    const valuesToRemove = valuesObjToRemove.value;
+
+    const filteredArray = parameters.filter(
+      (item) => !valuesToRemove.includes(item)
+    );
+    setParameters((prev) => filteredArray);
     setSelectedLibraries(selectedLibraries.filter((_, i) => i !== index));
     setPath(path.filter((_, i) => i !== index));
   };
@@ -288,109 +290,14 @@ function BuildSolutionWithLibraries({ back }) {
     getData("/v2/libraries");
   }, []);
 
-  useEffect(() => {
-    console.log(data, "ggg");
-  }, [data]);
-
-  const libraries = [
-    {
-      category: "User",
-      description: "dscs",
-      id: 1,
-      parameters: ["serviceName", "jvm-min", "jvm-max"],
-      scriptName: "If running Start script",
-      scriptPath: "src/path",
-      serviceName: "apache2",
-    },
-    {
-      category: "User",
-      description: "dscs",
-      id: 1,
-      parameters: ["serviceName"],
-      scriptName: "If running check service",
-      scriptPath: "src/path",
-      serviceName: "car-service",
-    },
-    {
-      category: "User",
-      description: "dscs",
-      id: 1,
-      parameters: ["serviceName"],
-      scriptName: "If running check service",
-      scriptPath: "src/path",
-      serviceName: "nginX",
-    },
-  ];
+  // useEffect(() => {
+  //   console.log(data, "ggg");
+  // }, [data]);
 
   return (
-    <div className="flex justify-between p-2">
-      <div className=" relative w-[50%] h-cust">
-        {/*  */}
-        <nav
-          className="mb-1 flex px-5 py-3 text-gray-700 border border-gray-200 rounded-lg bg-gray-50"
-          aria-label="Breadcrumb"
-        >
-          <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
-            <li>
-              <div className="flex items-center">
-                <a className="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2">
-                  New Problem
-                </a>
-              </div>
-            </li>
-            <li>
-              <div className="flex items-center">
-                <svg
-                  className="rtl:rotate-180 block w-3 h-3 mx-1 text-gray-400 "
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 6 10"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="m1 9 4-4-4-4"
-                  />
-                </svg>
-                <a
-                  onClick={() => back()}
-                  className="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2"
-                >
-                  Build Solution
-                </a>
-              </div>
-            </li>
-
-            <li aria-current="page">
-              <div class="flex items-center">
-                <svg
-                  class="rtl:rotate-180  w-3 h-3 mx-1 text-gray-400"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 6 10"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="m1 9 4-4-4-4"
-                  />
-                </svg>
-                <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2">
-                  Library Integration
-                </span>
-              </div>
-            </li>
-          </ol>
-        </nav>
-        {/*  */}
-
-        <div className=" bg-white rounded-lg">
+    <div style={{cursor:"pointer"}} className="flex justify-between p-2 cursor-pointer">
+      <div className=" relative w-[50%]">
+        <div className=" bg-white shadow-sm  shadow-slate-200 ">
           <div className=" p-2 w-full">
             <h3 className=" font-semibold text-start ">
               Build Solution with Libraries
@@ -415,7 +322,7 @@ function BuildSolutionWithLibraries({ back }) {
         </div>
       </div>
       <div className="w-[50%] px-2">
-        <div className="bg-white h-[calc(100vh-110px)] rounded-lg overflow-hidden">
+        <div className="bg-white h-[calc(100vh-160px)] overflow-hidden">
           <div className="bg-main py-2 px-3  flex justify-between">
             <div className="flex">
               <h3 className="text-white my-auto">
@@ -435,11 +342,11 @@ function BuildSolutionWithLibraries({ back }) {
             </div>
           </div>
           <div>
-            <ul className="p-2">
+            <ul className="p-2 cursor-pointer">
               {selectedLibraries.map((library, index) => (
                 <li
                   key={index}
-                  className="bg-slate-100 p-2 flex justify-between"
+                  className="bg-slate-100 p-2 mb-1  flex justify-between"
                 >
                   {library}
                   <button

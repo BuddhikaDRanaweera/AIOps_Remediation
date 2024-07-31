@@ -126,7 +126,7 @@ function App() {
             />
             <Route
               exact
-              path="/assisted-analysis"
+              path="/assisted-analysis/:PID"
               name="Assisted-Analysis"
               element={<AssistedAnalysis />}
             />

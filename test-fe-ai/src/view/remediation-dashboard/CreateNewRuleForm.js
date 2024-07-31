@@ -86,13 +86,13 @@ const CreateNewRuleForm = () => {
           >
             {({ isSubmitting }) => (
               <Form>
-                <div className=" md:max-w-md mx-auto">
+                <div className=" md:max-w-md mb-2 mx-auto">
                   <div className="flex justify-start">
                     <h3 className=" text-sm font-semibold">Problem Title:</h3>
                   </div>
                   <div>
                     <Field
-                      className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2  focus:outline-none focus:ring-second block w-full p-2.5"
+                      className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm  focus:ring-2  focus:outline-none focus:ring-second block w-full p-2.5"
                       name="problemTitle"
                       type="text"
                       title="Problem title"
@@ -113,7 +113,7 @@ const CreateNewRuleForm = () => {
                   </div>
                   <div>
                     <Field
-                      className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2  focus:outline-none focus:ring-second block w-full p-2.5"
+                      className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm  focus:ring-2  focus:outline-none focus:ring-second block w-full p-2.5"
                       name="subProblemTitle"
                       type="text"
                       title="Sub-Problem"
@@ -134,7 +134,7 @@ const CreateNewRuleForm = () => {
                   </div>
                   <div>
                     <Field
-                      className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2  focus:outline-none focus:ring-second block w-full p-2.5"
+                      className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm  focus:ring-2  focus:outline-none focus:ring-second block w-full p-2.5"
                       name="serviceName"
                       type="text"
                       title="Service-Name"
@@ -157,7 +157,7 @@ const CreateNewRuleForm = () => {
                   </div>
                   <div>
                     <Field
-                      className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2  focus:outline-none focus:ring-second block w-full p-2.5"
+                      className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm  focus:ring-2  focus:outline-none focus:ring-second block w-full p-2.5"
                       name="resolutionScript"
                       type="text"
                       title="Resolution script"
@@ -178,7 +178,7 @@ const CreateNewRuleForm = () => {
                   </div>
                   <div>
                     <Field
-                      className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2  focus:outline-none focus:ring-second block w-full p-2.5"
+                      className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm  focus:ring-2  focus:outline-none focus:ring-second block w-full p-2.5"
                       name="recommendation"
                       type="text"
                       title="Recommendation"
@@ -196,7 +196,7 @@ const CreateNewRuleForm = () => {
                 <div className="flex flex-col  md:max-w-md mx-auto">
                   <button
                     type="submit"
-                    className="text-white w-full bg-main hover:bg-indigo-900 focus:ring-2 focus:outline-none focus:ring-indigo-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    className="text-white w-full bg-main hover:bg-indigo-900 focus:ring-2 focus:outline-none focus:ring-indigo-400 font-medium  text-sm px-5 py-2.5 text-center"
                     disabled={isSubmitting}
                   >
                     Submit

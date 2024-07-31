@@ -9,21 +9,23 @@ const QuickActions = () => {
   const problem = useSelector((state) => state.problem);
   const [selectedAction, setSelectedAction] = useState("not selected");
   const navigate = useNavigate();
+  const [isLibraryChecked, setIsLibraryChecked] = useState(true);
+  const [isCustomChecked, setIsCustomChecked] = useState(false);
 
-  useEffect(() => {
-    // if (problem.problemId === "") navigate("/new-problem");
-  }, []);
+  const handleLibraryChange = () => {
+    setIsLibraryChecked(!isLibraryChecked);
+    if (!isLibraryChecked) {
+      setIsCustomChecked(false);
+    }
+  };
 
-  // const renderDescription = () => {
-  //   switch (selectedAction) {
-  //     case "customFix":
-  //       return <CustomScript />;
-  //     case "libraryIntegration":
-  //       return <BuildSolutionWithLibraries />;
-  //     default:
-  //       return <p>Select an action to build your solution.</p>;
-  //   }
-  // };
+  const handleCustomChange = () => {
+    setIsCustomChecked(!isCustomChecked);
+    if (!isCustomChecked) {
+      setIsLibraryChecked(false);
+    }
+  };
+
 
   const handleAction = () => {
     setSelectedAction((prev) => "not selected");
@@ -31,35 +33,45 @@ const QuickActions = () => {
 
   return (
     <>
-      {selectedAction == "not selected" && (
-        <div className="p-5">
-          <h1 className=" text-3xl font-semibold text-start">Build Solution</h1>
-          <div className="w-full flex flex-col gap-5 p-5">
-            <div
-              onClick={() => setSelectedAction((prev) => "customFix")}
-              className="w-full bg-white border-2 flex h-52 shadow-md cursor-pointer hover:bg-main hover:text-white shadow-slate-400 text-main p-5 rounded-md m-auto"
-            >
-              <div className="my-auto text-start">
-                <h4 className=" text-3xl">Write a Custom Fix</h4>
-                <p>Write your own scripts from scratch.</p>
-              </div>
+      <div className="text-start p-5">
+        <div className="px-2 flex gap-2">
+          <div className="p-2 flex justify-start gap-2 bg-white w-[300px]">
+            <div className="flex">
+              <input
+                id="library-checkbox"
+                type="checkbox"
+                checked={isLibraryChecked}
+                onChange={handleLibraryChange}
+                className="w-4 h-4 mx-2 my-auto text-slate-400 bg-gray-100 border-gray-300 rounded focus:ring-slate-100 focus:ring-2 "
+              />
             </div>
-            <div
-              onClick={() => setSelectedAction((prev) => "libraryIntegration")}
-              className="w-full border-2 bg-white flex h-52 shadow-md cursor-pointer hover:bg-main hover:text-white shadow-slate-400 text-main p-5 rounded-md m-auto"
-            >
-              <div className="my-auto text-start">
-                <h4 className=" text-3xl">Library Integration</h4>
-                <p>Use existing libraries and external inputs.</p>
-              </div>
+            <div>
+              <h3 className="font-semibold text-sm">Library Integration</h3>
+              <p className="text-xs ">
+                Use existing libraries and external inputs.
+              </p>
+            </div>
+          </div>
+          <div className="p-2 flex justify-start gap-2 bg-white w-[300px]">
+            <div className="flex">
+              <input
+                id="custom-checkbox"
+                type="checkbox"
+                checked={isCustomChecked}
+                onChange={handleCustomChange}
+                className="w-4 h-4 mx-2 my-auto  text-slate-400 bg-gray-100 border-gray-300 rounded focus:ring-slate-100 focus:ring-2 "
+              />
+            </div>
+            <div>
+              <h3 className="font-semibold text-sm">Write a Custom Fix</h3>
+              <p className="text-xs">Write your own scripts from scratch</p>
             </div>
           </div>
         </div>
-      )}
-      {selectedAction == "libraryIntegration" && (
-        <BuildSolutionWithLibraries back={handleAction} />
-      )}
-      {selectedAction == "customFix" && <CustomScript back={handleAction} />}
+        {isLibraryChecked && <BuildSolutionWithLibraries back={handleAction} />}
+        {isCustomChecked && <CustomScript back={handleAction} />}
+      </div>
+
     </>
 
     // <div>

@@ -59,7 +59,7 @@ function SolutionRepository({ handleInputChange, setPath }) {
   };
 
   return (
-    <div className="bg-white rounded-md shadow-sm shadow-slate-400 h-[calc(100vh-110px)]">
+    <div className="bg-white shadow-sm shadow-slate-400 h-[calc(100vh-160px)]">
       <div className="flex justify-between">
         <div className="p-2 text-start">
           <h1 className=" text-sm font-semibold">
@@ -72,12 +72,12 @@ function SolutionRepository({ handleInputChange, setPath }) {
         {/*  */}
       </div>
       <div className="p-2">
-        <div className="m-0 bg-main  text-white flex justify-between">
+        <div className="m-0 bg-slate-200  text-main flex justify-between">
           <div className="flex gap-2">
             <h3
               onClick={() => setActiveTab((prev) => "all")}
               className={`mb-0 font-semibold text-sm p-4 ${
-                activeTab == "all" && "border-b-2 border-white text-white"
+                activeTab == "all" && "border-b-2 border-main"
               }`}
             >
               All
@@ -85,7 +85,7 @@ function SolutionRepository({ handleInputChange, setPath }) {
             <h3
               onClick={() => setActiveTab((prev) => "new")}
               className={`mb-0 font-semibold text-sm p-4  ${
-                activeTab == "new" && "border-b-2 border-white text-white"
+                activeTab == "new" && "border-b-2 border-main"
               }`}
             >
               New
@@ -99,7 +99,7 @@ function SolutionRepository({ handleInputChange, setPath }) {
                 </div>
                 <input
                   type="text"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  focus:ring-second focus:border-third block w-full ps-10 p-2.5"
+                  className="bg-gray-50  text-gray-900 text-sm block w-full ps-10 p-2"
                   placeholder="Scripts in the library"
                 />
               </div>
@@ -130,21 +130,21 @@ function SolutionRepository({ handleInputChange, setPath }) {
 export default SolutionRepository;
 
 export const Libraries_by_category = ({ title, libs, getLib }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
   return (
-    <div className="bg-slate-100 p-2 mb-1">
+    <div className="p-2 border-b border-slate-200">
       <div
         onClick={() => setIsExpanded((prev) => !prev)}
         className="flex justify-between"
       >
         <div className="flex gap-2">
           <i
-            className={`text-main text-lg fa ${
+            className={`text-main text-sm fa ${
               title === "User management" ? "fa-users" : "fa-cogs"
             }`}
             aria-hidden="true"
           ></i>
-          <h3 className=" font-semibold">{title}</h3>
+          <h3 className=" font-semibold text-xs">{title}</h3>
         </div>
         <div className="flex">
           {isExpanded ? (
