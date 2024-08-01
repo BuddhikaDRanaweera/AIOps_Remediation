@@ -20,7 +20,7 @@ import {
 } from "../../app/features/loading/LoadingSlice";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { dark } from "@mui/material/styles/createPalette";
+
 
 ChartJS.register(
   CategoryScale,
@@ -230,6 +230,47 @@ function AssistedAnalysis() {
   const [dataForCpuIdle, setDataForCpuIdle] = useState(null);
   const [dataForCpuUser, setDataForCpuUser] = useState(null);
   const [dataForCpuSystem, setDataForCpuSystem] = useState(null);
+  const [errorRateGraphs, setErrorRateGraphs] = useState([]);
+  const [errorRateGraphsView, setErrorRateGraphsView] = useState([]);
+
+  useEffect(() => {
+   if(errorRateGraphs.length !== 0){
+   const newError =  errorRateGraphs?.map(item => {
+      const leb = convertTimestamps(item?.graph?.label);
+      const data = replaceNullWithZero(item?.graph?.data);
+      return {
+        labels: leb,
+
+        datasets: [
+          {
+            label: item?.name,
+            fill: false,
+            lineTension: 0.1,
+            backgroundColor: "rgba(255,99,132,0.4)",
+            borderColor: "rgba(255,99,132,1)",
+            borderCapStyle: "butt",
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderJoinStyle: "miter",
+            pointBorderColor: "rgba(255,99,132,1)",
+            pointBackgroundColor: "#fff",
+            pointBorderWidth: 1,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: "rgba(255,99,132,1)",
+            pointHoverBorderColor: "rgba(220,220,220,1)",
+            pointHoverBorderWidth: 2,
+            pointRadius: 1,
+            pointHitRadius: 10,
+            data: data,
+          },
+        ],
+      }
+    });
+    console.log(newError,'ffff');
+
+    setErrorRateGraphsView(prev => newError);
+   }
+  },[errorRateGraphs])
 
   useEffect(() => {
     if (dataMem) {
@@ -244,17 +285,17 @@ function AssistedAnalysis() {
             label: "Memory",
             fill: false,
             lineTension: 0.1,
-            backgroundColor: "rgba(75,192,192,0.4)",
-            borderColor: "rgba(75,192,192,1)",
+            backgroundColor: "rgba(54,162,235,0.4)",
+            borderColor: "rgba(54,162,235,1)",
             borderCapStyle: "butt",
             borderDash: [],
             borderDashOffset: 0.0,
             borderJoinStyle: "miter",
-            pointBorderColor: "rgba(75,192,192,1)",
+            pointBorderColor: "rgba(54,162,235,1)",
             pointBackgroundColor: "#fff",
             pointBorderWidth: 1,
             pointHoverRadius: 5,
-            pointHoverBackgroundColor: "rgba(75,192,192,1)",
+            pointHoverBackgroundColor: "rgba(54,162,235,1)",
             pointHoverBorderColor: "rgba(220,220,220,1)",
             pointHoverBorderWidth: 2,
             pointRadius: 1,
@@ -463,13 +504,55 @@ function AssistedAnalysis() {
         }
       };
 
+      const fetchDataErrorRate = async () => {
+        try {
+          const response = await axios.get(
+            `https://mbx35629.live.dynatrace.com/api/v2/metrics/query?metricSelector=builtin:service.errors.total.rate&from=${startDate}&to=${endDate}`,
+            {
+              params: {
+                "Api-Token": apiKey,
+              },
+            }
+          );
+
+          const res = response.data.result[0].data;
+          console.log(response, "erroe")
+          const errorRatesGraphs = res.map(item => ({
+            name: item.dimensionMap["dt.entity.service"],
+            graph: {
+              label: item.timestamps,
+              data: item.values
+            }
+          }));
+
+          setErrorRateGraphs(prev => errorRatesGraphs);
+
+          // console.log(errorRatesGraphs, 'errors ..s');
+          
+          // const mem = {
+          //   label: res?.timestamps,
+          //   data: res?.values,
+          //   topic: `Memory Usage of ${res?.dimensionMap["dt.entity.host"]}`,
+          // };
+          // console.log(mem, "memory bb data");
+          // setDataMem((prev) => mem);
+        } catch (error) {
+          // alert(error.message);
+          console.error("Error fetching data: ", error);
+        } finally {
+          dispatch(clearGlobalLoading());
+        }
+      };
+
+
       fetchDataCPU();
       fetchDataMemory();
+      fetchDataErrorRate();
     }
   }, [data]);
 
   return (
-    <div className="p-5 flex flex-col gap-5 h-body overflow-auto">
+    <>{data && (<div className="p-5 flex flex-col gap-5 h-body overflow-auto">
       <div className="w-full flex flex-wrap gap-1">
         <div className="mx-auto p-5 w-[63%] bg-white shadow-sm shadow-slate-400">
           <div className="flex gap-2 mb-5 text-start text-lg text-main font-semibold">
@@ -570,13 +653,13 @@ function AssistedAnalysis() {
             </h3>
             <div className="p-3">
               {data?.affectedEntities?.map((item, index) => (
-                <h3 className="text-xs text-start mb-3">{item.name}</h3>
+                <h3 key={index} className="text-xs text-start mb-3">{item.name}</h3>
               ))}
             </div>
           </div>
         )}
       </div>
-
+      <h3 className="text-xl font-bold text-start">CPU Usage Graphs</h3>
       <div className="flex justify-center flex-wrap gap-1">
         {dataForCpuIdle && (
           <div className="w-[33%] bg-white shadow-sm shadow-slate-400 p-5">
@@ -602,7 +685,17 @@ function AssistedAnalysis() {
            <Line data={data2} />
            </div> */}
       </div>
+      <h3 className="text-xl font-bold text-start">Error Rate Graphs</h3>
+      <div className="flex flex-wrap justify-between gap-1">
 
+      {errorRateGraphsView.length !== 0 && errorRateGraphsView?.map(item => ( 
+          <div className="w-[33%] bg-white shadow-sm shadow-slate-400 p-5">
+            <Line data={item} />
+          </div>
+        ))}
+
+      </div>
+      <h3 className="text-xl font-bold text-start">Memory Usage Graphs</h3>
       <div>
         {data2 && (
           <div className="w-[40%] bg-white shadow-sm shadow-slate-400 p-5">
@@ -611,7 +704,7 @@ function AssistedAnalysis() {
           </div>
         )}
       </div>
-    </div>
+    </div>)}</>
   );
 }
 

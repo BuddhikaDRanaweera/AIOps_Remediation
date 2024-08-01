@@ -15,5 +15,10 @@ module.exports = {
       },
     },
   },
+  variants: {
+    extend: {
+      cursor: ['hover'],
+    },
+  },
   plugins: [],
 };

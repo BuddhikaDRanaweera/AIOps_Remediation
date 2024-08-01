@@ -175,13 +175,16 @@ const HomePage = () => {
   return (
     <div className=" p-5 flex flex-col gap-2 justify-between h-body ">
       <div className="flex flex-col gap-2 md:flex-row justify-between">
-        <div className=" w-full md:w-[610px] flex flex-col gap-2">
-          <div className=" flex flex-wrap gap-2">
+        <div className="w-full md:w-[635px] flex flex-col gap-2">
+          <div className=" p-2 shadow-sm shadow-slate-400 bg-white flex flex-wrap gap-2">
+            <div className="w-full">
+              <h3 className="text-sm font-semibold">Quick Actions</h3>
+            </div>
             <div
               onClick={() => {
                 dispatch(setNewRemediation(true));
               }}
-              className=" text-[#310078] w-[300px] flex gap-2 rounded-md  bg-white p-2 shadow-sm shadow-slate-400 hover:text-white hover:bg-[#310078]"
+              className="w-[300px] bg-slate-200 cursor-pointer flex gap-2 rounded-md  p-2 shadow-sm shadow-slate-400  hover:bg-slate-300"
             >
               <div className="my-auto">
                 <i className={` fa fa-plus-square p-2`} aria-hidden="true"></i>
@@ -197,7 +200,7 @@ const HomePage = () => {
                 onClick={() => {
                   navigateTo(item?.path);
                 }}
-                className=" text-[#310078] w-[300px] flex gap-2 rounded-md  bg-white p-2 shadow-sm shadow-slate-400 hover:text-white hover:bg-[#310078]"
+                className=" w-[300px] flex gap-2 rounded-md  bg-slate-200 p-2 shadow-sm shadow-slate-400  hover:bg-slate-300"
               >
                 <div className="my-auto">
                   <i className={` ${item?.icon} p-2`} aria-hidden="true"></i>
@@ -209,7 +212,7 @@ const HomePage = () => {
               </div>
             ))}
           </div>
-          <div className="bg-white p-5 h-[300px] shadow-sm shadow-slate-400">
+          <div className="bg-white p-5 h-[300px] shadow-sm shadow-slate-400 overflow-auto">
             <div className="flex justify-between ">
               <h3 className="text-sm font-semibold">Open Problems</h3>
               <div className="flex justify-center bg-orange-50 min-h-10 min-w-10">
@@ -270,6 +273,7 @@ const HomePage = () => {
             </div>
           </div>
         </div>
+
         <div className="w-full md:w-[calc(100vw-660px)] h-[425px] p-5 bg-white shadow-sm shadow-slate-400">
           <div className="flex flex-col md:flex-row justify-between ">
             <h3 className="text-sm text-start font-semibold">
