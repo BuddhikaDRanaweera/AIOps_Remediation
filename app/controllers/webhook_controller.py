@@ -34,7 +34,7 @@ def webhook():
     serviceName = data.get("ImpactedEntityNames")
     state = data.get("State", "unknown")
 
-    print(serviceName,pid,"pid")
+    print(serviceName[0],pid,"pid")
     if state == "OPEN":
             if "ServiceName" in data and "ProblemID" in data:
                 logger.info("Received webhook notification. Service to restart: %s", serviceName)
