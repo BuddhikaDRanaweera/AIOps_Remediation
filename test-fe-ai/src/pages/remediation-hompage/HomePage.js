@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useFetch_GET from "../../services/http/Get";
@@ -60,7 +59,6 @@ const HomePage = () => {
 
   const [isHighlightChecked, setIsHighlightChecked] = useState(false);
   const handleHighlightChange = () => {
-
     setIsHighlightChecked((prev) => !prev);
   };
 
@@ -83,16 +81,14 @@ const HomePage = () => {
     getDataActiveProblems("/get_new_problems");
     getData("/audit-status");
     ptGetData("/problem-list");
-}, []);
+  }, []);
 
   // useEffect(()=>{
   //   setInterval(()=>{
   //     getDataActiveProblems("/get_new_problems");
-      
+
   //   }, 5000)
   // },[])
-
- 
 
   useEffect(() => {
     if (ptData) console.log(ptData, "title");
@@ -213,15 +209,42 @@ const HomePage = () => {
             ))}
           </div>
           <div className="bg-white p-5 h-[300px] shadow-sm shadow-slate-400 overflow-auto">
-            <div className="flex justify-between ">
-              <h3 className="text-sm font-semibold">Open Problems</h3>
-              <div className="flex justify-center bg-orange-50 min-h-10 min-w-10">
-                <p className="font-bold m-auto text-2xl p-1">
-                  {data?.opencount || 0}
-                </p>
+            <div className="flex flex-col gap-2">
+              <div className="flex gap-2">
+                <div className="w-[33%]">
+                  <h3 className="text-sm font-semibold">Open Problems</h3>
+                </div>
+                <div className="w-[33%]">
+                  <h3 className="text-sm font-semibold">Inprogress Problems</h3>
+                </div>
+                <div className="w-[33%]">
+                  <h3 className="text-sm font-semibold">Remediated Problems</h3>
+                </div>
+              </div>
+              <div className="flex gap-2 w-full">
+                <div className="flex justify-center bg-red-50 max-h-10 w-[33%]">
+                  <p className="font-bold m-auto text-2xl p-1">
+                    {data?.opencount || 0}
+                  </p>
+                </div>
+                <div className="flex justify-center bg-yellow-50 max-h-10 w-[33%]">
+                  <p className="font-bold m-auto text-2xl p-1">
+                    {data?.InProgressCount || 0}
+                  </p>
+                </div>
+                <div className="flex justify-center bg-green-50 max-h-10 w-[33%]">
+                  <p className="font-bold m-auto text-2xl p-1">
+                    {data?.closedCount || 0}
+                  </p>
+                </div>
               </div>
             </div>
-            <div className="py-2">
+            <div className="pt-5">
+              <h3 className="text-sm font-bold">
+                New Problems
+              </h3>
+            </div>
+            <div className="py-2 ">
               <table className="w-full">
                 <thead>
                   <tr className="bg-slate-200 text-sm">
@@ -274,7 +297,7 @@ const HomePage = () => {
           </div>
         </div>
 
-        <div className="w-full md:w-[calc(100vw-660px)] h-[425px] p-5 bg-white shadow-sm shadow-slate-400">
+        <div className="w-full md:w-[calc(100vw-660px)] max-h-[calc(100vh-120px)] min-h-[469px] p-5 bg-white shadow-sm shadow-slate-400">
           <div className="flex flex-col md:flex-row justify-between ">
             <h3 className="text-sm text-start font-semibold">
               Recent Incidents
@@ -284,7 +307,7 @@ const HomePage = () => {
                 <input
                   id="bordered-checkbox-1"
                   type="checkbox"
-                  defaultValue={''}
+                  defaultValue={""}
                   checked={isHighlightChecked}
                   onChange={handleHighlightChange}
                   name="bordered-checkbox"
@@ -302,7 +325,7 @@ const HomePage = () => {
                 className="bg-gray-50 border border-gray-300 text-gray-900 mb-2 text-sm w-[150px]  focus:outline-none  block  p-1"
               >
                 <option disabled value="">
-                  select title
+                  Select Title
                 </option>
                 {ptData?.map((item, index) => (
                   <option key={index} value={item}>
@@ -318,11 +341,11 @@ const HomePage = () => {
                 className="bg-gray-50 border border-gray-300 text-gray-900 mb-2 text-sm w-[150px]  focus:outline-none  block  p-1"
               >
                 <option disabled value="">
-                  select Action Type
+                  Select Action Type
                 </option>
-                {["MANUAL", "AUTO"].map((item, index) => (
+                {["MANUAL", "AUTOMATIC"].map((item, index) => (
                   <option key={index} value={item}>
-                    {item}
+                    {item.toUpperCase()}
                   </option>
                 ))}
               </select>
@@ -334,7 +357,7 @@ const HomePage = () => {
                 className="bg-gray-50 border border-gray-300 text-gray-900 mb-2 text-sm w-[150px]  focus:outline-none  block  p-1"
               >
                 <option disabled value="">
-                  select status
+                  Select Status
                 </option>
                 {["OPEN", "CLOSED", "IN_PROGRESS"].map((item, index) => (
                   <option key={index} value={item}>
