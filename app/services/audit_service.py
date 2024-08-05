@@ -82,7 +82,7 @@ def get_audit_status():
         in_progress_count = Audit.query.filter_by(status="IN_PROGRESS").count()
         closedCount = Audit.query.filter_by(status="CLOSED").count()
 
-        latest_audits = Audit.query.order_by(Audit.problemDetectedAt.desc()).all()
+        latest_audits = Audit.query.order_by(Audit.problemDetectedAt.desc()).limit(10).all()
 
         audit_list = [
             {
