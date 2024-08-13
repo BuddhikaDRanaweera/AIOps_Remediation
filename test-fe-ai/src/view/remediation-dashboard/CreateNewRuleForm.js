@@ -49,7 +49,7 @@ const CreateNewRuleForm = () => {
   if (data?.status === 201) navigate("/recommendation");
 
   return (
-    <div className="bg-blur flex h-lvh justify-center overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50  items-center w-full md:inset-0  max-h-full">
+    <div className="bg-blur flex h-lvh justify-center overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50  items-center w-full md:inset-0 p-2   max-h-full">
       <div className="m-auto  relative  w-full max-w-md max-h-full rounded-md overflow-hidden bg-white shadow-sm shadow-slate-400">
         <div className="flex justify-between p-4 border-b border-gray-300">
           <h3 className=" text-lg font-bold">New Recommendation</h3>

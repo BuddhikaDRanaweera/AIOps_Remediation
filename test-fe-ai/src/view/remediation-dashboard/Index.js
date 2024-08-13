@@ -49,9 +49,9 @@ const Dashboard = () => {
 
   return (
  
-    <div className="p-5 flex gap-2">
+    <div className="p-5 flex flex-col md:flex-row gap-2">
      
-     <div className="flex flex-col gap-2 bg-white p-5 shadow-sm shadow-slate-400 w-[700px]">
+     <div className="flex flex-col gap-2 bg-white p-5 shadow-sm shadow-slate-400 md:w-[700px]">
       <div className="flex justify-between">
         <h3 className="text-sm font-semibold">Active Problem</h3>
         <button
@@ -71,7 +71,7 @@ const Dashboard = () => {
 
      {/*  */}
 
-     <div className="bg-white p-5 h-[400px] w-[calc(100vw-700px)] shadow-sm shadow-slate-400">
+     <div className="bg-white p-5 h-[400px] md:w-[calc(100vw-700px)] shadow-sm shadow-slate-400">
             <div className="flex justify-between ">
               <h3 className="text-sm font-semibold">All Problems</h3>
               <div className="flex items-center gap-2 px-2 border h-[29px] bg-slate-50 border-gray-200">
