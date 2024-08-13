@@ -297,8 +297,8 @@ function BuildSolutionWithLibraries({ back }) {
   // }, [data]);
 
   return (
-    <div style={{cursor:"pointer"}} className="flex justify-between p-2 cursor-pointer">
-      <div className=" relative w-[50%]">
+    <div style={{cursor:"pointer"}} className="flex md:flex-row flex-col justify-between p-2 cursor-pointer">
+      <div className=" relative md:w-[50%]">
         <div className=" bg-white shadow-sm  shadow-slate-200 ">
           <div className=" p-2 w-full">
             <h3 className=" font-semibold text-start ">
@@ -323,7 +323,7 @@ function BuildSolutionWithLibraries({ back }) {
           </div>
         </div>
       </div>
-      <div className="w-[50%] px-2">
+      <div className="md:w-[50%] md:px-2 mt-1 md:m-0">
         <div className="bg-white h-[calc(100vh-160px)] overflow-hidden">
           <div className="bg-slate-200 py-2 px-3  flex justify-between">
             <div className="flex">

@@ -132,7 +132,7 @@ export default SolutionRepository;
 export const Libraries_by_category = ({ title, libs, getLib }) => {
   const [isExpanded, setIsExpanded] = useState(true);
   return (
-    <div className="p-2 border-b border-slate-200">
+    <div className="p-2 border-b border-slate-200 ">
       <div
         onClick={() => setIsExpanded((prev) => !prev)}
         className="flex justify-between"

@@ -158,12 +158,12 @@ function CustomScript({ back }) {
   };
 
   return (
-    <div className="flex justify-between">
+    <div className="flex flex-col md:flex-row justify-between">
       <div
         onClick={() => {
           if (isOpenAction) setIsOpenAction(false);
         }}
-        className="w-[60%] p-2"
+        className="md:w-[60%] p-2"
       >
         <div className="relative flex justify-end bg-slate-300 px-3">
           <div className=" hover:bg-blur hover:text-white rounded-md p-1 m-1 ">
@@ -205,7 +205,7 @@ function CustomScript({ back }) {
         />
 
         {parameters?.length !== 0 && (
-          <div className="bg-white h-10 flex p-2">
+          <div className="bg-white h-10 overflow-auto flex p-2">
             <div className="my-auto px-5">
               <h3 className="text-sm font-semibold">Parameters</h3>
             </div>
@@ -220,7 +220,7 @@ function CustomScript({ back }) {
         )}
       </div>
 
-      <div className=" w-[40%] pe-2 pt-2">
+      <div className=" md:w-[40%] pe-2 pt-2  overflow-auto h-[calc(100vh-150px)]">
         <SolutionRepository
           handleInputChange={handleInputChange_}
           setPath={setPath}

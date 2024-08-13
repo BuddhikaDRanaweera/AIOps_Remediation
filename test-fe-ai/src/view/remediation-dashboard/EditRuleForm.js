@@ -53,7 +53,7 @@ const EditRuleForm = () => {
 
   return (
     <div className="flex justify-center items-center h-[calc(100vh-100px)] p-4">
-      <div className="bg-white shadow-lg w-full max-w-lg p-6 mx-auto">
+      <div className="bg-white shadow-lg w-full md:w-[60%] p-6 mx-auto">
         <h1 className="text-2xl font-semibold text-gray-800 mb-6">Edit Recommendation</h1>
         <Formik
           initialValues={{

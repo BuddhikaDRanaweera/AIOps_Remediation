@@ -34,7 +34,7 @@ const QuickActions = () => {
   return (
     <>
       <div className="text-start p-5">
-        <div className="px-2 flex gap-2">
+        <div className="px-2 flex md:flex-row flex-col gap-2">
           <div className="p-2 flex justify-start gap-2 bg-white w-[300px]">
             <div className="flex">
               <input
