@@ -61,9 +61,9 @@ const RemediationTable = () => {
           </select>
         </div> */}
       </div>
-      <div className="px-5 py-2 w-full">
-        <table className="w-full bg-white overflow-hidden shadow-sm shadow-slate-400 text-sm text-left rtl:text-right text-gray-500">
-          <thead className="text-xs bg-main text-white uppercase ">
+      <div className="px-5 py-2 w-full h-[calc(100vh-150px)] overflow-auto">
+        <table className="w-full bg-white overflow-hidden shadow-sm shadow-slate-400 text-sm text-left rtl:text-right ">
+          <thead className="text-xs bg-slate-300 uppercase ">
             <tr className="">
               <th className="px-6 py-3">ProblemId</th>
               <th className="px-6 py-3">Problem Title</th>

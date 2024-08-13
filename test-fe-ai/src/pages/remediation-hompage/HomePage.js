@@ -172,15 +172,15 @@ const HomePage = () => {
     <div className=" p-5 flex flex-col gap-2 justify-between h-body ">
       <div className="flex flex-col gap-2 md:flex-row justify-between">
         <div className="w-full md:w-[635px] flex flex-col gap-2">
-          <div className=" p-2 shadow-sm shadow-slate-400 bg-white flex flex-wrap gap-2">
-            <div className="w-full">
+          <div className=" p-2 shadow-sm shadow-slate-400 bg-white flex flex-col md:grid md:grid-cols-2 gap-2">
+            <div className="col-span-2">
               <h3 className="text-sm font-semibold">Quick Actions</h3>
             </div>
             <div
               onClick={() => {
                 dispatch(setNewRemediation(true));
               }}
-              className="w-[300px] bg-slate-200 cursor-pointer flex gap-2 rounded-md  p-2 shadow-sm shadow-slate-400  hover:bg-slate-300"
+              className=" bg-slate-200 cursor-pointer flex gap-2 rounded-md  p-2 shadow-sm shadow-slate-400  hover:bg-slate-300"
             >
               <div className="my-auto">
                 <i className={` fa fa-plus-square p-2`} aria-hidden="true"></i>
@@ -196,7 +196,7 @@ const HomePage = () => {
                 onClick={() => {
                   navigateTo(item?.path);
                 }}
-                className=" w-[300px] flex gap-2 rounded-md  bg-slate-200 p-2 shadow-sm shadow-slate-400  hover:bg-slate-300"
+                className="flex gap-2 rounded-md cursor-pointer  bg-slate-200 p-2 shadow-sm shadow-slate-400  hover:bg-slate-300"
               >
                 <div className="my-auto">
                   <i className={` ${item?.icon} p-2`} aria-hidden="true"></i>
@@ -208,7 +208,7 @@ const HomePage = () => {
               </div>
             ))}
           </div>
-          <div className="bg-white p-5 h-[300px] shadow-sm shadow-slate-400 overflow-auto">
+          <div className="bg-white cursor-pointer p-5 h-[calc(100vh-270px)] shadow-sm shadow-slate-400">
             <div className="flex flex-col gap-2">
               <div className="flex gap-2">
                 <div className="w-[33%]">
@@ -244,7 +244,7 @@ const HomePage = () => {
                 New Problems
               </h3>
             </div>
-            <div className="py-2 ">
+            <div className="py-2 h-[calc(100vh-400px)] overflow-auto">
               <table className="w-full">
                 <thead>
                   <tr className="bg-slate-200 text-sm">
@@ -258,6 +258,7 @@ const HomePage = () => {
                 <tbody>
                   {dataActiveProblems?.map((incident, index) => (
                     <tr
+                     
                       key={index}
                       onClick={() =>
                         setSelectedProblem(
@@ -266,7 +267,7 @@ const HomePage = () => {
                           incident.id
                         )
                       }
-                      className="bg-white hover:bg-slate-50 text-xs border-b border-gray-300"
+                      className="bg-white cursor-pointer hover:bg-slate-50 text-xs border-b border-gray-300"
                     >
                       <td className="p-2">{incident?.id}</td>
                       <td>{incident?.problemTitle}</td>
@@ -274,13 +275,13 @@ const HomePage = () => {
                       <td>
                         {incident?.serviceName == "apache2" ? (
                           <div className="flex">
-                            <p className=" m-auto w-12 bg-red-400 p-1 text-xs rounded-full text-white">
+                            <p className=" m-auto text-center w-12 bg-red-400 p-1 text-xs rounded-full text-white">
                               High
                             </p>
                           </div>
                         ) : (
                           <div className="flex">
-                            <p className=" m-auto  w-12 bg-amber-600 p-1 text-xs rounded-full text-white">
+                            <p className=" m-auto  text-center w-12 bg-amber-600 p-1 text-xs rounded-full text-white">
                               Low
                             </p>
                           </div>
@@ -297,7 +298,7 @@ const HomePage = () => {
           </div>
         </div>
 
-        <div className="w-full md:w-[calc(100vw-660px)] max-h-[calc(100vh-120px)] min-h-[469px] p-5 bg-white shadow-sm shadow-slate-400">
+        <div className="w-full cursor-pointer md:w-[calc(100vw-660px)] h-[calc(100vh-102px)] min-h-[469px] p-5 bg-white shadow-sm shadow-slate-400">
           <div className="flex flex-col md:flex-row justify-between ">
             <h3 className="text-sm text-start font-semibold">
               Recent Incidents

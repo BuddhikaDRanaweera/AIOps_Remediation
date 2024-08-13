@@ -32,6 +32,7 @@ ChartJS.register(
   Legend,
   RadialLinearScale // Add this line
 );
+
 function AssistedAnalysis() {
   const { PID, ExecutionId } = useParams();
   //   const data = {

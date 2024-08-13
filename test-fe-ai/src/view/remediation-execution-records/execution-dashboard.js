@@ -75,7 +75,7 @@ const ExecutionHistory = () => {
         </div>
         <div className="flex justify-end gap-5 px-5">
            <div className="my-auto">
-           <select className="bg-gray-50 border border-gray-300 text-gray-900 mb-2 text-sm rounded-lg focus:ring-2  focus:outline-none focus:ring-second block w-full p-2.5" id="remediation-filter" onChange={handleServiceFilterChange}>
+           <select className="bg-gray-50 border border-gray-300 text-gray-900 mb-2 text-sm outline-none block w-full p-2.5" id="remediation-filter" onChange={handleServiceFilterChange}>
             <option value="">Filter by Service Name</option>
             <option value="apache2">Apache2</option>
             <option value="OneAgent">OneAgent</option>
@@ -83,7 +83,7 @@ const ExecutionHistory = () => {
           </select>
            </div>
            <div className="my-auto">
-           <select className="bg-gray-50 border border-gray-300 text-gray-900 mb-2 text-sm rounded-lg focus:ring-2  focus:outline-none focus:ring-second block w-full p-2.5" id="status-filter" onChange={handleStatusFilterChange}>
+           <select className="bg-gray-50 border border-gray-300 text-gray-900 mb-2 text-sm outline-none block w-full p-2.5"id="status-filter" onChange={handleStatusFilterChange}>
             <option value="">Filter by Status</option>
             <option value="CLOSED">Closed</option>
             <option value="IN_PROGRESS">In Progress</option>
@@ -92,9 +92,9 @@ const ExecutionHistory = () => {
            </div>
         </div>
       </div>
-      <div className="px-5">
-        <table className="w-full bg-white  rounded-md overflow-hidden shadow-sm shadow-slate-400 text-sm text-left rtl:text-right text-gray-500">
-        <thead className="text-xs bg-main text-white uppercase">
+      <div className="px-5 h-[calc(100vh-180px)] overflow-auto">
+        <table className="w-full bg-white overflow-hidden shadow-sm shadow-slate-400 text-sm text-left rtl:text-right ">
+        <thead className="text-xs bg-slate-300 uppercase">
             <tr >
               {/* <th>ID</th> */}
               <th className="p-3 text-center">DisplayID</th>

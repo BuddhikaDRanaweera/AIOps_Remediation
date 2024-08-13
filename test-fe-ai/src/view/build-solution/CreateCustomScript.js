@@ -165,16 +165,16 @@ function CustomScript({ back }) {
         }}
         className="w-[60%] p-2"
       >
-        <div className="relative flex justify-end bg-main px-3">
-          <div className=" hover:bg-blur rounded-md p-1 ">
+        <div className="relative flex justify-end bg-slate-300 px-3">
+          <div className=" hover:bg-blur hover:text-white rounded-md p-1 m-1 ">
             <HiDotsHorizontal
               onClick={() => setIsOpenAction((prev) => !prev)}
-              className=" text-2xl text-white"
+              className=" text-2xl "
             />
           </div>
 
           {isOpenAction && (
-            <div className=" absolute top-9 right-4 flex flex-col gap-1 w-32 z-40 bg-white p-3 rounded-md text-start">
+            <div className=" cursor-pointer absolute top-9 right-4 flex flex-col gap-1 w-32 z-40 bg-white p-3 rounded-md text-start">
               <h3
                 onClick={() => setIsOpenPopup((prev) => "save")}
                 className=" hover:text-main"

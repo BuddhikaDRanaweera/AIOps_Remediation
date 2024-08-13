@@ -196,7 +196,7 @@ const CreateNewRuleForm = () => {
                 <div className="flex flex-col  md:max-w-md mx-auto">
                   <button
                     type="submit"
-                    className="text-white w-full bg-main hover:bg-indigo-900 focus:ring-2 focus:outline-none focus:ring-indigo-400 font-medium  text-sm px-5 py-2.5 text-center"
+                    className="w-full bg-slate-200 hover:bg-slate-300 focus:ring-2 focus:outline-none focus:ring-indigo-400 font-medium  text-sm px-5 py-2.5 text-center"
                     disabled={isSubmitting}
                   >
                     Submit

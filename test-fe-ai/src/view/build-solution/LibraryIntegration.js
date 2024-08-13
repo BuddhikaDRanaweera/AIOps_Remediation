@@ -1,5 +1,7 @@
 import Editor from "@monaco-editor/react";
 import React, { useEffect, useState } from "react";
+import { IoMdRemove } from "react-icons/io";
+import { IoMdAdd } from "react-icons/io";
 import { FaPlusCircle } from "react-icons/fa";
 import { FaCircleMinus } from "react-icons/fa6";
 import useFetch_GET from "../../services/http/Get";
@@ -53,9 +55,9 @@ function LibraryItem({
         <div className="text-sm font-semibold">{title}</div>
         <div className="text-lg font-bold">
           {isExpanded ? (
-            <FaCircleMinus className="text-main" />
+            <IoMdRemove className="" />
           ) : (
-            <FaPlusCircle className="text-main" />
+            <IoMdAdd className="" />
           )}
         </div>
       </div>
@@ -75,7 +77,7 @@ function LibraryItem({
                   id={item.Key}
                   value={formData[item.Key] || ""}
                   onChange={(event) => handleInputChange(event, item.Key)}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-main focus:border-main block w-full p-2.5"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm outline-none block w-full p-2.5"
                 />
               )}
 
@@ -84,7 +86,7 @@ function LibraryItem({
                   id={item.Key}
                   defaultValue={""}
                   onChange={(event) => handleInputChange(event, item.Key)}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-main focus:border-main block w-full p-2.5"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm outline-none block w-full p-2.5"
                 >
                   <option value="" disabled>
                     Select an option
@@ -103,7 +105,7 @@ function LibraryItem({
           <div className="flex justify-end pb-3">
             <button
               onClick={handleAdd}
-              className="text-white bg-main hover:bg-second focus:ring-2 focus:outline-none focus:ring-third font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
+              className=" bg-slate-200 hover:bg-slate-300 outline-none focus:outline-none font-medium  text-sm w-full sm:w-auto px-5 py-2.5 text-center"
             >
               Add to Solution
             </button>
@@ -323,20 +325,20 @@ function BuildSolutionWithLibraries({ back }) {
       </div>
       <div className="w-[50%] px-2">
         <div className="bg-white h-[calc(100vh-160px)] overflow-hidden">
-          <div className="bg-main py-2 px-3  flex justify-between">
+          <div className="bg-slate-200 py-2 px-3  flex justify-between">
             <div className="flex">
-              <h3 className="text-white my-auto">
+              <h3 className="my-auto">
                 Selected Libraries ({selectedLibraries.length})
               </h3>
             </div>
             <div className="flex">
               <button
-                className=" hover:bg-third rounded-md py-1 px-2 text-white flex justify-center gap-2"
+                className=" hover:bg-slate-400 rounded-md py-1 px-2 flex justify-center gap-2"
                 onClick={() => {
                   buildSolution();
                 }}
               >
-                <FaHammer className="text-white text-md my-auto" />
+                <FaHammer className="text-md my-auto" />
                 Build
               </button>
             </div>
@@ -350,7 +352,7 @@ function BuildSolutionWithLibraries({ back }) {
                 >
                   {library}
                   <button
-                    className="bg-indigo-100 hover:bg-indigo-200 rounded-md p-1 "
+                    className="bg-indigo-100 hover:bg-indigo-200 p-1 "
                     onClick={() => handleRemoveLibrary(index)}
                   >
                     Remove

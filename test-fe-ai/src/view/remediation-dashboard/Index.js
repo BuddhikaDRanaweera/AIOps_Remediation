@@ -56,7 +56,7 @@ const Dashboard = () => {
         <h3 className="text-sm font-semibold">Active Problem</h3>
         <button
           id="createRuleButton"
-          className="focus:outline-none text-white bg-main  hover:bg-second focus:ring-4 focus:ring-third font-medium rounded-sm text-sm px-5 py-2 mb-2"
+          className="focus:outline-none text-black bg-slate-200 hover:bg-slate-300 font-medium rounded-sm text-sm px-5 py-2 mb-2"
           onClick={() => {
             dispatch(setNewRemediation(true))
           }}
@@ -89,7 +89,7 @@ const Dashboard = () => {
                 </label>
               </div>
             </div>
-            <div className="py-2">
+            <div className="py-2 h-[340px] overflow-auto">
               <table className="w-full">
                 <thead>
                   <tr className="bg-slate-200 text-sm">

@@ -6,7 +6,6 @@ import * as Yup from "yup";
 import useFetch_GET from "../../services/http/Get";
 import useFetch_POST from "../../services/http/Post";
 
-
 const EditRuleForm = () => {
   const { isLoading, error, data, postData } = useFetch_POST();
   const {
@@ -50,9 +49,11 @@ const EditRuleForm = () => {
     postData(`/edit_remediation/${problemId}/${remediationId}`, values);
   };
   if (data?.status === 200) navigate("/recommendation");
+
   return (
-    <div className="middle-panel">
-      <div className="table-header">Edit Recommendation</div>
+     <div className="flex justify-center h-[calc(100vh-100px)]">
+ <div className="p-6 bg-white shadow-lg m-auto w-[60%]">
+      <h1 className="text-2xl font-semibold text-gray-800 mb-6">Edit Recommendation</h1>
       <Formik
         initialValues={{
           problemTitle: "",
@@ -67,150 +68,112 @@ const EditRuleForm = () => {
       >
         {({ isSubmitting }) => (
           <Form>
-            <div className="middle-panel-text">
-              <div className="form-value">
-                <div style={{ width: "20%", marginTop: "10px" }}>
-                  <p className="recommendation-title">
-                    <strong>Problem Title: </strong>
-                  </p>
-                </div>
-                <div
-                  style={{
-                    width: "80%",
-                    display: "flex",
-                    justifyContent: "start",
-                    marginTop: "10px",
-                  }}
-                >
+            <div className="space-y-4">
+              <div className="flex items-start">
+                <label className="w-1/4 text-gray-700 font-medium" htmlFor="problemTitle">
+                  Problem Title:
+                </label>
+                <div className="w-3/4">
                   <Field
-                    className="new-rule-input-box"
+                    id="problemTitle"
                     name="problemTitle"
                     type="text"
-                    title="Problem title"
+                    className="w-full px-4 py-2 border border-gray-300 focus:outline-none focus:ring focus:border-blue-500"
                   />
                   <ErrorMessage
                     name="problemTitle"
                     component="div"
-                    className="error"
+                    className="text-red-600 text-sm mt-1"
                   />
                 </div>
               </div>
-              <div className="form-value">
-                <div style={{ width: "20%", marginTop: "10px" }}>
-                  <p className="recommendation-title">
-                    <strong>Sub-Problem: </strong>
-                  </p>
-                </div>
-                <div
-                  style={{
-                    width: "80%",
-                    display: "flex",
-                    justifyContent: "start",
-                    marginTop: "10px",
-                  }}
-                >
+              <div className="flex items-start">
+                <label className="w-1/4 text-gray-700 font-medium" htmlFor="subProblemTitle">
+                  Sub-Problem:
+                </label>
+                <div className="w-3/4">
                   <Field
-                    className="new-rule-input-box"
+                    id="subProblemTitle"
                     name="subProblemTitle"
                     type="text"
-                    title="Sub-Problem"
+                    className="w-full px-4 py-2 border border-gray-300 focus:outline-none focus:ring focus:border-blue-500"
                   />
                   <ErrorMessage
                     name="subProblemTitle"
                     component="div"
-                    className="error"
+                    className="text-red-600 text-sm mt-1"
                   />
                 </div>
               </div>
-              <div className="form-value">
-                <div style={{ width: "20%", marginTop: "10px" }}>
-                  <p className="recommendation-title">
-                    <strong>Service Name: </strong>
-                  </p>
-                </div>
-                <div
-                  style={{
-                    width: "80%",
-                    display: "flex",
-                    justifyContent: "start",
-                    marginTop: "10px",
-                  }}
-                >
+              <div className="flex items-start">
+                <label className="w-1/4 text-gray-700 font-medium" htmlFor="serviceName">
+                  Service Name:
+                </label>
+                <div className="w-3/4">
                   <Field
-                    className="new-rule-input-box"
+                    id="serviceName"
                     name="serviceName"
                     type="text"
-                    title="Service-Name"
+                    className="w-full px-4 py-2 border border-gray-300 focus:outline-none focus:ring focus:border-blue-500"
                   />
                   <ErrorMessage
                     name="serviceName"
                     component="div"
-                    className="error"
+                    className="text-red-600 text-sm mt-1"
                   />
                 </div>
               </div>
-              <div className="form-value">
-                <div style={{ width: "20%", marginTop: "10px" }}>
-                  <p className="recommendation-title">
-                    <strong>Resolution Script: </strong>
-                  </p>
-                </div>
-                <div
-                  style={{
-                    width: "80%",
-                    display: "flex",
-                    justifyContent: "start",
-                    marginTop: "10px",
-                  }}
-                >
+              <div className="flex items-start">
+                <label className="w-1/4 text-gray-700 font-medium" htmlFor="resolutionScript">
+                  Resolution Script:
+                </label>
+                <div className="w-3/4">
                   <Field
-                    className="new-rule-input-box"
+                    id="resolutionScript"
                     name="resolutionScript"
                     type="text"
-                    title="Resolution script"
+                    className="w-full px-4 py-2 border border-gray-300 focus:outline-none focus:ring focus:border-blue-500"
                   />
                   <ErrorMessage
                     name="resolutionScript"
                     component="div"
-                    className="error"
+                    className="text-red-600 text-sm mt-1"
                   />
                 </div>
               </div>
-              <div className="form-value">
-                <div style={{ width: "20%", marginTop: "10px" }}>
-                  <p className="recommendation-title">
-                    <strong>Recommendation: </strong>
-                  </p>
-                </div>
-                <div
-                  style={{
-                    width: "80%",
-                    display: "flex",
-                    justifyContent: "start",
-                    marginTop: "10px",
-                  }}
-                >
+              <div className="flex items-start">
+                <label className="w-1/4 text-gray-700 font-medium" htmlFor="recommendation">
+                  Recommendation:
+                </label>
+                <div className="w-3/4">
                   <Field
-                    className="new-rule-input-box"
+                    id="recommendation"
                     name="recommendation"
                     type="text"
-                    title="Recommendation"
+                    className="w-full px-4 py-2 border border-gray-300 focus:outline-none focus:ring focus:border-blue-500"
                   />
                   <ErrorMessage
                     name="recommendation"
                     component="div"
-                    className="error"
+                    className="text-red-600 text-sm mt-1"
                   />
                 </div>
               </div>
             </div>
-            <button type="submit" className="button" disabled={isSubmitting}>
-              Update
-            </button>
+            <div className="mt-6">
+              <button
+                type="submit"
+                className="px-6 py-2 bg-slate-200 outline-none shadow hover:bg-slate-300 focus:outline-none disabled:opacity-50"
+                disabled={isSubmitting}
+              >
+                Update
+              </button>
+            </div>
           </Form>
         )}
       </Formik>
     </div>
+     </div>
   );
 };
 
