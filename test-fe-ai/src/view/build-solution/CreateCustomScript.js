@@ -158,7 +158,8 @@ function CustomScript({ back }) {
   };
 
   return (
-    <div className="flex flex-col md:flex-row justify-between">
+    <>
+     <div className=" hidden md:flex flex-col md:flex-row justify-between">
       <div
         onClick={() => {
           if (isOpenAction) setIsOpenAction(false);
@@ -202,6 +203,7 @@ function CustomScript({ back }) {
           theme="vs-dark"
           value={script}
           onChange={handleInputChange}
+          
         />
 
         {parameters?.length !== 0 && (
@@ -238,6 +240,11 @@ function CustomScript({ back }) {
           onChangeFile
         )}
     </div>
+    <div className="flex md:hidden justify-center ">
+        <h3 className="text-gray-500 text-sm m-5">You can not access this in mobile view.</h3> 
+    </div>
+    </>
+   
 
     //
   );

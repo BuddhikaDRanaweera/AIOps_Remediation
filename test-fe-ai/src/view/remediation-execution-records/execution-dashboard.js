@@ -73,7 +73,7 @@ const ExecutionHistory = () => {
       </div>
 
       {/* Table / Cards */}
-      <div className="overflow-auto">
+      <div className="px-5 py-2 w-full h-[calc(100vh-190px)] overflow-auto">
         <div className="hidden md:block">
           <table className="w-full bg-white shadow-sm text-sm text-left">
             <thead className="bg-gray-200 text-xs">

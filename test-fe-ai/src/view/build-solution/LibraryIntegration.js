@@ -157,89 +157,178 @@ function BuildSolutionWithLibraries({ back }) {
 
   const popup = () => {
     return (
-      <div className="overflow-y-auto bg-blur flex overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-lvh">
-        <div class="relative p-4 w-full">
-          <div class="relative bg-white rounded-lg shadow-sm shadow-black p-2 h-[calc(100vh-60px)]">
-            <div className="flex justify-between bg-main px-2 py-1">
-              <h3 className="text-lg text-slate-500 text-start"></h3>
-              <button
-                onClick={() => setIsOpenPopup((prev) => "")}
-                type="button"
-                className=" text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-              >
-                <svg
-                  class="w-3 h-3"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 14 14"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                  />
-                </svg>
-                <span className="sr-only">Close modal</span>
-              </button>
-            </div>
+      // <div className="overflow-y-auto bg-blur flex overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-lvh">
+      //   <div class="relative p-4 w-full">
+      //     <div class="relative bg-white rounded-lg shadow-sm shadow-black p-2 h-[calc(100vh-60px)]">
+      //       <div className="flex justify-between bg-slate-200 px-2 py-1">
+      //         <h3 className="text-lg text-slate-500 text-start"></h3>
+      //         <button
+      //           onClick={() => setIsOpenPopup((prev) => "")}
+      //           type="button"
+      //           className=" text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+      //         >
+      //           <svg
+      //             class="w-3 h-3"
+      //             aria-hidden="true"
+      //             xmlns="http://www.w3.org/2000/svg"
+      //             fill="none"
+      //             viewBox="0 0 14 14"
+      //           >
+      //             <path
+      //               stroke="currentColor"
+      //               stroke-linecap="round"
+      //               stroke-linejoin="round"
+      //               stroke-width="2"
+      //               d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+      //             />
+      //           </svg>
+      //           <span className="sr-only">Close modal</span>
+      //         </button>
+      //       </div>
 
-            <Editor
-              height="82%"
-              defaultLanguage="bash"
-              theme="vs-dark"
-              value={buildSolutionData?.data}
-              options={{
-                readOnly: true,
-                minimap: { enabled: false },
-                // You can add more options here
-              }}
+      //       <Editor
+      //         height="82%"
+      //         defaultLanguage="bash"
+      //         theme="vs-dark"
+      //         value={buildSolutionData?.data}
+      //         options={{
+      //           readOnly: true,
+      //           minimap: { enabled: false },
+      //           // You can add more options here
+      //         }}
+      //       />
+
+      //       <div className="flex justify-between ">
+      //         <div className="mt-3 p-2">
+      //           <h3 className="text-start font-semibold">Parameters</h3>
+      //           <div className="flex gap-3">
+      //             {parameters?.map((item) => (
+      //               <h3 className="bg-slate-100 p-2 rounded-md">{item}</h3>
+      //             ))}
+      //           </div>
+      //         </div>
+      //         <div class="grid grid-cols-3 mt-3 gap-2 p-2 w-[500px]">
+      //           <label
+      //             for="file"
+      //             className="w-full mb-2 text-sm font-medium text-gray-900"
+      //           >
+      //             File Name
+      //           </label>
+      //           <input
+      //             onChange={(event) => changeFileName(event)}
+      //             value={fileName}
+      //             type="text"
+      //             id="file"
+      //             className="bg-gray-50 my-auto border border-gray-300 text-gray-900 text-sm outline-none w-full p-2.5"
+      //             // value={value}
+      //             // onChange={(event) => onChange(event.target.value)}
+      //           />
+      //           <div className="p-5 flex justify-end w-full">
+      //             <button
+      //               disabled={fileName == null ? true : false}
+      //               onClick={() => {
+      //                 saveToDirectory();
+      //               }}
+      //               type="submit"
+      //               className="text-white p-2.5 bg-slate-200 outline-none font-medium text-sm w-full  text-center"
+      //             >
+      //               Save
+      //             </button>
+      //           </div>
+      //         </div>
+      //       </div>
+      //     </div>
+      //   </div>
+      // </div>
+      <div className="fixed inset-0 z-50 flex items-center justify-center w-full h-lvh bg-blur overflow-y-auto overflow-x-hidden">
+  <div className="relative w-full p-4">
+    <div className="relative p-4 bg-white rounded-lg shadow-lg h-[calc(100vh-60px)]">
+      <div className="flex items-center justify-between px-4 py-2 bg-slate-200">
+        <h3 className="text-lg text-slate-500">Title Here</h3>
+        <button
+          onClick={() => setIsOpenPopup("")}
+          type="button"
+          className="flex items-center justify-center w-8 h-8 text-gray-400 bg-transparent rounded-lg hover:bg-gray-200 hover:text-gray-900"
+        >
+          <svg
+            className="w-4 h-4"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 14 14"
+          >
+            <path
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M1 1l6 6m0 0l6 6M7 7l6-6M7 7L1 13"
             />
+          </svg>
+          <span className="sr-only">Close modal</span>
+        </button>
+      </div>
 
-            <div className="flex justify-between ">
-              <div className="mt-3 p-2">
-                <h3 className="text-start font-semibold">Parameters</h3>
-                <div className="flex gap-3">
-                  {parameters?.map((item) => (
-                    <h3 className="bg-slate-100 p-2 rounded-md">{item}</h3>
-                  ))}
-                </div>
-              </div>
-              <div class="flex mt-3 justify-end gap-2 p-2 w-[500px]">
-                <label
-                  for="file"
-                  className="w-[20%] my-auto block mb-2 text-sm font-medium text-gray-900"
-                >
-                  File Name
-                </label>
-                <input
-                  onChange={(event) => changeFileName(event)}
-                  value={fileName}
-                  type="text"
-                  id="file"
-                  className="bg-gray-50 my-auto border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:outline-none focus:ring-third block w-[50%] p-2.5"
-                  // value={value}
-                  // onChange={(event) => onChange(event.target.value)}
-                />
-                <div className="px-5 flex justify-end w-[30%]">
-                  <button
-                    disabled={fileName == null ? true : false}
-                    onClick={() => {
-                      saveToDirectory();
-                    }}
-                    type="submit"
-                    className="text-white bg-main hover:bg-second focus:ring-2 focus:outline-none focus:ring-third font-medium rounded-lg text-sm w-full  text-center"
-                  >
-                    Save
-                  </button>
-                </div>
-              </div>
-            </div>
+      <Editor
+        height="82%"
+        defaultLanguage="bash"
+        theme="vs-dark"
+        value={buildSolutionData?.data}
+        options={{
+          readOnly: true,
+          minimap: { enabled: false },
+        }}
+      />
+
+      <div className="flex flex-col gap-4 md:flex-row md:justify-between">
+        <div className="p-4">
+          <h3 className="text-lg font-semibold text-start">Parameters</h3>
+          <div className="flex flex-wrap gap-3 mt-2">
+            {parameters?.map((item, index) => (
+              <h3
+                key={index}
+                className="p-2 text-sm bg-slate-100 rounded-md"
+              >
+                {item}
+              </h3>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex justify-end gap-2 p-4 w-full md:w-[500px]">
+          <div className="my-auto">
+          <label
+            htmlFor="file"
+            className="text-sm font-medium text-gray-900"
+          >
+            File Name
+          </label>
+          </div>
+     <div className="my-auto">
+     <input
+            onChange={(event) => changeFileName(event)}
+            value={fileName}
+            type="text"
+            id="file"
+            className="w-full p-2.5 text-sm text-gray-900 bg-gray-50 border border-gray-300 outline-none"
+          />
+     </div>
+          <div className="my-auto">
+            <button
+              disabled={!fileName}
+              onClick={saveToDirectory}
+              type="submit"
+              className="w-full p-2.5 text-sm font-medium  bg-slate-500 hover:bg-slate-600 disabled:bg-slate-200"
+            >
+              Save
+            </button>
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
     );
   };
 
