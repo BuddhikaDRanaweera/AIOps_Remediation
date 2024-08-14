@@ -681,16 +681,16 @@ const HomePage = () => {
             </div>
           </div>
 
-          <div className="py-2 overflow-auto">
-            <table className="w-full h-[calc(100vh-220px)] hidden md:table">
+          <div className="py-2 h-[calc(100vh-320px)] md:h-[calc(100vh-220px)] overflow-auto">
+            <table className="w-full  hidden md:table">
               <thead>
                 <tr className="bg-slate-200 text-sm">
-                  <th className="p-2">ID</th>
-                  <th>Title</th>
-                  <th>Service</th>
-                  <th>Status</th>
-                  <th>Action</th>
-                  <th></th>
+                  {/* <th className="p-2">ID</th> */}
+                  <th className=" text-start p-2">Title</th>
+                  <th className=" text-start p-2 w-[200px]">Service</th>
+                  <th className=" text-start p-2">Status</th>
+                  <th className=" text-start p-2"> Action</th>
+                  <th className=" text-start p-2"></th>
                 </tr>
               </thead>
               <tbody>
@@ -716,12 +716,12 @@ const HomePage = () => {
                       "bg-orange-50"
                     } hover:bg-slate-50 text-xs border-b border-gray-300`}
                   >
-                    <td className="p-2">{incident?.id}</td>
-                    <td>{incident?.problemTitle}</td>
-                    <td>{incident?.serviceName}</td>
-                    <td>{incident?.status}</td>
-                    <td>{incident?.actionType}</td>
-                    <td>
+                    {/* <td className="p-2">{incident?.id}</td> */}
+                    <td className=" text-start p-2">{incident?.problemTitle}</td>
+                    <td className=" text-start p-2 w-[200px]">{incident?.serviceName}</td>
+                    <td className=" text-start p-2">{incident?.status}</td>
+                    <td className=" text-start p-2">{incident?.actionType}</td>
+                    <td className=" text-start p-2">
                       <BsArrowUpRightSquareFill className="text-lg" />
                     </td>
                   </tr>
@@ -730,37 +730,50 @@ const HomePage = () => {
             </table>
 
             <div className="md:hidden space-y-4 h-[calc(100vh-330px)] px-2">
-  {recent?.map((incident, index) => (
-    <div
-      key={index}
-      onClick={() => {
-        navigateTo(`/${incident?.pid}/${incident?.executedProblemId}`);
-      }}
-      className={`${
-        incident?.status === "OPEN" && isHighlightChecked && "bg-red-50"
-      } ${
-        incident?.status === "CLOSED" && isHighlightChecked && "bg-green-50"
-      } ${
-        incident?.status === "IN_PROGRESS" && isHighlightChecked && "bg-orange-50"
-      } hover:bg-slate-50 p-4 rounded-lg shadow-md border`}
-    >
-      <div className="flex flex-col space-y-2">
-        <div className="text-sm font-medium space-y-1">
-          <p className="text-gray-600">ID: {incident?.id}</p>
-          <p className="text-gray-800 truncate">{incident?.problemTitle}</p>
-          <p className="text-gray-600 truncate max-w-[150px]">Service: {incident?.serviceName}</p>
+              {recent?.map((incident, index) => (
+                <div
+                  key={index}
+                  onClick={() => {
+                    navigateTo(
+                      `/${incident?.pid}/${incident?.executedProblemId}`
+                    );
+                  }}
+                  className={`${
+                    incident?.status === "OPEN" &&
+                    isHighlightChecked &&
+                    "bg-red-50"
+                  } ${
+                    incident?.status === "CLOSED" &&
+                    isHighlightChecked &&
+                    "bg-green-50"
+                  } ${
+                    incident?.status === "IN_PROGRESS" &&
+                    isHighlightChecked &&
+                    "bg-orange-50"
+                  } hover:bg-slate-50 p-4 rounded-lg shadow-md border`}
+                >
+                  <div className="flex flex-col space-y-2">
+                    <div className="text-sm font-medium space-y-1">
+                      <p className="text-gray-600">ID: {incident?.id}</p>
+                      <p className="text-gray-800 truncate">
+                        {incident?.problemTitle}
+                      </p>
+                      <p className="text-gray-600 truncate max-w-[150px]">
+                        Service: {incident?.serviceName}
+                      </p>
 
-          <p className="text-gray-600">Status: {incident?.status}</p>
-        </div>
-        <div className="flex justify-between items-center">
-          <p className="text-gray-600">{incident?.actionType}</p>
-          <BsArrowUpRightSquareFill className="text-lg" />
-        </div>
-      </div>
-    </div>
-  ))}
-</div>
-
+                      <p className="text-gray-600">
+                        Status: {incident?.status}
+                      </p>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <p className="text-gray-600">{incident?.actionType}</p>
+                      <BsArrowUpRightSquareFill className="text-lg" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 

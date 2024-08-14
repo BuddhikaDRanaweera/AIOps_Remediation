@@ -553,159 +553,295 @@ function AssistedAnalysis() {
   }, [data]);
 
   return (
-    <>{data && (<div className="p-5 flex flex-col gap-5 h-body overflow-auto">
-      <div className="w-full flex flex-wrap gap-1">
-        <div className="mx-auto p-5 w-[63%] bg-white shadow-sm shadow-slate-400">
-          <div className="flex gap-2 mb-5 text-start text-lg text-main font-semibold">
-            <MdSettingsSuggest className="my-auto text-3xl" />
-            <h3 className=" text-xl my-auto">
-              {data?.impactedEntities[0].name} {data?.title}
-            </h3>
+    // <>{data && (<div className="p-5 flex flex-col gap-5 h-body overflow-auto">
+    //   <div className="w-full flex flex-wrap gap-1">
+    //     <div className="mx-auto p-5 md:w-[63%] bg-white shadow-sm shadow-slate-400">
+    //       <div className="flex gap-2 mb-5 text-start text-lg text-gray-600 font-semibold">
+    //         <MdSettingsSuggest className="my-auto text-3xl" />
+    //         <h3 className=" text-xl my-auto">
+    //           {data?.impactedEntities[0].name} {data?.title}
+    //         </h3>
+    //       </div>
+    //       <div className="flex flex-wrap gap-10">
+    //         <div className="w-[16%]">
+    //           <h3 className="text-start text-xs font-semibold">Problem Id</h3>
+    //           <h3 className=" text-start text-sm ">{data?.displayId}</h3>
+    //         </div>
+
+    //         <div className="w-[16%]">
+    //           <h3 className="text-start text-xs font-semibold">
+    //             Detected Time
+    //           </h3>
+    //           <h3 className=" text-start text-sm">
+    //             {data && formatDateString(getDate(data?.startTime))}
+    //           </h3>
+    //         </div>
+
+    //         <div className="w-[16%]">
+    //           <h3 className="text-start text-xs font-semibold">
+    //             Analysis End Date
+    //           </h3>
+    //           <h3 className=" text-start text-sm">
+    //             {data &&
+    //               (data?.endTime == "-1"
+    //                 ? "-"
+    //                 : formatDateString(getDate(data?.endTime)))}
+    //           </h3>
+    //         </div>
+
+    //         <div className="w-[16%]">
+    //           <h3 className="text-start text-xs font-semibold">
+    //             Total Down Time
+    //           </h3>
+    //           <h3 className=" text-start text-sm text-orange-400">
+    //             {data && getDownTime()}
+    //           </h3>
+    //         </div>
+
+    //         <div className="w-[16%]">
+    //           <h3 className="text-start text-xs font-semibold">Impact Level</h3>
+    //           <h3 className=" text-start text-sm">{data?.impactLevel}</h3>
+    //         </div>
+
+    //         <div className="w-[16%]">
+    //           <h3 className="text-start text-xs font-semibold">
+    //             Severity Level
+    //           </h3>
+    //           <h3 className=" text-start text-sm">{data?.severityLevel}</h3>
+    //         </div>
+
+    //         <div className="w-[16%]">
+    //           <h3 className="text-start text-xs font-semibold">Status</h3>
+    //           <h3
+    //             className={` text-start font-semibold text-sm ${
+    //               data?.status == "CLOSED" ? "text-green-800" : "text-red-500"
+    //             }`}
+    //           >
+    //             {data?.status}
+    //           </h3>
+    //         </div>
+
+    //         <div className="w-[16%]">
+    //           <h3 className="text-start text-xs font-semibold">
+    //             Root Cause ID
+    //           </h3>
+    //           <h3 className=" text-start text-sm">
+    //             {data?.rootCauseEntity?.entityId?.id || "-"}
+    //           </h3>
+    //         </div>
+
+    //         <div className="w-[16%]">
+    //           <h3 className="text-start text-xs font-semibold">Entity Name</h3>
+    //           <h3 className=" text-start text-sm">
+    //             {data?.rootCauseEntity?.name || "-"}
+    //           </h3>
+    //         </div>
+
+    //         <div className="w-[100%]">
+    //           <h3 className="text-start text-xs font-semibold">
+    //             Problem description
+    //           </h3>
+    //           <h3 className=" text-start text-sm ">
+    //             {data?.evidenceDetails?.details[0]?.data?.properties[0].value}
+    //           </h3>
+    //         </div>
+    //       </div>
+    //     </div>
+    //     {data2 && (
+    //       <div className="md:w-[36%] bg-white shadow-sm shadow-slate-400">
+    //         <h3 className=" font-semibold text-start mb-2 bg-slate-100 p-3">
+    //           Impacted Service
+    //         </h3>
+    //         <div className="p-3">
+    //           {data?.affectedEntities?.map((item, index) => (
+    //             <h3 key={index} className="text-xs text-start mb-3">{item.name}</h3>
+    //           ))}
+    //         </div>
+    //       </div>
+    //     )}
+    //   </div>
+    //   <h3 className="text-xl font-bold text-start">CPU Usage Graphs</h3>
+    //   <div className="flex justify-center flex-wrap gap-1">
+    //     {dataForCpuIdle && (
+    //       <div className="md:w-[33%] bg-white shadow-sm shadow-slate-400 p-5">
+    //         <Line data={dataForCpuIdle} />
+    //       </div>
+    //     )}
+    //     {dataForCpuUser && (
+    //       <div className="md:w-[33%] bg-white shadow-sm shadow-slate-400 p-5">
+    //         <Line data={dataForCpuUser} />
+    //       </div>
+    //     )}
+    //     {dataForCpuSystem && (
+    //       <div className="md:w-[33%] bg-white shadow-sm shadow-slate-400 p-5">
+    //         <Line data={dataForCpuSystem} />
+    //       </div>
+    //     )}
+
+    //     {/* <div className='w-[33%] bg-white shadow-sm shadow-slate-400 p-5'>
+    //        <Line data={data2} />
+    //        </div>
+
+    //        <div className='w-[33%] bg-white shadow-sm shadow-slate-400 p-5'>
+    //        <Line data={data2} />
+    //        </div> */}
+    //   </div>
+    //   <h3 className="text-xl font-bold text-start">Error Rate Graphs</h3>
+    //   <div className="flex flex-wrap justify-between gap-1">
+
+    //   {errorRateGraphsView.length !== 0 && errorRateGraphsView?.map(item => ( 
+    //       <div className="md:w-[33%] bg-white shadow-sm shadow-slate-400 p-5">
+    //         <Line data={item} />
+    //       </div>
+    //     ))}
+
+    //   </div>
+    //   <h3 className="text-xl font-bold text-start">Memory Usage Graphs</h3>
+    //   <div>
+    //     {data2 && (
+    //       <div className="md:w-[40%] bg-white shadow-sm shadow-slate-400 p-5">
+    //         <h3 className="mb-2 font-semibold text-start">{dataMem?.topic}</h3>
+    //         <Line data={data2} />
+    //       </div>
+    //     )}
+    //   </div>
+    // </div>)}</>
+    <>{data && (
+      <div className="p-5 flex flex-col gap-5 h-body overflow-auto">
+        <div className="w-full flex flex-col md:flex-row gap-4">
+          <div className="w-full md:w-[63%] mx-auto p-5 bg-white shadow-sm shadow-slate-400">
+            <div className="flex gap-2 mb-5 text-start text-lg text-gray-600 font-semibold">
+              <MdSettingsSuggest className="my-auto text-3xl" />
+              <h3 className="text-xl my-auto">
+                {data?.impactedEntities[0].name} {data?.title}
+              </h3>
+            </div>
+            <div className="flex flex-wrap gap-4">
+              <div className="w-full md:w-[48%] lg:w-[16%]">
+                <h3 className="text-start text-xs font-semibold">Problem Id</h3>
+                <h3 className="text-start text-sm">{data?.displayId}</h3>
+              </div>
+    
+              <div className="w-full md:w-[48%] lg:w-[16%]">
+                <h3 className="text-start text-xs font-semibold">Detected Time</h3>
+                <h3 className="text-start text-sm">
+                  {data && formatDateString(getDate(data?.startTime))}
+                </h3>
+              </div>
+    
+              <div className="w-full md:w-[48%] lg:w-[16%]">
+                <h3 className="text-start text-xs font-semibold">Analysis End Date</h3>
+                <h3 className="text-start text-sm">
+                  {data &&
+                    (data?.endTime == "-1"
+                      ? "-"
+                      : formatDateString(getDate(data?.endTime)))}
+                </h3>
+              </div>
+    
+              <div className="w-full md:w-[48%] lg:w-[16%]">
+                <h3 className="text-start text-xs font-semibold">Total Down Time</h3>
+                <h3 className="text-start text-sm text-orange-400">
+                  {data && getDownTime()}
+                </h3>
+              </div>
+    
+              <div className="w-full md:w-[48%] lg:w-[16%]">
+                <h3 className="text-start text-xs font-semibold">Impact Level</h3>
+                <h3 className="text-start text-sm">{data?.impactLevel}</h3>
+              </div>
+    
+              <div className="w-full md:w-[48%] lg:w-[16%]">
+                <h3 className="text-start text-xs font-semibold">Severity Level</h3>
+                <h3 className="text-start text-sm">{data?.severityLevel}</h3>
+              </div>
+    
+              <div className="w-full md:w-[48%] lg:w-[16%]">
+                <h3 className="text-start text-xs font-semibold">Status</h3>
+                <h3
+                  className={`text-start font-semibold text-sm ${
+                    data?.status == "CLOSED" ? "text-green-800" : "text-red-500"
+                  }`}
+                >
+                  {data?.status}
+                </h3>
+              </div>
+    
+              <div className="w-full md:w-[48%] lg:w-[16%]">
+                <h3 className="text-start text-xs font-semibold">Root Cause ID</h3>
+                <h3 className="text-start text-sm">
+                  {data?.rootCauseEntity?.entityId?.id || "-"}
+                </h3>
+              </div>
+    
+              <div className="w-full md:w-[48%] lg:w-[16%]">
+                <h3 className="text-start text-xs font-semibold">Entity Name</h3>
+                <h3 className="text-start text-sm">
+                  {data?.rootCauseEntity?.name || "-"}
+                </h3>
+              </div>
+    
+              <div className="w-full">
+                <h3 className="text-start text-xs font-semibold">Problem description</h3>
+                <h3 className="text-start text-sm">
+                  {data?.evidenceDetails?.details[0]?.data?.properties[0].value}
+                </h3>
+              </div>
+            </div>
           </div>
-          <div className="flex flex-wrap gap-10">
-            <div className="w-[16%]">
-              <h3 className="text-start text-xs font-semibold">Problem Id</h3>
-              <h3 className=" text-start text-sm ">{data?.displayId}</h3>
+    
+          {data2 && (
+            <div className="w-full md:w-[36%] bg-white shadow-sm shadow-slate-400">
+              <h3 className="font-semibold text-start mb-2 bg-slate-100 p-3">Impacted Service</h3>
+              <div className="p-3">
+                {data?.affectedEntities?.map((item, index) => (
+                  <h3 key={index} className="text-xs text-start mb-3">{item.name}</h3>
+                ))}
+              </div>
             </div>
-
-            <div className="w-[16%]">
-              <h3 className="text-start text-xs font-semibold">
-                Detected Time
-              </h3>
-              <h3 className=" text-start text-sm">
-                {data && formatDateString(getDate(data?.startTime))}
-              </h3>
-            </div>
-
-            <div className="w-[16%]">
-              <h3 className="text-start text-xs font-semibold">
-                Analysis End Date
-              </h3>
-              <h3 className=" text-start text-sm">
-                {data &&
-                  (data?.endTime == "-1"
-                    ? "-"
-                    : formatDateString(getDate(data?.endTime)))}
-              </h3>
-            </div>
-
-            <div className="w-[16%]">
-              <h3 className="text-start text-xs font-semibold">
-                Total Down Time
-              </h3>
-              <h3 className=" text-start text-sm text-orange-400">
-                {data && getDownTime()}
-              </h3>
-            </div>
-
-            <div className="w-[16%]">
-              <h3 className="text-start text-xs font-semibold">Impact Level</h3>
-              <h3 className=" text-start text-sm">{data?.impactLevel}</h3>
-            </div>
-
-            <div className="w-[16%]">
-              <h3 className="text-start text-xs font-semibold">
-                Severity Level
-              </h3>
-              <h3 className=" text-start text-sm">{data?.severityLevel}</h3>
-            </div>
-
-            <div className="w-[16%]">
-              <h3 className="text-start text-xs font-semibold">Status</h3>
-              <h3
-                className={` text-start font-semibold text-sm ${
-                  data?.status == "CLOSED" ? "text-green-800" : "text-red-500"
-                }`}
-              >
-                {data?.status}
-              </h3>
-            </div>
-
-            <div className="w-[16%]">
-              <h3 className="text-start text-xs font-semibold">
-                Root Cause ID
-              </h3>
-              <h3 className=" text-start text-sm">
-                {data?.rootCauseEntity?.entityId?.id || "-"}
-              </h3>
-            </div>
-
-            <div className="w-[16%]">
-              <h3 className="text-start text-xs font-semibold">Entity Name</h3>
-              <h3 className=" text-start text-sm">
-                {data?.rootCauseEntity?.name || "-"}
-              </h3>
-            </div>
-
-            <div className="w-[100%]">
-              <h3 className="text-start text-xs font-semibold">
-                Problem description
-              </h3>
-              <h3 className=" text-start text-sm ">
-                {data?.evidenceDetails?.details[0]?.data?.properties[0].value}
-              </h3>
-            </div>
-          </div>
+          )}
         </div>
-        {data2 && (
-          <div className="w-[36%] bg-white shadow-sm shadow-slate-400">
-            <h3 className=" font-semibold text-start mb-2 bg-slate-100 p-3">
-              Impacted Service
-            </h3>
-            <div className="p-3">
-              {data?.affectedEntities?.map((item, index) => (
-                <h3 key={index} className="text-xs text-start mb-3">{item.name}</h3>
-              ))}
+    
+        <h3 className="text-xl font-bold text-start">CPU Usage Graphs</h3>
+        <div className="flex md:justify-start justify-center flex-wrap gap-4">
+          {dataForCpuIdle && (
+            <div className="w-full md:w-[48%] lg:w-[31%] bg-white shadow-sm shadow-slate-400 p-5">
+              <Line data={dataForCpuIdle} />
             </div>
-          </div>
-        )}
+          )}
+          {dataForCpuUser && (
+            <div className="w-full md:w-[48%] lg:w-[31%] bg-white shadow-sm shadow-slate-400 p-5">
+              <Line data={dataForCpuUser} />
+            </div>
+          )}
+          {dataForCpuSystem && (
+            <div className="w-full md:w-[48%] lg:w-[31%] bg-white shadow-sm shadow-slate-400 p-5">
+              <Line data={dataForCpuSystem} />
+            </div>
+          )}
+        </div>
+    
+        <h3 className="text-xl font-bold text-start">Error Rate Graphs</h3>
+        <div className="flex flex-wrap justify-center md:justify-start gap-4">
+          {errorRateGraphsView.length !== 0 && errorRateGraphsView?.map((item, index) => (
+            <div key={index} className="w-full md:w-[48%] lg:w-[33%] bg-white shadow-sm shadow-slate-400 p-5">
+              <Line data={item} />
+            </div>
+          ))}
+        </div>
+    
+        <h3 className="text-xl font-bold text-start">Memory Usage Graphs</h3>
+        <div className="flex justify-center md:justify-start">
+          {data2 && (
+            <div className="w-full md:w-[60%] lg:w-[40%] bg-white shadow-sm shadow-slate-400 p-5">
+              <h3 className="mb-2 font-semibold text-start">{dataMem?.topic}</h3>
+              <Line data={data2} />
+            </div>
+          )}
+        </div>
       </div>
-      <h3 className="text-xl font-bold text-start">CPU Usage Graphs</h3>
-      <div className="flex justify-center flex-wrap gap-1">
-        {dataForCpuIdle && (
-          <div className="w-[33%] bg-white shadow-sm shadow-slate-400 p-5">
-            <Line data={dataForCpuIdle} />
-          </div>
-        )}
-        {dataForCpuUser && (
-          <div className="w-[33%] bg-white shadow-sm shadow-slate-400 p-5">
-            <Line data={dataForCpuUser} />
-          </div>
-        )}
-        {dataForCpuSystem && (
-          <div className="w-[33%] bg-white shadow-sm shadow-slate-400 p-5">
-            <Line data={dataForCpuSystem} />
-          </div>
-        )}
-
-        {/* <div className='w-[33%] bg-white shadow-sm shadow-slate-400 p-5'>
-           <Line data={data2} />
-           </div>
-
-           <div className='w-[33%] bg-white shadow-sm shadow-slate-400 p-5'>
-           <Line data={data2} />
-           </div> */}
-      </div>
-      <h3 className="text-xl font-bold text-start">Error Rate Graphs</h3>
-      <div className="flex flex-wrap justify-between gap-1">
-
-      {errorRateGraphsView.length !== 0 && errorRateGraphsView?.map(item => ( 
-          <div className="w-[33%] bg-white shadow-sm shadow-slate-400 p-5">
-            <Line data={item} />
-          </div>
-        ))}
-
-      </div>
-      <h3 className="text-xl font-bold text-start">Memory Usage Graphs</h3>
-      <div>
-        {data2 && (
-          <div className="w-[40%] bg-white shadow-sm shadow-slate-400 p-5">
-            <h3 className="mb-2 font-semibold text-start">{dataMem?.topic}</h3>
-            <Line data={data2} />
-          </div>
-        )}
-      </div>
-    </div>)}</>
+    )}</>
+    
   );
 }
 

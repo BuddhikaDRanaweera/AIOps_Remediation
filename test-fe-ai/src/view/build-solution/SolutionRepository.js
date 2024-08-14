@@ -72,12 +72,12 @@ function SolutionRepository({ handleInputChange, setPath }) {
         {/*  */}
       </div>
       <div className="p-2">
-        <div className="m-0 bg-slate-200  text-main flex justify-between">
+        <div className="m-0 bg-slate-200  flex justify-between">
           <div className="flex gap-2">
             <h3
               onClick={() => setActiveTab((prev) => "all")}
               className={`mb-0 font-semibold text-sm p-4 ${
-                activeTab == "all" && "border-b-2 border-main"
+                activeTab == "all" && "border-b-2 border-black"
               }`}
             >
               All
@@ -85,7 +85,7 @@ function SolutionRepository({ handleInputChange, setPath }) {
             <h3
               onClick={() => setActiveTab((prev) => "new")}
               className={`mb-0 font-semibold text-sm p-4  ${
-                activeTab == "new" && "border-b-2 border-main"
+                activeTab == "new" && "border-b-2 border-black"
               }`}
             >
               New
@@ -95,11 +95,11 @@ function SolutionRepository({ handleInputChange, setPath }) {
             <form className=" m-auto ">
               <div className="relative">
                 <div className="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-                  <IoSearch className="text-main" />
+                  <IoSearch className="text-gray-700" />
                 </div>
                 <input
                   type="text"
-                  className="bg-gray-50  text-gray-900 text-sm block w-full ps-10 p-2"
+                  className="bg-gray-50  outline-none text-gray-900 text-sm block w-full ps-10 p-2"
                   placeholder="Scripts in the library"
                 />
               </div>
@@ -139,7 +139,7 @@ export const Libraries_by_category = ({ title, libs, getLib }) => {
       >
         <div className="flex gap-2">
           <i
-            className={`text-main text-sm fa ${
+            className={` text-sm fa ${
               title === "User management" ? "fa-users" : "fa-cogs"
             }`}
             aria-hidden="true"
@@ -148,24 +148,24 @@ export const Libraries_by_category = ({ title, libs, getLib }) => {
         </div>
         <div className="flex">
           {isExpanded ? (
-            <IoIosArrowDropupCircle className="my-auto text-main text-xl" />
+            <IoIosArrowDropupCircle className="my-auto text-xl" />
           ) : (
-            <MdExpandCircleDown className="my-auto text-main text-xl" />
+            <MdExpandCircleDown className="my-auto text-xl" />
           )}
         </div>
       </div>
       {isExpanded && (
-        <div className="py-2">
+        <div className="py-2 ">
           {libs?.map((item, index) => (
-            <div key={index} className="flex gap-2 mb-1 py-1 px-2">
+            <div key={index} className="flex gap-2 mb-1 py-1 px-2 cursor-pointer">
               <i
-                className={`my-auto text-main fa ${
+                className={`my-auto text-gray-500 fa ${
                   item?.scriptName?.includes("start") ? "fa-play" : "fa-file"
                 }`}
                 aria-hidden="true"
               ></i>
               <span
-                className="my-auto hover:text-main text-sm"
+                className="my-auto text-gray-500 hover:text-black text-sm"
                 onClick={() => {
                   getLib(item?.scriptPath, item?.parameterValues);
                 }}
