@@ -29,7 +29,7 @@ const EditRuleForm = () => {
 
   useEffect(() => {
     getData(`/get_remediation/${remediationId}`);
-  }, [getData, remediationId]);
+  }, [remediationId]);
 
   useEffect(() => {
     if (dataObj && formikRef.current) {
