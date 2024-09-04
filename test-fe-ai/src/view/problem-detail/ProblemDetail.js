@@ -22,10 +22,10 @@ const ProblemDetail = () => {
   const navigate = useNavigate();
   const [data, setData] = useState();
   console.log(apiData);
-  const url = `https://mbx35629.live.dynatrace.com/api/v2/problems/${PID}`;
+  const url = `https://uag17776.live.dynatrace.com/api/v2/problems/${PID}`;
   // https://xdy01853.live.dynatrace.com/api/v2/apiTokens
   const apiKey =
-    "dt0c01.ZOSARGM6P2XHHUVXOSNBWPQ6.Q4B6BBD2K4BMH7JMGTHOKNEEJ5L3LH4ZDOMQ7VISE54PM3YY52QMM7ETDAYIDEDC";
+    "dt0c01.SXQEW54MQL5FLY2CNDD4SILS.AR67H437SVENVZIOOSWZ6GXFTQH5IVTS2UAT6RZ7CZ57DPITCOW7BPR34OGCTA7L";
 
   const getDate = (time) => {
     const date = new Date(time);

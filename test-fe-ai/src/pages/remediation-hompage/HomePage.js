@@ -686,7 +686,7 @@ const HomePage = () => {
               <thead>
                 <tr className="bg-slate-200 text-sm">
                   {/* <th className="p-2">ID</th> */}
-                  <th className=" text-start p-2">Title</th>
+                  <th className=" text-start p-2">Alert Details</th>
                   <th className=" text-start p-2 w-[200px]">Service</th>
                   <th className=" text-start p-2">Status</th>
                   <th className=" text-start p-2"> Action</th>

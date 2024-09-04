@@ -398,8 +398,8 @@ function AssistedAnalysis() {
     }
   }, [dataCPU]);
 
-  const url = `https://mbx35629.live.dynatrace.com/api/v2/problems/${PID}`;
-  const apiKey = 'dt0c01.ZOSARGM6P2XHHUVXOSNBWPQ6.Q4B6BBD2K4BMH7JMGTHOKNEEJ5L3LH4ZDOMQ7VISE54PM3YY52QMM7ETDAYIDEDC'
+  const url = `https://uag17776.live.dynatrace.com/api/v2/problems/${PID}`;
+  const apiKey = 'dt0c01.SXQEW54MQL5FLY2CNDD4SILS.AR67H437SVENVZIOOSWZ6GXFTQH5IVTS2UAT6RZ7CZ57DPITCOW7BPR34OGCTA7L'
     //"dt0c01.SLO7I7RYHVGLTXLWRF5FDGOS.3UOAFOR5GEQYVTDZX4TVWLC67GZGVGQFPMBTQEKLJGMGBQ5IJZC6K6TS53DCC37V";
 
 
@@ -452,7 +452,7 @@ function AssistedAnalysis() {
         try {
           console.log(endDate, 'end date')
           const response = await axios.get(
-            `https://mbx35629.live.dynatrace.com/api/v2/metrics/query?metricSelector=builtin:host.cpu.(idle,user,system)&resolution=1h&from=${startDate}&to=${endDate}`,
+            `https://uag17776.live.dynatrace.com/api/v2/metrics/query?metricSelector=builtin:host.cpu.(idle,user,system)&resolution=1h&from=${startDate}&to=${endDate}`,
             {
               params: {
                 "Api-Token": apiKey,
@@ -480,7 +480,7 @@ function AssistedAnalysis() {
       const fetchDataMemory = async () => {
         try {
           const response = await axios.get(
-            `https://mbx35629.live.dynatrace.com/api/v2/metrics/query?metricSelector=builtin:host.mem.usage&resolution=1h&from=${startDate}&to=${endDate}`,
+            `https://uag17776.live.dynatrace.com/api/v2/metrics/query?metricSelector=builtin:host.mem.usage&resolution=1h&from=${startDate}&to=${endDate}`,
             {
               params: {
                 "Api-Token": apiKey,
@@ -508,7 +508,7 @@ function AssistedAnalysis() {
       const fetchDataErrorRate = async () => {
         try {
           const response = await axios.get(
-            `https://mbx35629.live.dynatrace.com/api/v2/metrics/query?metricSelector=builtin:service.errors.total.rate&from=${startDate}&to=${endDate}`,
+            `https://uag17776.live.dynatrace.com/api/v2/metrics/query?metricSelector=builtin:service.errors.total.rate&from=${startDate}&to=${endDate}`,
             {
               params: {
                 "Api-Token": apiKey,
