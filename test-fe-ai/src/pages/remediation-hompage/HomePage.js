@@ -6,6 +6,11 @@ import { useDispatch } from "react-redux";
 import { setNewRemediation } from "../../app/features/modals_view/modal";
 import { setProblem } from "../../app/features/problem/ProblemSlice";
 import { IoMdClose } from "react-icons/io";
+
+import { BsArrowUpRightSquareFill } from "react-icons/bs";
+import axios from "axios";
+
+import { Line, Radar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -17,7 +22,6 @@ import {
   Legend,
   RadialLinearScale, // Add this line
 } from "chart.js";
-import { BsArrowUpRightSquareFill } from "react-icons/bs";
 
 ChartJS.register(
   CategoryScale,
@@ -35,6 +39,15 @@ ChartJS.register(
 const HomePage = () => {
   const navigate = useNavigate();
   const { isLoading, error, data, getData } = useFetch_GET();
+
+  const [onholdStageMetrics, setOnholdStageMetrics] = useState();
+  const [onholdStageMetricsView, setOnholdStageMetricsView] = useState();
+
+  const [  implementationStageMetrics, setImplementationStageMetrics] = useState();
+  const [  implementationStageMetricsView, setImplementationStageMetricsView] = useState();
+
+  const [viewMetric, setViewMetric] = useState({ type: "", view: false });
+
   const {
     isLoading: isLoadingActiveProblems,
     error: errorActiveProblems,
@@ -58,6 +71,7 @@ const HomePage = () => {
   } = useFetch_GET();
 
   const [isHighlightChecked, setIsHighlightChecked] = useState(false);
+
   const handleHighlightChange = () => {
     setIsHighlightChecked((prev) => !prev);
   };
@@ -82,6 +96,152 @@ const HomePage = () => {
     getData("/audit-status");
     ptGetData("/problem-list");
   }, []);
+
+  useEffect(() => {
+    const fetchDataMetrics = async () => {
+      try {
+        const response = await axios.get(
+          `https://uag17776.live.dynatrace.com/api/v2/metrics/query?metricSelector=log.Stuck_Order_Onhold_Stage&resolution=10m&from=now-1d&to=now&entitySelector: type("HOST")`,
+          {
+            params: {
+              "Api-Token":
+                "dt0c01.M37LPHB2ES5R2IEHV46RNY66.U2Z4O2BWWO4OR2F7FQAGIX3Z3TZRABVIXZGS7PH3EP37SARQIQ5DR7VFGWC6TKOD",
+            },
+          }
+        );
+
+        const Stuck_Order_Onhold_Stage = response?.data?.result[0]?.data[0];
+        console.log(Stuck_Order_Onhold_Stage, "Metrics data");
+        setOnholdStageMetrics((prev) => ({
+          label: Stuck_Order_Onhold_Stage?.timestamps,
+          data: Stuck_Order_Onhold_Stage?.values,
+        }));
+      } catch (error) {
+        // alert(error.message);
+        console.error("Error fetching data: ", error);
+      } finally {
+      }
+    };
+    const fetchDataMetrics2 = async () => {
+      try {
+        const response = await axios.get(
+          `https://uag17776.live.dynatrace.com/api/v2/metrics/query?metricSelector=log.Stuck_Order_Implementation_Stage&resolution=10m&from=now-1d&to=now&entitySelector:`,
+          {
+            params: {
+              "Api-Token":
+                "dt0c01.M37LPHB2ES5R2IEHV46RNY66.U2Z4O2BWWO4OR2F7FQAGIX3Z3TZRABVIXZGS7PH3EP37SARQIQ5DR7VFGWC6TKOD",
+            },
+          }
+        );
+        console.log(response?.data, "Metrics data 2");
+        const Stuck_Order_Implementation_Stage = response?.data?.result[0]?.data[0];
+        
+        setImplementationStageMetrics((prev) => ({
+          label: Stuck_Order_Implementation_Stage?.timestamps,
+          data: Stuck_Order_Implementation_Stage?.values,
+        }));
+      } catch (error) {
+        // alert(error.message);
+        console.error("Error fetching data: ", error);
+      } finally {
+      }
+    };
+
+    fetchDataMetrics();
+    fetchDataMetrics2();
+  }, [viewMetric]);
+
+  const replaceNullWithZero = (arr) => {
+    return arr.map((item) => (item === null ? 0 : item));
+  };
+
+  const convertTimestamps = (arr) => {
+    return arr.map((timestamp) => {
+      const date = new Date(timestamp);
+      const day = date.getUTCDate();
+      const month = date.toLocaleString("default", { month: "short" });
+      const hours = date.getUTCHours();
+      const period = hours >= 12 ? "pm" : "am";
+      const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
+      return `${day} ${month} ${formattedHours}${period}`;
+    });
+  };
+
+  useEffect(() => {
+    if (onholdStageMetrics) {
+      const lebOnholdStageMetrics = convertTimestamps(
+        onholdStageMetrics?.label
+      );
+      const dataOnholdStageMetrics = replaceNullWithZero(
+        onholdStageMetrics?.data
+      );
+
+      setOnholdStageMetricsView((prev) => ({
+        labels: lebOnholdStageMetrics,
+        datasets: [
+          {
+            label: "Idle",
+            fill: false,
+            lineTension: 0.1,
+            backgroundColor: "rgba(75,192,192,0.4)",
+            borderColor: "rgba(75,192,192,1)",
+            borderCapStyle: "butt",
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderJoinStyle: "miter",
+            pointBorderColor: "rgba(75,192,192,1)",
+            pointBackgroundColor: "#fff",
+            pointBorderWidth: 1,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: "rgba(75,192,192,1)",
+            pointHoverBorderColor: "rgba(220,220,220,1)",
+            pointHoverBorderWidth: 2,
+            pointRadius: 1,
+            pointHitRadius: 10,
+            data: dataOnholdStageMetrics,
+          },
+        ],
+      }));
+    }
+  }, [onholdStageMetrics]);
+
+  useEffect(() => {
+    if (implementationStageMetrics) {
+      const lebOnholdStageMetrics = convertTimestamps(
+        implementationStageMetrics?.label
+      );
+      const dataOnholdStageMetrics = replaceNullWithZero(
+       implementationStageMetrics?.data
+      );
+
+      setImplementationStageMetricsView((prev) => ({
+        labels: lebOnholdStageMetrics,
+        datasets: [
+          {
+            label: "Idle",
+            fill: false,
+            lineTension: 0.1,
+            backgroundColor: "rgba(75,192,192,0.4)",
+            borderColor: "rgba(75,192,192,1)",
+            borderCapStyle: "butt",
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderJoinStyle: "miter",
+            pointBorderColor: "rgba(75,192,192,1)",
+            pointBackgroundColor: "#fff",
+            pointBorderWidth: 1,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: "rgba(75,192,192,1)",
+            pointHoverBorderColor: "rgba(220,220,220,1)",
+            pointHoverBorderWidth: 2,
+            pointRadius: 1,
+            pointHitRadius: 10,
+            data: dataOnholdStageMetrics,
+          },
+        ],
+      }));
+    }
+  }, [implementationStageMetrics]);
 
   // useEffect(()=>{
   //   setInterval(()=>{
@@ -208,7 +368,31 @@ const HomePage = () => {
               </div>
             ))}
           </div>
-          <div className="bg-white cursor-pointer p-5 h-[calc(100vh-270px)] shadow-sm shadow-slate-400">
+          <div className=" p-2 shadow-sm h-[100px] shadow-slate-400 bg-white flex flex-col">
+            <div className="mb-2">
+              <h3 className="text-sm font-semibold">Metrics</h3>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <div
+                onClick={() => {
+                  setViewMetric((prev) => ({ type: "onHold", view: true }));
+                }}
+                className=" bg-slate-50 p-2 rounded-sm shadow-sm shadow-slate-400 flex justify-center cursor-pointer hover:bg-slate-100"
+              >
+                <p>Onhold Stage Metrics</p>
+              </div>
+              <div
+                onClick={() => {
+                  setViewMetric((prev) => ({ type: "implementation", view: true }));
+                }}
+                className=" bg-slate-50 p-2 rounded-sm shadow-sm shadow-slate-400 flex justify-center cursor-pointer hover:bg-slate-100"
+              >
+                <p>Implementation Stage Metrics</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white cursor-pointer p-5 h-[calc(100vh-380px)] shadow-sm shadow-slate-400">
             <div className="flex flex-col gap-2">
               <div className="flex gap-2">
                 <div className="w-[33%]">
@@ -717,8 +901,12 @@ const HomePage = () => {
                     } hover:bg-slate-50 text-xs border-b border-gray-300`}
                   >
                     {/* <td className="p-2">{incident?.id}</td> */}
-                    <td className=" text-start p-2">{incident?.problemTitle}</td>
-                    <td className=" text-start p-2 w-[200px]">{incident?.serviceName}</td>
+                    <td className=" text-start p-2">
+                      {incident?.problemTitle}
+                    </td>
+                    <td className=" text-start p-2 w-[200px]">
+                      {incident?.serviceName}
+                    </td>
                     <td className=" text-start p-2">{incident?.status}</td>
                     <td className=" text-start p-2">{incident?.actionType}</td>
                     <td className=" text-start p-2">
@@ -779,6 +967,54 @@ const HomePage = () => {
 
         {/*  */}
       </div>
+
+      {/*  */}
+
+      {viewMetric?.view && (
+        <div className="bg-blur flex h-lvh justify-center overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50  items-center w-full md:inset-0 p-2   max-h-full">
+          <div className="m-auto  relative  w-full md:w-[80%]  max-h-full rounded-md overflow-hidden bg-white shadow-sm shadow-slate-400">
+            <div className="flex justify-between p-4 border-b border-gray-300">
+              <h3 className=" text-lg font-bold">
+                {viewMetric?.type == "onHold" && "Stuck Order Onhold Stage"}
+                {viewMetric?.type == "implementation" && "Stuck Order Implementation Stage Metrics"}
+              </h3>
+              <button
+                onClick={() => {
+                  setViewMetric((prev) => ({ type: "", view: false }));
+                }}
+                type="button"
+                className="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+              >
+                <svg
+                  class="w-3 h-3"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 14 14"
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                  />
+                </svg>
+                <span class="sr-only">Close modal</span>
+              </button>
+            </div>
+            <div className="p-5">
+              {onholdStageMetricsView && viewMetric?.type == "onHold" && (
+                <Line data={onholdStageMetricsView} />
+              )}
+              {implementationStageMetricsView && viewMetric?.type == "implementation" && (
+                <Line data={implementationStageMetricsView} />
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+      {/*  */}
     </div>
   );
 };
