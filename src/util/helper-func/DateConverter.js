@@ -30,10 +30,6 @@ export const formatDateString = (dateString) => {
 
 export const formatDateToCustomFormat = (dateString) => {
   if (!dateString) return "";
-
-  // Parse the date with moment, assume it's in UTC
   const dateInUTC = moment(dateString);
-
-  // Convert to IST and format
   return dateInUTC.format("YYYY:MM:DD - HH:mm:ss");
 };
