@@ -268,7 +268,7 @@ const HomePage = () => {
     {
       id: 3,
       path: "/new-problem",
-      title: "Create Self-healing Rule (Assisted)",
+      title: "Root Cause Troubleshoot",
       des: "View New Problems",
       icon: "fa fa-exclamation-circle",
     },
