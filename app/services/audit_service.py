@@ -39,7 +39,7 @@ def create_audit(problemTitle, subProblemTitle, impactedEntity, problemImpact, p
 
 def get_all_audits():
     try:
-        audits = Audit.query.all()
+        audits = Audit.query.order_by(Audit.problemDetectedAt.desc()).all()
         return audits
     except SQLAlchemyError as e:
         logger.error(f"Error fetching all audits: {str(e)}")
