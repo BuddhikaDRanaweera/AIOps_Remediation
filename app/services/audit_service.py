@@ -179,3 +179,16 @@ def get_audit_record_by_id(pid):
         # Rollback the changes in case of errors
         db.session.rollback()
         print(f"An error occurred: {e}")
+
+def get_audits_last_6_hours(problemTitle):  
+    try:
+        six_hours_ago = datetime.datetime.now() - datetime.timedelta(hours=24)
+        audits = Audit.query.filter(
+            Audit.problemTitle == problemTitle,
+            Audit.problemDetectedAt >= six_hours_ago,
+            Audit.problemEndAt <= datetime.datetime.now()
+        ).order_by(Audit.problemDetectedAt.desc()).all()
+        
+        return audits
+    except Exception as e:
+        raise Exception(f"Error fetching audits from the last 24 hours: {str(e)}")

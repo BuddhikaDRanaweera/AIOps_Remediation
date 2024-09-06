@@ -1,6 +1,6 @@
 # app/controllers/audit_controller.py
-from flask import Blueprint, jsonify
-from app.services.audit_service import get_all_audits, get_audit_status
+from flask import Blueprint, jsonify, request
+from app.services.audit_service import get_all_audits, get_audit_status, get_audits_last_6_hours
 import logging
 
 audit_bp = Blueprint('audit_bp', __name__)
@@ -46,3 +46,36 @@ def audit_status():
     except Exception as e:
         logger.error(f"Error fetching audit status: {str(e)}")
         return jsonify({"error": "Error fetching audit status"}), 500
+
+@audit_bp.route('/last-6hr-incidents', methods=['POST'])
+def get_last_6hr_incidents():
+    data = request.json
+    problem_title = data['problemTitle']
+    try:
+        audits = get_audits_last_6_hours(problem_title)
+        audit_list = [
+            {
+                "id": audit.id,
+                "problemTitle": audit.problemTitle,
+                "subProblemTitle": audit.subProblemTitle,
+                "impactedEntity": audit.impactedEntity,
+                "problemImpact": audit.problemImpact,
+                "problemSeverity": audit.problemSeverity,
+                "problemURL": audit.problemURL,
+                "serviceName": audit.serviceName,
+                "actionType": audit.actionType,
+                "status": audit.status,
+                "pid": audit.pid,
+                "executedProblemId": audit.executedProblemId,
+                "scriptExecutionStartAt": audit.scriptExecutionStartAt,
+                "displayId": audit.displayId,
+                "comments": audit.comments,
+                "problemDetectedAt": audit.problemDetectedAt,
+                "problemEndAt": audit.problemEndAt
+            } for audit in audits
+        ]
+        logger.info("Fetched last 6-hour incidents successfully")
+        return jsonify(audit_list), 200
+    except Exception as e:
+        logger.error(f"Error fetching last 6-hour incidents: {str(e)}")
+        return jsonify({"error": "Error fetching last 6-hour incidents"}), 500
