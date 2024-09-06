@@ -12,7 +12,7 @@ import { IoIosApps } from "react-icons/io";
 import { GrServices } from "react-icons/gr";
 import { FaServer } from "react-icons/fa";
 import { FaEdit } from "react-icons/fa";
-import { formatDateString } from "../../util/helper-func/DateConverter";
+import { formatDateString, formatDateToCustomFormat } from "../../util/helper-func/DateConverter";
 
 const ProblemDetail = () => {
   const { PID, ExecutionId } = useParams();
@@ -107,7 +107,7 @@ const ProblemDetail = () => {
                   Detected Time
                 </h3>
                 <h3 className=" text-start text-sm">
-                  {data && formatDateString(getDate(data?.startTime))}
+                  {data && formatDateToCustomFormat((data?.startTime))}
                 </h3>
               </div>
 
@@ -119,7 +119,7 @@ const ProblemDetail = () => {
                   {data &&
                     (data?.endTime == "-1"
                       ? "-"
-                      : formatDateString(getDate(data?.endTime)))}
+                      : formatDateToCustomFormat((data?.endTime)))}
                 </h3>
               </div>
 
