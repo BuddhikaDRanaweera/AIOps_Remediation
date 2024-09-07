@@ -4,11 +4,10 @@ import { useDispatch } from "react-redux";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 
-const Timeline = ({ local_status, global_status }) => {
+const Timeline = () => {
   const { isLoading, error, data: apiData, getData } = useFetch_GET();
   const [data, setData] = useState();
   const { PID, ExecutionId, AuditId } = useParams();
-  const intervalRef = useRef(null); // Use ref to store intervalId
   const url = `https://uag17776.live.dynatrace.com/api/v2/problems/${PID}`;
   const apiKey =
     "dt0c01.SXQEW54MQL5FLY2CNDD4SILS.AR67H437SVENVZIOOSWZ6GXFTQH5IVTS2UAT6RZ7CZ57DPITCOW7BPR34OGCTA7L";
@@ -45,10 +44,9 @@ const Timeline = ({ local_status, global_status }) => {
       }
     };
 
-    fetchData();
     const interval = setInterval(() => {
-      getData(`/audit/${AuditId}`);
-    }, 30000); // Call every 30 seconds
+        fetchData();
+    }, 15000); // Call every 30 seconds
     return () => {
       clearInterval(interval); // Cleanup on component unmount
     };
@@ -57,21 +55,12 @@ const Timeline = ({ local_status, global_status }) => {
   useEffect(() => {
     getData(`/audit/${AuditId}`);
 
-    intervalRef.current = setInterval(() => {
+    const intervalId = setInterval(() => {
       getData(`/audit/${AuditId}`);
-    }, 5000); // Call every 5 seconds
+    }, 10000); // Call every 5 seconds
     return () => {
-      clearInterval(intervalRef.intervalId); // Cleanup on component unmount
+      clearInterval(intervalId); // Cleanup on component unmount
     };
-  }, []);
-
-  useEffect(() => {
-    if (apiData?.status == "CLOSED") {
-      console.log("hi");
-
-      clearInterval(intervalRef.intervalId); // Clear the interval if status is "CLOSED"
-      intervalRef.current = null;
-    }
   }, []);
 
   return (
