@@ -19,8 +19,8 @@ const Timeline = () => {
     background: "conic-gradient(transparent 50%, #4F46E5 50%)", // Shade right side
   };
   const circleStyle = {
-    width: "w-10 lg:w-10", // or use 'w-10 lg:w-10' based on your design
-    height: "h-10 lg:h-10", // or use 'h-10 lg:h-10' based on your design
+    width: "w-10 lg:w-10", 
+    height: "h-10 lg:h-10",
     borderRadius: "50%",
     display: "flex",
     justifyContent: "center",
