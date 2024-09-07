@@ -7,8 +7,6 @@ import { useParams } from "react-router-dom";
 const Timeline = ({ local_status, global_status }) => {
   const { isLoading, error, data: apiData, getData } = useFetch_GET();
   const [data, setData] = useState();
-  const [dynatrace, setDynatrace] = useState();
-  const [audit, setAudit] = useState();
   const { PID, ExecutionId, AuditId } = useParams();
   const intervalRef = useRef(null); // Use ref to store intervalId
   const url = `https://uag17776.live.dynatrace.com/api/v2/problems/${PID}`;
