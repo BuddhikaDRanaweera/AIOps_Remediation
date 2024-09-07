@@ -43,6 +43,7 @@ const Timeline = () => {
         console.error("Error fetching data: ", error);
       }
     };
+    fetchData();
 
     const interval = setInterval(() => {
         fetchData();
