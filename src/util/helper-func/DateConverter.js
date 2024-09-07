@@ -33,3 +33,17 @@ export const formatDateToCustomFormat = (dateString) => {
   const dateInUTC = moment(dateString);
   return dateInUTC.format("YYYY:MM:DD - HH:mm:ss");
 };
+
+export const convertToIST = (gmtDateString) => {
+  // Create a new Date object from the GMT date string
+  const gmtDate = new Date(gmtDateString);
+
+  // Convert to India Standard Time (GMT+5:30)
+  const istOffset = 5.5 * 60 * 60 * 1000; // 5 hours 30 minutes in milliseconds
+  const istDate = new Date(gmtDate.getTime() - istOffset);
+
+  // Format the date to the desired output
+  const formattedDate = istDate; // Will return the format like: "Sat Sep 07 2024 09:10:03 GMT+0530 (India Standard Time)"
+
+  return formattedDate;
+}

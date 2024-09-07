@@ -68,6 +68,12 @@ function App() {
               name="Audit"
               element={<ExecutionHistory />}
             />
+            <Route
+              exact
+              path="/audit/:id"
+              name="Audit"
+              element={<ExecutionHistory />}
+            />
 
             <Route
               exact

@@ -22,6 +22,8 @@ import {
   Legend,
   RadialLinearScale, // Add this line
 } from "chart.js";
+import DateRange from "../../components/date-range/DateRange";
+import { convertToIST } from "../../util/helper-func/DateConverter";
 
 ChartJS.register(
   CategoryScale,
@@ -49,7 +51,7 @@ const HomePage = () => {
     useState();
 
   const [viewMetric, setViewMetric] = useState({ type: "", view: false });
-
+  const [dateRange, setDateRange] = useState();
   const {
     isLoading: isLoadingActiveProblems,
     error: errorActiveProblems,
@@ -155,11 +157,11 @@ const HomePage = () => {
   }, [viewMetric]);
 
   const replaceNullWithZero = (arr) => {
-    return arr.map((item) => (item === null ? 0 : item));
+    return arr?.map((item) => (item === null ? 0 : item));
   };
 
   const convertTimestamps = (arr) => {
-    return arr.map((timestamp) => {
+    return arr?.map((timestamp) => {
       const date = new Date(timestamp);
       const day = date.getUTCDate();
       const month = date.toLocaleString("default", { month: "short" });
@@ -319,6 +321,7 @@ const HomePage = () => {
     //  const fil = data?.activity?.filter((item) => item.status == selectedStatus);
     //  setRecent(prev => fil);
     // }
+    
 
     const filteredData = data?.activity?.filter((item) => {
       return (
@@ -327,20 +330,65 @@ const HomePage = () => {
         (selectedActionType === "" || item.actionType === selectedActionType)
       );
     });
+    console.log(dateRange);
+     if(dateRange){
+      console.log(new Date(dateRange), 'range');
+      console.log(new Date(), 'now');
+      const now = new Date();
+      const fitterDataWithDateRange = filteredData?.filter(item => {
+        console.log(convertToIST(item?.problemDetectedAt), 'time');
+        const detectedTime = convertToIST(item?.problemDetectedAt);
 
-    setRecent((prev) => filteredData);
-  }, [selectedStatus, selectedTitle, selectedActionType]);
+        return new Date(dateRange) <= detectedTime;
+
+      });
+      setRecent((prev) => fitterDataWithDateRange);
+
+     }else{
+      setRecent((prev) => filteredData);
+     }
+
+    
+  }, [selectedStatus, selectedTitle, selectedActionType, dateRange]);
+
+  const getFormattedTime = (range) => {
+    const now = new Date();
+    let pastDate;
+  
+    switch (range) {
+      case "last 30 min":
+        pastDate = new Date(now.getTime() - 30 * 60 * 1000); // 30 minutes
+        break;
+      case "last 1 hour":
+        pastDate = new Date(now.getTime() - 60 * 60 * 1000); // 1 hour
+        break;
+      case "last 6 hours":
+        pastDate = new Date(now.getTime() - 6 * 60 * 60 * 1000); // 6 hours
+        break;
+      case "last 24 hours":
+        pastDate = new Date(now.getTime() - 24 * 60 * 60 * 1000); // 24 hours
+        break;
+      default:
+        setDateRange((prev) => null);
+        return null;
+    }
+  
+    // Return Unix timestamp (in seconds, not milliseconds)
+    const unixTimestamp = Math.floor(pastDate.getTime());
+    setDateRange((prev) => unixTimestamp);
+  
+    // return unixTimestamp;
+  };
 
   function formatDateToCustomFormat(dateString) {
-    if (!dateString) return '';
+    if (!dateString) return "";
 
     // Parse the date with moment, assume it's in UTC
     const dateInUTC = moment.utc(dateString);
 
     // Convert to IST and format
-    return dateInUTC.format('YYYY:MM:DD-HH:mm:ss');
-}
-
+    return dateInUTC.format("YYYY:MM:DD-HH:mm:ss");
+  }
 
   return (
     <div className=" p-5 flex flex-col gap-2 justify-between h-body ">
@@ -433,7 +481,9 @@ const HomePage = () => {
                     {data?.InProgressCount || 0}
                   </p>
                 </div>
-                <div className="flex justify-center bg-green-50 max-h-10 w-[33%]">
+                <div className="flex justify-center bg-green-50 max-h-10 w-[33%]" onClick={() => {
+                  navigateTo('/audit/closed');
+                }}>
                   <p className="font-bold m-auto text-2xl p-1">
                     {data?.closedCount || 0}
                   </p>
@@ -830,6 +880,12 @@ const HomePage = () => {
 
           <div className="flex flex-col gap-2">
             <div className="relative">
+              <div className=" absolute right-0">
+                <DateRange
+                  range={(date) => {
+                    getFormattedTime(date)}}
+                />
+              </div>
               <div className="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none">
                 <svg
                   className="w-4 h-4 text-gray-500 dark:text-gray-400"
@@ -854,6 +910,7 @@ const HomePage = () => {
                 placeholder="search problems by service name"
               />
             </div>
+
             <div className="flex gap-2 flex-wrap">
               {selectedStatus && (
                 <div

@@ -1,16 +1,31 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useFetch_GET from "../../services/http/Get";
+import DateRange from "../../components/date-range/DateRange";
+import { convertToIST } from "../../util/helper-func/DateConverter";
 
 const ExecutionHistory = () => {
+
   const { isLoading, error, data: apiData, getData } = useFetch_GET();
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
+  const [selectedStatus, setSelectedStatus] = useState("");
+  const [selectedService, setSelectedService] = useState("");
+  const [dateRange, setDateRange] = useState();
   const navigate = useNavigate();
+  const {id} = useParams();
+
+
 
   useEffect(() => {
     getData("/get_audit_data");
   }, []);
+
+  useEffect(()=>{
+    if(id == 'closed'){
+      setSelectedStatus(prev => 'IN_PROGRESS')
+    }
+  },[id])
 
   useEffect(() => {
     setData(apiData);
@@ -19,16 +34,78 @@ const ExecutionHistory = () => {
 
   const handleServiceFilterChange = (event) => {
     const value = event.target.value;
-    setFilteredData(
-      value ? data.filter((item) => item.serviceName === value) : data
-    );
+    setSelectedService((prev) => value);
+    // setFilteredData(
+    //   value ? data.filter((item) => item.serviceName === value) : data
+    // );
   };
 
   const handleStatusFilterChange = (event) => {
     const value = event.target.value;
-    setFilteredData(
-      value ? data.filter((item) => item.status === value) : data
-    );
+    setSelectedStatus((prev) => value);
+    // setFilteredData(
+    //   value ? data.filter((item) => item.status === value) : data
+    // );
+  };
+
+  useEffect(() => {
+    console.log(selectedService);
+    console.log(selectedStatus);
+    
+    const filteredData = data?.filter((item) => {
+      return (
+        (selectedStatus === "" || item.status === selectedStatus) &&
+        (selectedService === "" || item.serviceNamem === selectedService) 
+      );
+    });
+    console.log(dateRange, 'date');
+     if(dateRange){
+      console.log(new Date(dateRange), 'range');
+      console.log(new Date(), 'now');
+      const now = new Date();
+      const fitterDataWithDateRange = filteredData?.filter(item => {
+        console.log(convertToIST(item?.problemDetectedAt), 'time');
+        const detectedTime = convertToIST(item?.problemDetectedAt);
+
+        return new Date(dateRange) <= detectedTime;
+
+      });
+      setFilteredData((prev) => fitterDataWithDateRange);
+
+     }else{
+     setFilteredData((prev) => filteredData);
+     }
+
+    
+  }, [selectedService, selectedStatus, dateRange, id]);
+
+  const getFormattedTime = (range) => {
+    const now = new Date();
+    let pastDate;
+  
+    switch (range) {
+      case "last 30 min":
+        pastDate = new Date(now.getTime() - 30 * 60 * 1000); // 30 minutes
+        break;
+      case "last 1 hour":
+        pastDate = new Date(now.getTime() - 60 * 60 * 1000); // 1 hour
+        break;
+      case "last 6 hours":
+        pastDate = new Date(now.getTime() - 6 * 60 * 60 * 1000); // 6 hours
+        break;
+      case "last 24 hours":
+        pastDate = new Date(now.getTime() - 24 * 60 * 60 * 1000); // 24 hours
+        break;
+      default:
+        setDateRange((prev) => null);
+        return null;
+    }
+  
+    // Return Unix timestamp (in seconds, not milliseconds)
+    const unixTimestamp = Math.floor(pastDate.getTime());
+    setDateRange((prev) => unixTimestamp);
+  
+    // return unixTimestamp;
   };
 
   const calculateDuration = (start, end) => {
@@ -49,8 +126,12 @@ const ExecutionHistory = () => {
           <p>View the execution history of remediation actions.</p>
         </div>
         <div className="flex flex-col md:flex-row gap-4 mt-4 md:mt-0">
+        <DateRange
+                  range={(date) => {
+                    getFormattedTime(date)}}
+                />
           <select
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm outline-none p-2.5"
+            className="bg-gray-50 border border-gray-300 text-gray-900 mb-2 text-sm w-[150px] focus:outline-none block p-1"
             id="remediation-filter"
             onChange={handleServiceFilterChange}
           >
@@ -60,7 +141,7 @@ const ExecutionHistory = () => {
             <option value="MySQL">MySQL</option>
           </select>
           <select
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm outline-none p-2.5"
+           className="bg-gray-50 border border-gray-300 text-gray-900 mb-2 text-sm w-[150px] focus:outline-none block p-1"
             id="status-filter"
             onChange={handleStatusFilterChange}
           >
@@ -75,7 +156,7 @@ const ExecutionHistory = () => {
       {/* Table / Cards */}
       <div className="px-5 py-2 w-full h-[calc(100vh-190px)] overflow-auto">
         <div className="hidden md:block">
-          <table className="w-full bg-white shadow-sm text-sm text-left">
+         {filteredData.length !== 0 ? (  <table className="w-full bg-white shadow-sm text-sm text-left">
             <thead className="bg-gray-200 text-xs">
               <tr>
                 <th className="p-3 text-center">DisplayID</th>
@@ -100,19 +181,19 @@ const ExecutionHistory = () => {
                   }
                 >
                   <td className="p-2 text-center">{item.displayId}</td>
-                  <td className="p-2 text-center truncate">{item.problemTitle}</td>
+                  <td className="p-2 text-start truncate max-w-60">{item.problemTitle}</td>
                   {/* <td className="p-2 text-center truncate">{item.subProblemTitle || "N/A"}</td> */}
                   <td className="p-2 text-center">{item.problemImpact}</td>
                   <td className="p-2 text-center">{item.problemSeverity}</td>
                   <td className="p-2 text-center">{item.status}</td>
-                  <td className="p-2 text-start">{item.serviceName}</td>
+                  <td className="p-2 text-start truncate max-w-60">{item.serviceName}</td>
                   <td className="p-2 text-center">{calculateDuration(item.problemDetectedAt, item.problemEndAt)}</td>
                   <td className="p-2 text-center">{item.actionType.toUpperCase()}</td>
                   {/* <td className="p-2 text-center truncate">{item.comments}</td> */}
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table>): (<p className="flex justify-center p-5 font-semibold">No Avilable Problems.</p>)}
         </div>
 
         <div className="md:hidden space-y-4">
