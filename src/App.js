@@ -90,7 +90,7 @@ function App() {
             />
             <Route
               exact
-              path="/:PID/:ExecutionId"
+              path="/:PID/:ExecutionId/:AuditId"
               name="Problem-Detail"
               element={<ProblemDetail />}
             />

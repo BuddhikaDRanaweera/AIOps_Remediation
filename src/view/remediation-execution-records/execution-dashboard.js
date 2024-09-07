@@ -177,7 +177,7 @@ const ExecutionHistory = () => {
                   className="hover:bg-gray-50"
                   key={item.ID}
                   onClick={() =>
-                    navigate(`/${item.pid}/${item.executedProblemId}`)
+                    navigate(`/${item.pid}/${item.executedProblemId}/${item.id}`)
                   }
                 >
                   <td className="p-2 text-center">{item.displayId}</td>
