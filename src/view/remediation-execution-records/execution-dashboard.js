@@ -21,15 +21,27 @@ const ExecutionHistory = () => {
     getData("/get_audit_data");
   }, []);
 
-  useEffect(()=>{
-    if(id == 'closed'){
-      setSelectedStatus(prev => 'IN_PROGRESS')
-    }
-  },[id])
+
 
   useEffect(() => {
     setData(apiData);
-    setFilteredData(apiData);
+    if(id){
+      const filteredData = apiData?.filter((item) => {
+        if(id == 'closed') return ((item.status === 'CLOSED'));
+        if(id == 'open') return ((item.status === 'OPEN'));
+        if(id == 'in-progress') return ((item.status === 'IN_PROGRESS'));
+
+        
+      });
+      if(id == 'closed') setSelectedStatus(prev => 'CLOSED');
+      if(id == 'open') setSelectedStatus(prev => 'OPEN');
+      if(id == 'in-progress') setSelectedStatus(prev => 'IN_PROGRESS');
+
+      setFilteredData(filteredData);
+    }else{
+      setFilteredData(apiData);
+    }
+    
   }, [apiData]);
 
   const handleServiceFilterChange = (event) => {
@@ -49,16 +61,17 @@ const ExecutionHistory = () => {
   };
 
   useEffect(() => {
-    console.log(selectedService);
-    console.log(selectedStatus);
+    // console.log(selectedService);
+    // console.log(selectedStatus);
     
+   if(data){
     const filteredData = data?.filter((item) => {
       return (
         (selectedStatus === "" || item.status === selectedStatus) &&
         (selectedService === "" || item.serviceNamem === selectedService) 
       );
     });
-    console.log(dateRange, 'date');
+    // console.log(dateRange, 'date');
      if(dateRange){
       console.log(new Date(dateRange), 'range');
       console.log(new Date(), 'now');
@@ -75,6 +88,7 @@ const ExecutionHistory = () => {
      }else{
      setFilteredData((prev) => filteredData);
      }
+   }
 
     
   }, [selectedService, selectedStatus, dateRange, id]);
@@ -144,8 +158,10 @@ const ExecutionHistory = () => {
            className="bg-gray-50 border border-gray-300 text-gray-900 mb-2 text-sm w-[150px] focus:outline-none block p-1"
             id="status-filter"
             onChange={handleStatusFilterChange}
+            value={selectedStatus || ''}
           >
             <option value="">Filter by Status</option>
+            <option value="OPEN">Open</option>
             <option value="CLOSED">Closed</option>
             <option value="IN_PROGRESS">In Progress</option>
             <option value="FAILED">Failed</option>
@@ -172,10 +188,10 @@ const ExecutionHistory = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredData?.map((item) => (
+              {filteredData?.map((item, index) => (
                 <tr
                   className="hover:bg-gray-50"
-                  key={item.ID}
+                  key={index}
                   onClick={() =>
                     navigate(`/${item.pid}/${item.executedProblemId}`)
                   }

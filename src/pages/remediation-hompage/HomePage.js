@@ -321,7 +321,6 @@ const HomePage = () => {
     //  const fil = data?.activity?.filter((item) => item.status == selectedStatus);
     //  setRecent(prev => fil);
     // }
-    
 
     const filteredData = data?.activity?.filter((item) => {
       return (
@@ -331,30 +330,26 @@ const HomePage = () => {
       );
     });
     console.log(dateRange);
-     if(dateRange){
-      console.log(new Date(dateRange), 'range');
-      console.log(new Date(), 'now');
+    if (dateRange) {
+      console.log(new Date(dateRange), "range");
+      console.log(new Date(), "now");
       const now = new Date();
-      const fitterDataWithDateRange = filteredData?.filter(item => {
-        console.log(convertToIST(item?.problemDetectedAt), 'time');
+      const fitterDataWithDateRange = filteredData?.filter((item) => {
+        console.log(convertToIST(item?.problemDetectedAt), "time");
         const detectedTime = convertToIST(item?.problemDetectedAt);
 
         return new Date(dateRange) <= detectedTime;
-
       });
       setRecent((prev) => fitterDataWithDateRange);
-
-     }else{
+    } else {
       setRecent((prev) => filteredData);
-     }
-
-    
+    }
   }, [selectedStatus, selectedTitle, selectedActionType, dateRange]);
 
   const getFormattedTime = (range) => {
     const now = new Date();
     let pastDate;
-  
+
     switch (range) {
       case "last 30 min":
         pastDate = new Date(now.getTime() - 30 * 60 * 1000); // 30 minutes
@@ -372,11 +367,11 @@ const HomePage = () => {
         setDateRange((prev) => null);
         return null;
     }
-  
+
     // Return Unix timestamp (in seconds, not milliseconds)
     const unixTimestamp = Math.floor(pastDate.getTime());
     setDateRange((prev) => unixTimestamp);
-  
+
     // return unixTimestamp;
   };
 
@@ -471,19 +466,32 @@ const HomePage = () => {
                 </div>
               </div>
               <div className="flex gap-2 w-full">
-                <div className="flex justify-center bg-red-50 max-h-10 w-[33%]">
+                <div
+                  onClick={() => {
+                    navigateTo("/audit/open");
+                  }}
+                  className="flex justify-center bg-red-50 max-h-10 w-[33%]"
+                >
                   <p className="font-bold m-auto text-2xl p-1">
                     {data?.opencount || 0}
                   </p>
                 </div>
-                <div className="flex justify-center bg-yellow-50 max-h-10 w-[33%]">
+                <div
+                  onClick={() => {
+                    navigateTo("/audit/in-progress");
+                  }}
+                  className="flex justify-center bg-yellow-50 max-h-10 w-[33%]"
+                >
                   <p className="font-bold m-auto text-2xl p-1">
                     {data?.InProgressCount || 0}
                   </p>
                 </div>
-                <div className="flex justify-center bg-green-50 max-h-10 w-[33%]" onClick={() => {
-                  navigateTo('/audit/closed');
-                }}>
+                <div
+                  className="flex justify-center bg-green-50 max-h-10 w-[33%]"
+                  onClick={() => {
+                    navigateTo("/audit/closed");
+                  }}
+                >
                   <p className="font-bold m-auto text-2xl p-1">
                     {data?.closedCount || 0}
                   </p>
@@ -883,7 +891,8 @@ const HomePage = () => {
               <div className=" absolute right-0">
                 <DateRange
                   range={(date) => {
-                    getFormattedTime(date)}}
+                    getFormattedTime(date);
+                  }}
                 />
               </div>
               <div className="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none">
