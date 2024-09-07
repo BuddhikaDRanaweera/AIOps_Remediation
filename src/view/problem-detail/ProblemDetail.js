@@ -12,38 +12,58 @@ import { IoIosApps } from "react-icons/io";
 import { GrServices } from "react-icons/gr";
 import { FaServer } from "react-icons/fa";
 import { FaEdit } from "react-icons/fa";
-import { formatDateString, formatDateToCustomFormat } from "../../util/helper-func/DateConverter";
+import {
+  formatDateString,
+  formatDateToCustomFormat,
+} from "../../util/helper-func/DateConverter";
+import useFetch_POST from "../../services/http/Post";
 
 const ProblemDetail = () => {
   const { PID, ExecutionId } = useParams();
-  const { isLoading, error, data: apiData, getData } = useFetch_GET();
-  console.log(PID);
+  const { data: apiData, getData } = useFetch_GET();
+  const { data: lastSixHourIncidents, postData: postIncidents } =
+    useFetch_POST();
+  // console.log(PID);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [data, setData] = useState();
-  console.log(apiData);
+  // console.log(apiData);
   const url = `https://uag17776.live.dynatrace.com/api/v2/problems/${PID}`;
   // https://xdy01853.live.dynatrace.com/api/v2/apiTokens
   const apiKey =
     "dt0c01.SXQEW54MQL5FLY2CNDD4SILS.AR67H437SVENVZIOOSWZ6GXFTQH5IVTS2UAT6RZ7CZ57DPITCOW7BPR34OGCTA7L";
+  useEffect(() => {
+    dispatch(setGlobalLoading({ loading: true }));
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(url, {
+          params: {
+            "Api-Token": apiKey,
+          },
+        });
+        // console.log(response.data, "incident data");
+        setData(response?.data);
+      } catch (error) {
+        alert(error?.message);
+        // console.error("Error fetching data: ", error);
+      } finally {
+        dispatch(clearGlobalLoading());
+      }
+    };
+    getData(`/problem_recommendations/${ExecutionId}/${PID}`);
+    fetchData();
+  }, []);
 
-  const getDate = (time) => {
-    const date = new Date(time);
-    // Get the day, month, year, hours, and minutes
-    const day = date.getDate();
-    const month = date.getMonth() + 1; // Months are zero-based
-    const year = date.getFullYear();
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
-    const seconds = date.getSeconds();
-    return `${day}/${month}/${year} - ${String(hours).padStart(
-      2,
-      "0"
-    )} : ${String(minutes).padStart(2, "0")} : ${String(seconds).padStart(
-      2,
-      "0"
-    )}`;
-  };
+  useEffect(() => {
+    if (apiData && apiData?.length !== 0) {
+      console.log(apiData[0]?.problemTitle, "data");
+      const pt = apiData[0]?.problemTitle;
+      postIncidents(`/last-6hr-incidents`, {
+        problemTitle: pt,
+      });
+    }
+  }, [apiData]);
+
   const getDownTime = () => {
     const differenceMs = Math.abs(data?.startTime - data?.endTime);
     const totalMinutes = Math.floor(differenceMs / (1000 * 60));
@@ -58,32 +78,6 @@ const ProblemDetail = () => {
       return formattedTime;
     }
   };
-  useEffect(() => {
-    dispatch(setGlobalLoading({ loading: true }));
-
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(url, {
-          params: {
-            "Api-Token": apiKey,
-          },
-        });
-        console.log(response.data, "incident data");
-        setData(response.data);
-      } catch (error) {
-        alert(error.message);
-        console.error("Error fetching data: ", error);
-      } finally {
-        dispatch(clearGlobalLoading());
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    getData(`/problem_recommendations/${ExecutionId}/${PID}`);
-  }, []);
 
   return (
     <div className=" flex flex-col gap-1 justify-between h-body ">
@@ -107,7 +101,7 @@ const ProblemDetail = () => {
                   Detected Time
                 </h3>
                 <h3 className=" text-start text-sm">
-                  {data && formatDateToCustomFormat((data?.startTime))}
+                  {data && formatDateToCustomFormat(data?.startTime)}
                 </h3>
               </div>
 
@@ -119,7 +113,7 @@ const ProblemDetail = () => {
                   {data &&
                     (data?.endTime == "-1"
                       ? "-"
-                      : formatDateToCustomFormat((data?.endTime)))}
+                      : formatDateToCustomFormat(data?.endTime))}
                 </h3>
               </div>
 
@@ -238,71 +232,89 @@ const ProblemDetail = () => {
           </div>
         </div>
       </div>
-      {/* 
-      {apiData ? (
-        <div className="px-5 pt-5 h-[50%]">
-          <h3 className=" text-lg font-semibold text-start">
-            Remediation Details
-          </h3>
-          <div className="py-2 w-full">
-            <table className="w-full bg-white  overflow-hidden shadow-sm shadow-slate-400 text-sm text-left rtl:text-right text-gray-500">
-              <thead className="text-xs bg-main text-white uppercase ">
-                <tr className="">
-                  <th className="px-6 py-3">Problem Title</th>
-                  <th className="px-6 py-3">Recommendation</th>
-                  <th className="px-6 py-3">Service Name</th>
-                  <th className="px-6 py-3">Sub Problem Title</th>
-                  <th className="px-6 py-3">
-                    Remediation Execution Start Time
-                  </th>
-                  <th className="px-6 py-3">Remediation Execution End Time</th>
-                  <th className="px-6 py-3">Script Path</th>
-                  <th className="px-6 py-3">Edit</th>
+
+      <div className="grid grid-cols-1 px-5 py-2 gap-2">
+        <div>
+          {lastSixHourIncidents && (
+            <table className="w-full bg-white overflow-hidden shadow-sm shadow-slate-400 text-sm text-left rtl:text-right">
+              <thead className="text-xs bg-slate-200 uppercase">
+                <tr>
+                  <th className="px-6 py-3">Incident Reference</th>
+                  <th className="px-6 py-3">Incident Title</th>
+                  <th className="px-6 py-3">Status</th>
+                  <th className="px-6 py-3">Start Time</th>
+                  <th className="px-6 py-3">End Time</th>
                 </tr>
               </thead>
               <tbody>
-                {apiData?.map((item, index) => (
-                  <tr className="" key={index}>
-                    <td className="p-2 text-center">{item.problemTitle}</td>
+                {lastSixHourIncidents?.data?.map((item, index) => (
+                  <tr key={index}>
+                    <td className="p-2 text-start">{item.problemTitle}</td>
+                    <td className="p-2 text-start">{item.problemTitle}</td>
+                    <td className="p-2 text-start">{item.status}</td>
                     <td className="p-2 text-start">
-                      {item.recommendationText}
+                      {formatDateToCustomFormat(item.problemDetectedAt)}
                     </td>
-                    <td className="p-2 text-start">{item.serviceName}</td>
-                    <td className="p-2 text-start">{item.subProblemTitle}</td>
-                    <td className="p-2 text-start">
-                      {item.scriptExecutionStartAt}
-                    </td>
-                    <td className="p-2 text-start">{item.problemEndAt}</td>
-                    <td className="p-2 text-start">{item.scriptPath}</td>
-
-                    <td className="p-2 text-center">
-                      <button
-                        className="edit-button"
-                        onClick={() => {
-                          navigate(
-                            `/recommendation/${item.remediationId}/${item.problemId}`
-                          );
-                        }}
-                      >
-                        <FaEdit className="text-2xl hover:text-main" />
-                      </button>
-                    </td>
+                    <td className="p-2 text-start">{formatDateToCustomFormat(item.problemEndAt) }</td>
                   </tr>
                 ))}
               </tbody>
             </table>
-          </div>
+          )}
         </div>
-      ) : (
-        <div className="bg-white  flex m-5 rounded-md shadow-sm shadow-slate-400 p-5 h-full">
-          <div className="m-auto flex flex-col justify-center">
-            <h3>Remediation required for this problem.</h3>
-            <h3 className=" m-1 p-2 text-sm bg-main rounded-lg text-white">
-              Create Remediation
-            </h3>
-          </div>
+        <div>
+          <table className="w-full bg-white overflow-hidden shadow-sm shadow-slate-400 text-sm text-left rtl:text-right">
+            <thead className="text-xs bg-slate-300 uppercase">
+              <tr>
+                <th className="px-6 py-3">Incident Reference</th>
+                <th className="px-6 py-3">Incident Title</th>
+                <th className="px-6 py-3">Status</th>
+                <th className="px-6 py-3">Start Time</th>
+                <th className="px-6 py-3">End Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              {/* {filteredData?.map((item) => (
+                <tr key={item.id}>
+                  <td className="p-2 text-center">{item.problemId}</td>
+                  <td className="p-2 text-start">{item.problemTitle}</td>
+                  <td className="p-2 text-start">{item.subProblemTitle || "N/A"}</td>
+                  <td className="p-2 text-start">{item.scriptPath}</td>
+                  <td className="p-2 text-start">{item.recommendationText}</td>
+                  <td className="p-2 text-start">{item.createdAt}</td>
+                  <td className="p-2 text-start">{item.lastUpdateAt}</td>
+                  <td className="p-2 text-start">{item.Owner} John</td>
+                  <td className="p-2 text-center">
+                    <button
+                      className="edit-button"
+                      onClick={() => {
+                        navigate(`/recommendation/${item.remediationId}/${item.problemId}`);
+                      }}
+                    >
+                      <FaEdit className="text-2xl hover:text-main" />
+                    </button>
+                  </td>
+                  <td className="p-2 text-center">
+                    <button
+                      className="edit-button"
+                      onClick={() => {
+                        setOpen(true);
+                        setDeleteObj({
+                          problemId: item?.problemId,
+                          remediationId: item.remediationId,
+                        });
+                      }}
+                    >
+                      <DeleteIcon className="text-2xl hover:text-main" />
+                    </button>
+                  </td>
+                </tr>
+              ))} */}
+            </tbody>
+          </table>
         </div>
-      )} */}
+      </div>
+
       {apiData ? (
         <div className="px-5 pt-5 h-[50%]">
           <h3 className="text-lg font-semibold text-start">

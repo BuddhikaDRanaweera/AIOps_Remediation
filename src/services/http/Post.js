@@ -19,14 +19,16 @@ const useFetch_POST = () => {
     try {
       const response = await api.post(url, requestData);
       setData(response);
-      if (response.status == 200 || response.status == 201)
-        dispatch(
-          setAlert({
-            alert: response.data,
-            variant: "success",
-            open: true,
-          })
-        );
+      console.log(response);
+      
+      // if (response?.status == 200 || response?.status == 201)
+      //   dispatch(
+      //     setAlert({
+      //       alert: response?.data,
+      //       variant: "success",
+      //       open: true,
+      //     })
+      //   );
     } catch (error) {
       dispatch(
         setAlert({
