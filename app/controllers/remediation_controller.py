@@ -24,6 +24,7 @@ def create_remediation_controller():
     problem_title = data.get('problemTitle')
     parameters = data.get('parameters',None)
     parametersValues = data.get('parametersValue',None)
+    effortTime = data.get('parametersValue',None)
     ist_timezone = timezone('Asia/Kolkata')
     
     print(data)
@@ -34,7 +35,7 @@ def create_remediation_controller():
     
     if(execute_script_ssh(script_path, parametersValues)):
         create_remediation(recommendation_text, script_path, problem_id, parametersValues)
-        update_status_by_id(problem_id)
+        update_status_by_id(problem_id,effortTime)
         update_to_inprogress_manual_exe(service_name, problem_id, problem_title, scriptExecutionStartAt)
         return "Remediation Saved Successfully", 201
     else:

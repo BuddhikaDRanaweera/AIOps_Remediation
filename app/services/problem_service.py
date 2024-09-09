@@ -50,11 +50,12 @@ def get_all_problems_with_remediations():
         logger.error(f"Error fetching problems with remediations: {str(e)}")
         return {"error": str(e)}
     
-def update_status_by_id(id):
+def update_status_by_id(id,effortTime):
     try:
         problem = Problem.query.get(id)
         if problem:
             problem.status = "RESOLVED"
+            problem.effortTime = effortTime
             db.session.commit()
             logger.info(f"Problem with ID {id} updated successfully")
             return {"message": f"Problem with ID {id} updated successfully"}
