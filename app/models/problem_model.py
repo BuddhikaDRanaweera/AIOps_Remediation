@@ -6,3 +6,4 @@ class Problem(db.Model):
     subProblemTitle = db.Column(db.String(255), default="N/A")
     serviceName = db.Column(db.String(255), nullable=False)
     status = db.Column(db.String(255), nullable=False)
+    effortTime = db.Column(db.String(255), nullable=True)
