@@ -1014,7 +1014,7 @@ const HomePage = () => {
                   key={index}
                   onClick={() => {
                     navigateTo(
-                      `/${incident?.pid}/${incident?.executedProblemId}`
+                      `/${incident?.pid}/${incident?.executedProblemId}/${incident?.id}`
                     );
                   }}
                   className={`${

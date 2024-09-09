@@ -217,7 +217,7 @@ const ExecutionHistory = () => {
             <div
               key={index}
               className="p-4 bg-white  shadow-md border hover:bg-gray-50"
-              onClick={() => navigate(`/${item.pid}/${item.executedProblemId}`)}
+              onClick={() => navigate(`/${item.pid}/${item.executedProblemId}/${item.id}`)}
             >
               <p className="text-sm text-gray-600">ID: {item.displayId}</p>
               <p className="text-sm font-semibold text-gray-800 truncate">Title: {item.problemTitle}</p>
