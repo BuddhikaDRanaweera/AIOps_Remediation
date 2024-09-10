@@ -33,6 +33,15 @@ export const formatDateToCustomFormat = (dateString) => {
   const dateInUTC = moment(dateString);
   return dateInUTC.format("YYYY:MM:DD - HH:mm:ss");
 };
+export const formatDateToUTCFormat = (dateString) => {
+  if (!dateString) return "";
+  const dateInUTC = moment.utc(dateString);
+  return dateInUTC.format("YYYY:MM:DD - HH:mm:ss");
+};
+export const formatDateToUTCFormatCal = (dateString) => {
+  if (!dateString) return "";
+  return moment(dateString).unix();// Adjust format as needed
+};
 
 export const convertToIST = (gmtDateString) => {
   // Create a new Date object from the GMT date string
@@ -47,3 +56,18 @@ export const convertToIST = (gmtDateString) => {
 
   return formattedDate;
 }
+
+
+export const calculateTimeDifference = (startTime, endTime) => {
+  // Convert start and end time to Date objects if they are not already
+  const startDate = new Date(startTime);
+  const endDate = new Date(endTime);
+
+  // Calculate the difference in milliseconds
+  const differenceMs = endDate - startDate;
+
+  // Convert the difference to seconds (or any other unit)
+  const differenceSeconds = differenceMs / 1000;
+
+  return differenceSeconds;
+};

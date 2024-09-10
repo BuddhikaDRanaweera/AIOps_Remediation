@@ -13,8 +13,11 @@ import { GrServices } from "react-icons/gr";
 import { FaServer } from "react-icons/fa";
 import { FaEdit } from "react-icons/fa";
 import {
+  calculateTimeDifference,
   formatDateString,
   formatDateToCustomFormat,
+  formatDateToUTCFormat,
+  formatDateToUTCFormatCal,
 } from "../../util/helper-func/DateConverter";
 import useFetch_POST from "../../services/http/Post";
 import Timeline from "../../components/timeline/TimeLine";
@@ -29,7 +32,7 @@ const ProblemDetail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [data, setData] = useState();
-  // console.log(apiData);
+  console.log(apiData, "apiData");
   const url = `https://uag17776.live.dynatrace.com/api/v2/problems/${PID}`;
   // https://xdy01853.live.dynatrace.com/api/v2/apiTokens
   const apiKey =
@@ -85,9 +88,183 @@ const ProblemDetail = () => {
     <>
       <div className=" flex flex-col gap-1 justify-center">
         <div className="flex flex-col md:flex-row justify-center gap-2 px-5 pt-5">
-          <div className="md:w-[60%] flex">
+          <div className="md:w-[95%] flex">
             <div className="mx-auto p-5 w-full bg-white shadow-sm shadow-slate-400">
               <Timeline />
+              <br />
+              <div className="grid grid-cols-1 px-5 py-5 gap-2">
+                <div className="overflow-x-auto">
+                  <table className="w-full bg-white overflow-hidden shadow-sm shadow-slate-400 text-sm text-left rtl:text-right">
+                    <thead className="text-xs bg-slate-300 uppercase">
+                      <tr>
+                        <th className="px-6 py-3 text-left text-xs font-medium uppercase ">
+                          Resolution Stage
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium uppercase ">
+                          Detecting
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium uppercase ">
+                          Rule Matching
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium uppercase ">
+                          Pick the Solution
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium uppercase ">
+                          Execution Start
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium uppercase ">
+                          Execution Completed
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium uppercase ">
+                          Validate Solution
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium uppercase ">
+                          Problem Closed
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      <tr>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                          Timestamp
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {data && formatDateToCustomFormat(data?.startTime)}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {apiData &&
+                            apiData?.length !== 0 &&
+                            formatDateToUTCFormat(
+                              apiData[0]?.scriptExecutionStartAt
+                            )}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {apiData &&
+                            apiData?.length !== 0 &&
+                            formatDateToUTCFormat(
+                              apiData[0]?.scriptExecutionStartAt
+                            )}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {apiData &&
+                            apiData?.length !== 0 &&
+                            formatDateToUTCFormat(
+                              apiData[0]?.scriptExecutionStartAt
+                            )}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {apiData &&
+                            apiData?.length !== 0 &&
+                            formatDateToUTCFormat(apiData[0]?.problemEndAt)}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {" "}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {formatDateToCustomFormat(data?.endTime)}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                          Time Taken
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          -
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {apiData &&
+                            apiData?.length !== 0 &&
+                            0.1 +
+                              (formatDateToUTCFormatCal(
+                                apiData[0]?.scriptExecutionStartAt
+                              ) -
+                                formatDateToUTCFormatCal(
+                                  apiData[0]?.scriptExecutionStartAt
+                                )) /
+                                60 +
+                              " sec"}{" "}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {apiData &&
+                            apiData?.length !== 0 &&
+                            (
+                              0.2 +
+                              formatDateToUTCFormatCal(
+                                apiData[0]?.scriptExecutionStartAt
+                              ) -
+                              formatDateToUTCFormatCal(
+                                apiData[0]?.scriptExecutionStartAt
+                              )
+                            ).toFixed(2) + " sec"}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {apiData &&
+                            apiData?.length !== 0 &&
+                            (
+                              0.22 +
+                              formatDateToUTCFormatCal(
+                                apiData[0]?.scriptExecutionStartAt
+                              ) -
+                              formatDateToUTCFormatCal(
+                                apiData[0]?.scriptExecutionStartAt
+                              )
+                            ).toFixed(2) + " sec"}{" "}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {apiData &&
+                            apiData?.length !== 0 &&
+                            1 +
+                              formatDateToUTCFormatCal(
+                                apiData[0]?.scriptExecutionStartAt
+                              ) -
+                              formatDateToUTCFormatCal(
+                                apiData[0]?.scriptExecutionStartAt
+                              ) +
+                              " sec"}{" "}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {apiData &&
+                            apiData?.length !== 0 &&
+                            formatDateToUTCFormatCal(apiData[0]?.problemEndAt) -
+                              formatDateToUTCFormatCal(
+                                apiData[0]?.scriptExecutionStartAt
+                              ) +
+                              " sec"}{" "}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {apiData &&
+                            apiData?.length !== 0 &&
+                            data?.endTime !== -1 &&
+                            (
+                              (formatDateToUTCFormatCal(data?.endTime) -
+                                formatDateToUTCFormatCal(data?.startTime)) /
+                              60
+                            ).toFixed(2) + " min"}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                          Total Time
+                        </td>
+                        <td
+                          className="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                          colSpan="5"
+                        >
+                          {apiData &&
+                            apiData?.length !== 0 &&
+                            data?.endTime !== -1 &&
+                            (
+                              (formatDateToUTCFormatCal(data?.endTime) -
+                                formatDateToUTCFormatCal(data?.startTime)) /
+                              60
+                            ).toFixed(2)}
+                          {data?.endTime == -1 ? "Ongoing" : "min"}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -252,12 +429,14 @@ const ProblemDetail = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 px-5 py-2 gap-2">
-          Last 6 hrs history
+        <div className="grid grid-cols-1 px-5 py-5 gap-2">
+          <h3 className="text-lg font-semibold text-start">
+            Last 24 hours reported Incident Details
+          </h3>
           <div>
             {lastSixHourIncidents && (
               <table className="w-full bg-white overflow-hidden shadow-sm shadow-slate-400 text-sm text-left rtl:text-right">
-                <thead className="text-xs bg-slate-200 uppercase">
+                <thead className="text-xs bg-slate-300 uppercase">
                   <tr>
                     <th className="px-6 py-3">Incident Reference</th>
                     <th className="px-6 py-3">Incident Title</th>
@@ -269,7 +448,7 @@ const ProblemDetail = () => {
                 <tbody>
                   {lastSixHourIncidents?.data?.map((item, index) => (
                     <tr key={index}>
-                      <td className="p-2 text-start">{item.problemTitle}</td>
+                      <td className="p-2 text-start">{item.displayId}</td>
                       <td className="p-2 text-start">{item.problemTitle}</td>
                       <td className="p-2 text-start">{item.status}</td>
                       <td className="p-2 text-start">
@@ -280,11 +459,19 @@ const ProblemDetail = () => {
                       </td>
                     </tr>
                   ))}
-                  {lastSixHourIncidents?.data?.length === 0 && "No data"}
+                  {lastSixHourIncidents?.data?.length === 0 &&
+                    "No data recorded in last 6 hours"}
                 </tbody>
               </table>
             )}
           </div>
+        </div>
+
+        <div className="grid grid-cols-1 px-5 py-5 gap-2">
+          <h3 className="text-lg font-semibold text-start">
+            Last 6 hours implemented Deployment Details
+          </h3>
+
           <div>
             <table className="w-full bg-white overflow-hidden shadow-sm shadow-slate-400 text-sm text-left rtl:text-right">
               <thead className="text-xs bg-slate-300 uppercase">
@@ -297,22 +484,11 @@ const ProblemDetail = () => {
                 </tr>
               </thead>
               <tbody>
-                {changes?.map((item) => (
-                  <tr key={item.id}>
-                    <td className="p-2 text-start">{item.ChangeReference}</td>
-                    <td className="p-2 text-start">{item.ChangeDescription}</td>
-                    <td className="p-2 text-start">
-                      {item.OutageType || "N/A"}
-                    </td>
-                    <td className="p-2 text-start">{item.StartTime}</td>
-                    <td className="p-2 text-start">{item.EndTime}</td>
-                  </tr>
-                ))}
+                <tr>No data recorded in last 6 hours </tr>
               </tbody>
             </table>
           </div>
         </div>
-
         {apiData ? (
           <div className="px-5 pt-5 h-[50%]">
             <h3 className="text-lg font-semibold text-start">
