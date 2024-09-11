@@ -83,6 +83,7 @@ def webhook():
                                 print("6")
                                 update_audit_remediation_status(pid, serviceName, problemTitle, scriptExecutionStartAt, comments="Successfully Remediated", problemEndAt=datetime.now(ist_timezone),status="CLOSED")
                                 postValidation = execute_script_validation_ssh(validation.postValidationScriptPath)
+                                print(postValidation,">>>>>>>>6.0")
                                 if(postValidation):
                                     print("7")
                                     update_audit_post_validation_status(pid, serviceName, problemTitle, postValidationStatus=True, postValidationStartedAt=datetime.now(ist_timezone))
