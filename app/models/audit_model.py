@@ -1,4 +1,4 @@
-from sqlalchemy import Column, DateTime, Integer, PrimaryKeyConstraint, String
+from sqlalchemy import Boolean, Column, DateTime, Integer, PrimaryKeyConstraint, String
 from app import db
 
 class Audit(db.Model):
@@ -19,6 +19,11 @@ class Audit(db.Model):
     comments = Column(String(255))
     problemDetectedAt = Column(DateTime(timezone=True), nullable=True)
     problemEndAt = Column(DateTime(timezone=True), nullable=True)
+     # New columns
+    preValidationStatus = Column(Boolean, nullable=True)
+    postValidationStatus = Column(Boolean, nullable=True)
+    preValidationStartedAt = Column(DateTime(timezone=True), nullable=True)
+    postValidationStartedAt = Column(DateTime(timezone=True), nullable=True)
 
     __table_args__ = (
         PrimaryKeyConstraint('id', 'serviceName', 'displayId', name='pk_id_serviceName_displayId'),

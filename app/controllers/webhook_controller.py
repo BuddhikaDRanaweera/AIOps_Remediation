@@ -4,8 +4,9 @@ from pytz import timezone,utc
 import logging
 from app.services.problem_service import create_problem_auto, find_problem_id
 from app.services.remediation_service import get_script_path_by_prob_id
-from app.services.audit_service import create_audit, update_audit_status_closed,update_audit_status_to_failed
-from app.util.execute_script import execute_script_ssh, service_state_check_exe
+from app.services.validation_service import get_validation_script_path_by_prob_id
+from app.services.audit_service import create_audit, update_audit_status_closed,update_audit_status_to_failed, update_audit_pre_validation_status, update_audit_remediation_status,update_audit_post_validation_status
+from app.util.execute_script import execute_script_ssh, service_state_check_exe, execute_script_validation_ssh
 from app.util.dateConvertor import convert_timestamp_to_datetime
  
 # Create a logger
@@ -36,42 +37,80 @@ def webhook():
 
     print(serviceName,pid,"pid")
     if state == "OPEN":
-            if "ImpactedEntityNames" in data and "ProblemID" in data:
-                logger.info("Received webhook notification. Service to restart: %s", serviceName)
-                prob_id = find_problem_id(problemTitle, serviceName)
-                executedProblemId = prob_id
-                if prob_id:
-                    remediation = get_script_path_by_prob_id(prob_id)
-                    parametersValues = remediation.parameters
-                    script_path = remediation.scriptPath
-                    if script_path:
-                        # Run the script
-                        scriptExecutionStartAt = datetime.now(ist_timezone)
-                        if execute_script_ssh(script_path, parametersValues):
-                            # Add execution data to the audit table
-                            if create_audit(
-                                problemTitle, subProblemTitle, impactedEntity, problemImpact,
-                                problemSeverity, problemURL, problemDetectedAt, serviceName,
-                                pid, executedProblemId, displayId, actionType="AUTOMATIC",
-                                status="IN_PROGRESS", comments="Successfully Remediated",
-                                problemEndAt=datetime.now(ist_timezone), scriptExecutionStartAt=scriptExecutionStartAt
-                            ):
-                                return 'Script execution success', 200
+        if "ImpactedEntityNames" in data and "ProblemID" in data:
+            logger.info("Received webhook notification. Service to restart: %s", serviceName)
+            prob_id = find_problem_id(problemTitle, serviceName)
+            executedProblemId = prob_id
+            # Check it is existing problem or not
+            print("Check it is existing problem or not")
+            
+            if prob_id:
+                remediation = get_script_path_by_prob_id(prob_id)
+                parametersValues = remediation.parameters
+                script_path = remediation.scriptPath
+                # pick resolution script
+                print("pick resolution script")
+                    
+                if script_path:
+                    # Create audit records
+                    print("Create audit records")
+                        
+                    create_audit(
+                        problemTitle, subProblemTitle, impactedEntity, problemImpact,
+                        problemSeverity, problemURL, problemDetectedAt, serviceName, pid,
+                        executedProblemId, displayId, actionType="AUTOMATIC", status="OPEN",
+                        comments="Problem Detacted, Rule Picked",
+                        problemEndAt=None, scriptExecutionStartAt=None
+                    )
+                    print("pre validation rule picking  and execution")
+                    # pre validation rule picking  and execution
+                    validation = get_validation_script_path_by_prob_id(prob_id)
+                    if(validation):
+                        preValidation = execute_script_validation_ssh(validation.preValidationScriptPath)
+                        if(preValidation):
+                            # update audit record
+                            print("update audit record")
+                            update_audit_pre_validation_status(pid, serviceName, problemTitle, preValidationStatus=True, preValidationStartedAt=datetime.now(ist_timezone))
+                            # Run the script
+                            print("Run the script")
+                            scriptExecutionStartAt = datetime.now(ist_timezone)
+                            # check execution of resoluition is success or not
+                            print("check execution of resoluition is success or not")
+
+                            if execute_script_ssh(script_path, parametersValues):
+                                # Add execution data to the audit table
+                                print("Add execution data to the audit table")
+                                update_audit_remediation_status(pid, serviceName, problemTitle, scriptExecutionStartAt, comments="Successfully Remediated", problemEndAt=datetime.now(ist_timezone),status="CLOSED")
+                                postValidation = execute_script_validation_ssh(validation.postValidationScriptPath)
+                                if(postValidation):
+                                    print("post validation success")
+                                    update_audit_post_validation_status(pid, serviceName, problemTitle, postValidationStatus=True, postValidationStartedAt=datetime.now(ist_timezone))
+                                    return 'Remediation Script execution success', 200
+                                else:
+                                    print("post validation unsuccess")
+                                    update_audit_post_validation_status(pid, serviceName, problemTitle, postValidationStatus=False, postValidationStartedAt=datetime.now(ist_timezone))
                             else:
-                                update_audit_status_closed(pid, "CLOSED", scriptExecutionStartAt=scriptExecutionStartAt)
-                                return 'Script execution success', 200
+                                # update audit status
+                                print("Script execution unsuccessful!")
+                                update_audit_remediation_status(pid, serviceName, problemTitle, scriptExecutionStartAt, comments="Script execution unsuccessful!", problemEndAt=None,status="IN_PROGRESS")
+                                return 'Script execution unsuccessful!', 400
                         else:
-                            return 'Script execution unsuccessful!', 400
+                            # update audit status
+                            print("pre validation failed. Not a valida alert")
+                            update_audit_pre_validation_status(pid, serviceName, problemTitle, preValidationStatus=False, preValidationStartedAt=datetime.now(ist_timezone))
+                            return 'Not a valida alert', 400
                     else:
                         logger.warning("No script found in DB")
                         return 'No script specified in DB', 400
                 else:
+                    print("new problem detected")
                     create_problem_auto(problemTitle, subProblemTitle, serviceName, "NOT_RESOLVED")
                     create_audit(
                         problemTitle, subProblemTitle, impactedEntity, problemImpact,
                         problemSeverity, problemURL, problemDetectedAt, serviceName, pid,
                         executedProblemId, displayId, actionType="MANUAL", status="OPEN",
-                        comments="The new problem will be identified/was identified and the remediation will take /took place with manual instructions", problemEndAt=None, scriptExecutionStartAt=None
+                        comments="The new problem will be identified/was identified and the remediation will take /took place with manual instructions", 
+                        problemEndAt=None, scriptExecutionStartAt=None
                     )
                     return "Problem Recorded Sucessfully", 201
             else:
@@ -87,3 +126,4 @@ def webhook():
         logger.info("Dynatrace unknown notification received.")
         update_audit_status_to_failed(pid)
         return 'Dynatrace message', 200
+

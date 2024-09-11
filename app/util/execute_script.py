@@ -51,3 +51,42 @@ def service_state_check_exe(script_path, serviceName):
         print("Error executing bash script:", error_message)
         logging.error("Error happened while executing the script: %s", error_message)
         return False
+
+def execute_script_validation_ssh(script_path):
+    """
+    Executes a bash script on the local machine and returns the result.
+
+    :param script_path: The path to the script to execute.
+    :return: The output of the script execution, or an error message.
+    """
+    print(">>>>>>>>>>>>>>>>>>>>>>>")
+    print("Script path >>>>>", script_path)
+    try:
+        # Construct the bash command to execute the script
+        bash_command = f"sudo -u ubuntu bash {script_path}"
+        print("Bash command >>>>>>>>>>>>>>>>>>>>", bash_command)
+
+        # Execute the bash script using subprocess
+        result = subprocess.run(bash_command, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+        # Print and return the output
+        output = result.stdout
+        print("Bash script executed successfully.")
+        logging.info("Bash script executed successfully.")
+        return output
+
+    except ValueError as ve:
+        print("ValueError:", str(ve))
+        logging.error("ValueError: %s", str(ve))
+        return f"ValueError: {str(ve)}"
+
+    except subprocess.CalledProcessError as e:
+        error_message = e.stderr if e.stderr else str(e)
+        print("Error executing bash script:", error_message)
+        logging.error("Error happened while executing the script: %s", error_message)
+        return f"Error executing script: {error_message}"
+
+    except Exception as e:
+        print("Unexpected error:", str(e))
+        logging.error("Unexpected error: %s", str(e))
+        return f"Unexpected error: {str(e)}"

@@ -69,7 +69,11 @@ def get_problem_audit(id):
                 "displayId": audit.displayId,
                 "comments": audit.comments,
                 "problemDetectedAt": audit.problemDetectedAt,
-                "problemEndAt": audit.problemEndAt
+                "problemEndAt": audit.problemEndAt,
+                "preValidationStatus": audit.preValidationStatus,
+                "postValidationStatus": audit.postValidationStatus,
+                "preValidationStartedAt": audit.preValidationStartedAt,
+                "postValidationStartedAt": audit.postValidationStartedAt,
             }
 
        
@@ -81,6 +85,7 @@ def get_problem_audit(id):
 
 @audit_bp.route('/last-6hr-incidents', methods=['POST'])
 def get_last_6hr_incidents():
+    print("hi")
     data = request.json
     problem_title = data['problemTitle']
     try:
