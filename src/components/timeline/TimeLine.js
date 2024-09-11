@@ -3,9 +3,11 @@ import useFetch_GET from "../../services/http/Get";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { TiTick } from "react-icons/ti";
 
 const Timeline = () => {
   const { isLoading, error, data: apiData, getData } = useFetch_GET();
+
   const [data, setData] = useState();
   const { PID, ExecutionId, AuditId } = useParams();
   const url = `https://uag17776.live.dynatrace.com/api/v2/problems/${PID}`;
@@ -63,13 +65,129 @@ const Timeline = () => {
       clearInterval(intervalId); // Cleanup on component unmount
     };
   }, []);
+  const [stage, setStage] = useState(1);
+  useEffect(() => {
+    if (apiData) {
+      const timeline = ["Detected"];
+      if (apiData?.status === "OPEN") {
+       setStage(prev => 2)
+      } else {
+        if (apiData?.status == "CLOSED" || apiData?.status == "IN_PROGRESS") {
+          setStage(prev => 2)
+        }
+        if (apiData?.preValidationStatus) {
+          setStage(prev => 3)
+        }
+        if (apiData?.scriptExecutionStartAt !== null) {
+          setStage(prev => 4)
+        }
+        if (apiData?.problemEndAt !== null) {
+          setStage(prev => 5)
+        }
+        if (apiData?.postValidationStatus) {
+          setStage(prev => 6)
+        }
+        if ( data?.status === "CLOSED") {
+          setStage(prev => 7)
+        }
+      }
+    }
+  }, [apiData]);
 
   return (
     <>
       <h3 className="text-lg font-semibold text-start px-5 pb-5">
         Problem Timeline
       </h3>
-      <ol class="flex items-center w-full text-xs text-gray-900 font-medium sm:text-base">
+      {apiData?.status == 'OPEN' ? (  <ol className="items-center w-full space-y-4 sm:flex sm:space-x-8 sm:space-y-0 rtl:space-x-reverse">
+        {/* Step 1: User info */}
+        <li className={`flex items-center ${stage >= 1 ? 'text-green-600':'text-gray-600'} space-x-2.5 rtl:space-x-reverse`}>
+    <span className={`flex items-center justify-center w-8 h-8 border ${stage >= 1 ? 'border-green-600':'border-gray-600'} rounded-full shrink-0`}>
+      {stage >= 1 && <TiTick />}
+    </span>
+          <span>
+            <h3 className="font-medium leading-tight">Step 1</h3>
+            <p className="text-sm">Problem Detected</p>
+          </span>
+        </li>
+        <li className={`flex items-center ${stage >= 2 ? 'text-green-600':'text-gray-600'} space-x-2.5 rtl:space-x-reverse`}>
+    <span className={`flex items-center justify-center w-8 h-8 border ${stage >= 2 ? 'border-green-600':'border-gray-600'} rounded-full shrink-0`}>
+      {stage >= 2 && <TiTick />}
+    </span>
+          <span>
+            <h3 className="font-medium leading-tight">Step 2</h3>
+            <p className="text-sm">Rule Defenition Required to proceed</p>
+          </span>
+        </li>
+      </ol>
+):(  <ol className="items-center w-full space-y-4 sm:flex sm:space-x-8 sm:space-y-0 rtl:space-x-reverse">
+  {/* Step 1: User info */}
+  <li className={`flex items-center ${stage >= 1 ? 'text-green-600':'text-gray-600'} space-x-2.5 rtl:space-x-reverse`}>
+    <span className={`flex items-center justify-center w-8 h-8 border ${stage >= 1 ? 'border-green-600':'border-gray-600'} rounded-full shrink-0`}>
+      {stage >= 1 && <TiTick />}
+    </span>
+    <span>
+      <h3 className="font-medium leading-tight">Step 1</h3>
+      <p className="text-sm">Problem Detected</p>
+    </span>
+  </li>
+  <li className={`flex items-center ${stage >= 2 ? 'text-green-600':'text-gray-600'} space-x-2.5 rtl:space-x-reverse`}>
+  <span className={`flex items-center justify-center w-8 h-8 border ${stage >= 2 ? 'border-green-600':'border-gray-600'} rounded-full shrink-0`}>
+      {stage >= 2 && <TiTick />}
+    </span>
+    <span>
+      <h3 className="font-medium leading-tight">Step 2</h3>
+      <p className="text-sm">Rule Matching</p>
+    </span>
+  </li>
+  <li className={`flex items-center ${stage >= 3 ? 'text-green-600':'text-gray-600'} space-x-2.5 rtl:space-x-reverse`}>
+  <span className={`flex items-center justify-center w-8 h-8 border ${stage >= 3 ? 'border-green-600':'border-gray-600'} rounded-full shrink-0`}>
+      {stage >= 3 && <TiTick />}
+    </span>
+    <span>
+      <h3 className="font-medium leading-tight">Step 3</h3>
+      <p className="text-sm">Pre Validation</p>
+    </span>
+  </li>
+  <li className={`flex items-center ${stage >= 4 ? 'text-green-600':'text-gray-600'} space-x-2.5 rtl:space-x-reverse`}>
+  <span className={`flex items-center justify-center w-8 h-8 border ${stage >= 4 ? 'border-green-600':'border-gray-600'} rounded-full shrink-0`}>
+      {stage >= 4 && <TiTick />}
+    </span>
+    <span>
+      <h3 className="font-medium leading-tight">Step 4</h3>
+      <p className="text-sm">Execution Start</p>
+    </span>
+  </li>
+  <li className={`flex items-center ${stage >= 5 ? 'text-green-600':'text-gray-600'} space-x-2.5 rtl:space-x-reverse`}>
+  <span className={`flex items-center justify-center w-8 h-8 border ${stage >= 5 ? 'border-green-600':'border-gray-600'} rounded-full shrink-0`}>
+      {stage >= 5 && <TiTick />}
+    </span>
+    <span>
+      <h3 className="font-medium leading-tight">Step 5</h3>
+      <p className="text-sm">Execution End</p>
+    </span>
+  </li>
+  <li className={`flex items-center ${stage >= 6 ? 'text-green-600':'text-gray-600'} space-x-2.5 rtl:space-x-reverse`}>
+  <span className={`flex items-center justify-center w-8 h-8 border ${stage >= 6 ? 'border-green-600':'border-gray-600'} rounded-full shrink-0`}>
+      {stage >= 6 && <TiTick />}
+    </span>
+    <span>
+      <h3 className="font-medium leading-tight">Step 6</h3>
+      <p className="text-sm">Post Validation</p>
+    </span>
+  </li>
+  <li className={`flex items-center ${stage >= 7 ? 'text-green-600':'text-gray-600'} space-x-2.5 rtl:space-x-reverse`}>
+  <span className={`flex items-center justify-center w-8 h-8 border ${stage >= 7 ? 'border-green-600':'border-gray-600'} rounded-full shrink-0`}>
+      {stage >= 7 && <TiTick />}
+    </span>
+    <span>
+      <h3 className="font-medium leading-tight">Closed</h3>
+      {/* <p className="text-sm">Post Validation</p> */}
+    </span>
+  </li>
+</ol>
+)}
+      {/* <ol class="flex items-center w-full text-xs text-gray-900 font-medium sm:text-base">
         <li
           className={`flex w-full relative ${
             true
@@ -86,6 +204,7 @@ const Timeline = () => {
             Detected
           </div>
         </li>
+
         <li
           className={`flex w-full relative ${
             apiData?.status == "CLOSED" || apiData?.status == "IN_PROGRESS"
@@ -210,7 +329,7 @@ const Timeline = () => {
             </li>
           </>
         )}
-      </ol>
+      </ol> */}
     </>
   );
 };

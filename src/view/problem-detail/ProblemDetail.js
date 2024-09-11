@@ -88,7 +88,7 @@ const ProblemDetail = () => {
     <>
       <div className=" flex flex-col gap-1 justify-center">
         <div className="flex flex-col md:flex-row justify-center gap-2 px-5 pt-5">
-          <div className="md:w-[95%] flex">
+          <div className="md:w-[100%] flex">
             <div className="mx-auto p-5 w-full bg-white shadow-sm shadow-slate-400">
               <Timeline />
               <br />
