@@ -1,8 +1,9 @@
 import logging
 import subprocess
- 
+import time
 def execute_script_ssh(script_path, parametersValues):
     print(">>>>>>>>>>>>>>>>>>>>>>>")
+    time.sleep(10)  # Add a 10-second delay here
     print("Parameter values >>>>>", parametersValues)
     try:
         if parametersValues:
