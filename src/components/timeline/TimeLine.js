@@ -188,8 +188,14 @@ const Timeline = () => {
               </div>
             </li>
 
-            <li class="flex w-full relative">
-              <div class="block whitespace-nowrap z-10">
+            <li
+              className={`flex w-full relative ${
+                data?.status === "CLOSED"
+                  ? "text-green-600"
+                  : "text-gray-900"
+              }`}
+            >
+              <div className="block whitespace-nowrap z-10">
                 <span
                   className={`w-6 h-6 ${
                     data?.status == "CLOSED"
