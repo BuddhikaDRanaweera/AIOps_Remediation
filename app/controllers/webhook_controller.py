@@ -58,7 +58,7 @@ def webhook():
                     create_audit(
                         problemTitle, subProblemTitle, impactedEntity, problemImpact,
                         problemSeverity, problemURL, problemDetectedAt, serviceName, pid,
-                        executedProblemId, displayId, actionType="AUTOMATIC", status="OPEN",
+                        executedProblemId, displayId, actionType="AUTOMATIC", status="IN_PROGRESS",
                         comments="Problem Detacted, Rule Picked",
                         problemEndAt=None, scriptExecutionStartAt=None
                     )
