@@ -50,7 +50,6 @@ def audit_status():
 @audit_bp.route('/audit/<int:id>', methods=['GET'])
 def get_problem_audit(id):
     try:
-        print(id)
         audit = get_audit_record_by_audit_id(id)
         audit_list =  {
                 "id": audit.id,
