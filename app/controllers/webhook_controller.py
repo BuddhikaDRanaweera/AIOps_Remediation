@@ -67,11 +67,12 @@ def webhook():
                     validation = get_validation_script_path_by_prob_id(prob_id)
                     print("2")
                     if(validation):
+                        preValidationStartedAt=datetime.now(ist_timezone)
                         preValidation = execute_script_validation_ssh(validation.preValidationScriptPath)
                         if(preValidation.strip()=="true"):
                             # update audit record
                             print("3")
-                            update_audit_pre_validation_status(pid, serviceName, problemTitle, preValidationStatus=True, preValidationStartedAt=datetime.now(ist_timezone))
+                            update_audit_pre_validation_status(pid, serviceName, problemTitle, preValidationStatus=True, preValidationStartedAt=preValidationStartedAt)
                             # Run the script
                             print("4")
                             scriptExecutionStartAt = datetime.now(ist_timezone)
