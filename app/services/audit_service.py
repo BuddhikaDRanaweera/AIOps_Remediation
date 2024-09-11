@@ -136,8 +136,8 @@ def update_audit_post_validation_status(pid, serviceName, problemTitle, postVali
         audit = Audit.query.filter_by(pid = pid, status ="CLOSED" ,serviceName = serviceName, problemTitle = problemTitle).first()
         print(audit,"AUDIT FOUND")
         if audit:
-            audit.postValidationStartedAt = postValidationStartedAt
             audit.postValidationStatus = postValidationStatus
+            audit.postValidationStartedAt = postValidationStartedAt
             db.session.commit()
             logger.info(f"Updated audit post_validation status for PID {pid} successfully")
             return {"message": f"Audit with PID {pid} updated successfully"}
