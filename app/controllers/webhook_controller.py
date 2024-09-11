@@ -70,7 +70,7 @@ def webhook():
                         preValidation = execute_script_validation_ssh(validation.preValidationScriptPath)
                         print(preValidation,"HUTHTHO")
                         print(type(preValidation))
-                        if(preValidation==True):
+                        if(preValidation=="true"):
                             # update audit record
                             print("3")
                             update_audit_pre_validation_status(pid, serviceName, problemTitle, preValidationStatus=True, preValidationStartedAt=datetime.now(ist_timezone))
@@ -87,7 +87,7 @@ def webhook():
                                 postValidation = execute_script_validation_ssh(validation.postValidationScriptPath)
                                 print(postValidation,"HUTHTHO")
                                 print(type(postValidation))
-                                if(postValidation==True):
+                                if(postValidation=="true"):
                                     print("7")
                                     update_audit_post_validation_status(pid, serviceName, problemTitle, postValidationStatus=True, postValidationStartedAt=datetime.now(ist_timezone))
                                     return 'Remediation Script execution success', 200
