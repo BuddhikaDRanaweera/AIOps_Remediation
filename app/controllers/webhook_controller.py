@@ -94,6 +94,8 @@ def webhook():
                                 else:
                                     print("8")
                                     update_audit_post_validation_status(pid, serviceName, problemTitle, postValidationStatus=False, postValidationStartedAt=datetime.now(ist_timezone))
+                                    return 'validation failed', 400
+                                    
                             else:
                                 # update audit status
                                 print("9")
