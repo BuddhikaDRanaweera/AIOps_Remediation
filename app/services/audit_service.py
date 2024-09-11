@@ -133,7 +133,7 @@ def update_audit_remediation_status(pid, serviceName, problemTitle, scriptExecut
 def update_audit_post_validation_status(pid, serviceName, problemTitle, postValidationStatus, postValidationStartedAt):
     print(postValidationStatus, postValidationStartedAt,">><<<<<---------------------")
     try:
-        audit = Audit.query.filter_by(pid = pid, status ="CLOSED" ,serviceName = serviceName, problemTitle = problemTitle).first()
+        audit = Audit.query.filter_by(pid = pid, status ="IN_PROGRESS" ,serviceName = serviceName, problemTitle = problemTitle).first()
         
         print(audit.postValidationStatus,"postValidationStatus AUDIT FOUND")
         if audit:

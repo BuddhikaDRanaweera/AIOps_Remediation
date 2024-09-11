@@ -81,7 +81,7 @@ def webhook():
                             if execute_script_ssh(script_path, parametersValues):
                                 # Add execution data to the audit table
                                 print("6")
-                                update_audit_remediation_status(pid, serviceName, problemTitle, scriptExecutionStartAt, comments="Successfully Remediated", problemEndAt=datetime.now(ist_timezone),status="CLOSED")
+                                update_audit_remediation_status(pid, serviceName, problemTitle, scriptExecutionStartAt, comments="Successfully Remediated", problemEndAt=datetime.now(ist_timezone),status="IN_PROGRESS")
                                 postValidation = execute_script_validation_ssh(validation.postValidationScriptPath)
                                 if(postValidation.strip()=="true"):
                                     print("7")
