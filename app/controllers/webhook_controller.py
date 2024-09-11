@@ -53,7 +53,7 @@ def webhook():
                     
                 if script_path:
                     # Create audit records
-                    print("Create audit records")
+                    print("script_path>>> 1")
                         
                     create_audit(
                         problemTitle, subProblemTitle, impactedEntity, problemImpact,
@@ -65,11 +65,13 @@ def webhook():
                     print("pre validation rule picking  and execution")
                     # pre validation rule picking  and execution
                     validation = get_validation_script_path_by_prob_id(prob_id)
+                    print("2")
                     if(validation):
                         preValidation = execute_script_validation_ssh(validation.preValidationScriptPath)
+                        print(preValidation,"3")
                         if(preValidation):
                             # update audit record
-                            print("update audit record")
+                            print("update audit record>>>>4",pid, serviceName, problemTitle, preValidationStatus=True, preValidationStartedAt=datetime.now(ist_timezone))
                             update_audit_pre_validation_status(pid, serviceName, problemTitle, preValidationStatus=True, preValidationStartedAt=datetime.now(ist_timezone))
                             # Run the script
                             print("Run the script")
@@ -80,10 +82,11 @@ def webhook():
                             if execute_script_ssh(script_path, parametersValues):
                                 # Add execution data to the audit table
                                 print("Add execution data to the audit table")
+                                print("5  ",pid, serviceName, problemTitle, scriptExecutionStartAt, comments="Successfully Remediated", problemEndAt=datetime.now(ist_timezone),status="CLOSED")
                                 update_audit_remediation_status(pid, serviceName, problemTitle, scriptExecutionStartAt, comments="Successfully Remediated", problemEndAt=datetime.now(ist_timezone),status="CLOSED")
                                 postValidation = execute_script_validation_ssh(validation.postValidationScriptPath)
                                 if(postValidation):
-                                    print("post validation success")
+                                    print("post validation success", postValidation,"   6")
                                     update_audit_post_validation_status(pid, serviceName, problemTitle, postValidationStatus=True, postValidationStartedAt=datetime.now(ist_timezone))
                                     return 'Remediation Script execution success', 200
                                 else:
