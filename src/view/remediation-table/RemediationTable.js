@@ -59,7 +59,7 @@ const RemediationTable = () => {
                 <th className="px-6 py-3">Sub-problem</th>
                 <th className="px-6 py-3">Resolution Script</th>
                 <th className="px-6 py-3">Recommendation</th>
-                <th className="px-6 py-3">Effort Time</th>
+                <th className="px-6 py-3">Effort Saving</th>
                 <th className="px-6 py-3">Create Date</th>
                 <th className="px-6 py-3">Last Update</th>
                 <th className="px-6 py-3">Owner</th>
