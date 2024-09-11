@@ -20,8 +20,8 @@ class Audit(db.Model):
     problemDetectedAt = Column(DateTime(timezone=True), nullable=True)
     problemEndAt = Column(DateTime(timezone=True), nullable=True)
      # New columns
-    preValidationStatus = Column(Boolean, nullable=True)
-    postValidationStatus = Column(Boolean, nullable=True)
+    preValidationStatus = Column(Boolean, default=False)
+    postValidationStatus = Column(Boolean,default=False)
     preValidationStartedAt = Column(DateTime(timezone=True), nullable=True)
     postValidationStartedAt = Column(DateTime(timezone=True), nullable=True)
 
