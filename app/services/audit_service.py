@@ -135,7 +135,7 @@ def update_audit_post_validation_status(pid, serviceName, problemTitle, postVali
     try:
         audit = Audit.query.filter_by(pid = pid, status ="IN_PROGRESS" ,serviceName = serviceName, problemTitle = problemTitle).first()
         
-        print(audit.postValidationStatus,"postValidationStatus AUDIT FOUND")
+        print(audit.id,"postValidationStatus id AUDIT FOUND")
         if audit:
             audit.postValidationStatus = postValidationStatus
             audit.postValidationStartedAt = postValidationStartedAt
