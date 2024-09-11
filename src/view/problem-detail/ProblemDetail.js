@@ -331,7 +331,7 @@ const ProblemDetail = () => {
                   <h3 className=" text-start text-sm">{data?.severityLevel}</h3>
                 </div>
 
-                <div className="md:w-[25%]">
+                <div className="md:w-[20%]">
                   <h3 className="text-start text-xs font-semibold">Status</h3>
                   <h3
                     className={` text-start font-semibold text-sm ${
@@ -344,7 +344,7 @@ const ProblemDetail = () => {
                   </h3>
                 </div>
 
-                <div className="md:w-[25%]">
+                <div className="md:w-[20%]">
                   <h3 className="text-start text-xs font-semibold">
                     Root Cause ID
                   </h3>
@@ -353,12 +353,20 @@ const ProblemDetail = () => {
                   </h3>
                 </div>
 
-                <div className="md:w-[25%]">
+                <div className="md:w-[20%]">
                   <h3 className="text-start text-xs font-semibold">
                     Entity Name
                   </h3>
                   <h3 className=" text-start text-sm">
                     {data?.rootCauseEntity?.name || "-"}
+                  </h3>
+                </div>
+                <div className="md:w-[20%]">
+                  <h3 className="text-start text-xs font-semibold">
+                    Effort Saving Time
+                  </h3>
+                  <h3 className=" text-start text-sm">
+                   25 min
                   </h3>
                 </div>
 
@@ -484,7 +492,7 @@ const ProblemDetail = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr>No data recorded in last 6 hours </tr>
+                <tr className="p-2">No data recorded in last 6 hours </tr>
               </tbody>
             </table>
           </div>
@@ -543,6 +551,12 @@ const ProblemDetail = () => {
                       </span>
                       <span className="text-gray-600">{item.problemEndAt}</span>
                     </div>
+                    {/* <div className="flex flex-wrap justify-between">
+                      <span className="font-semibold text-gray-700">
+                        Effort Saving Time
+                      </span>
+                      <span className="text-gray-600">25 min</span>
+                    </div> */}
                     <div className="flex flex-wrap justify-between">
                       <span className="font-semibold text-gray-700">
                         Script Path:

@@ -951,13 +951,13 @@ const HomePage = () => {
           <div className="py-2 h-[calc(100vh-320px)] md:h-[calc(100vh-220px)] overflow-auto">
             <table className="w-full  hidden md:table">
               <thead>
-                <tr className="bg-slate-200 text-sm">
+                <tr className="bg-slate-200 text-xs">
                   {/* <th className="p-2">ID</th> */}
-                  <th className=" text-start p-2">Alert Details</th>
-                  <th className=" text-start p-2 w-[180px]">Service</th>
-                  <th className=" text-start p-2 w-[60px]">Status</th>
-                  <th className=" text-start p-2 w-[60px]">Effort Saving</th>
-                  <th className=" text-start p-2 w-[60px]">Start Date</th>
+                  <th className=" text-start p-2 ">Alert Details</th>
+                  <th className=" text-start p-2  max-w-44">Service</th>
+                  <th className=" text-start p-2">Status</th>
+                  <th className=" text-start p-2 ">Effort Saving</th>
+                  <th className=" text-start p-2 ">Start Date</th>
                   <th className=" text-start p-2">End Date</th>
                   <th className=" text-start p-2"> Action</th>
                   <th className=" text-start p-2"></th>
@@ -990,11 +990,11 @@ const HomePage = () => {
                     <td className=" text-start p-2">
                       {incident?.problemTitle}
                     </td>
-                    <td className=" text-start p-2">
+                    <td className=" text-start p-2 max-w-44">
                       {incident?.serviceName}
                     </td>
                     <td className=" text-start p-2">{incident?.status}</td>
-                    <td className="p-2 text-start">{incident?.efforTime}</td>
+                    <td className="p-2 text-start">{incident?.efforTime || 25 } min</td>
                     <td className=" text-start p-2">
                       {formatDateToCustomFormat(incident?.problemDetectedAt)}
                     </td>

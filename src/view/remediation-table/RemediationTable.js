@@ -75,7 +75,7 @@ const RemediationTable = () => {
                   <td className="p-2 text-start">{item.subProblemTitle || "N/A"}</td>
                   <td className="p-2 text-start ">{item.scriptPath}</td>
                   <td className="p-2 text-start">{item.recommendationText}</td>
-                  <td className="p-2 text-start">{item.efforTime}</td>
+                  <td className="p-2 text-start">{item.efforTime || 25} min</td>
                   <td className="p-2 text-start">{item.createdAt}</td>
                   <td className="p-2 text-start">{item.lastUpdateAt}</td>
                   <td className="p-2 text-start">{item.Owner} John</td>
