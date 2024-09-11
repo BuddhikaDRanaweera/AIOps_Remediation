@@ -3,7 +3,7 @@ import subprocess
 import time
 def execute_script_ssh(script_path, parametersValues):
     print(">>>>>>>>>>>>>>>>>>>>>>>")
-    time.sleep(10)  # Add a 10-second delay here
+    time.sleep(15)  # Add a 10-second delay here
     print("Parameter values >>>>>", parametersValues)
     try:
         if parametersValues:
@@ -61,6 +61,7 @@ def execute_script_validation_ssh(script_path):
     :return: The output of the script execution, or an error message.
     """
     print(">>>>>>>>>>>>>>>>>>>>>>>")
+    time.sleep(15)  # Add a 10-second delay here
     print("Script path >>>>>", script_path)
     try:
         # Construct the bash command to execute the script
