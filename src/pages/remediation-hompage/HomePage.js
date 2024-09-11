@@ -956,6 +956,7 @@ const HomePage = () => {
                   <th className=" text-start p-2">Alert Details</th>
                   <th className=" text-start p-2 w-[180px]">Service</th>
                   <th className=" text-start p-2 w-[60px]">Status</th>
+                  <th className=" text-start p-2 w-[60px]">Effort Time</th>
                   <th className=" text-start p-2 w-[60px]">S-Date</th>
                   <th className=" text-start p-2">E-Date</th>
                   <th className=" text-start p-2"> Action</th>
@@ -989,10 +990,11 @@ const HomePage = () => {
                     <td className=" text-start p-2">
                       {incident?.problemTitle}
                     </td>
-                    <td className=" text-start p-2 w-[200px]">
+                    <td className=" text-start p-2">
                       {incident?.serviceName}
                     </td>
                     <td className=" text-start p-2">{incident?.status}</td>
+                    <td className="p-2 text-start">{incident?.efforTime}</td>
                     <td className=" text-start p-2">
                       {formatDateToCustomFormat(incident?.problemDetectedAt)}
                     </td>

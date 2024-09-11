@@ -59,6 +59,7 @@ const RemediationTable = () => {
                 <th className="px-6 py-3">Sub-problem</th>
                 <th className="px-6 py-3">Resolution Script</th>
                 <th className="px-6 py-3">Recommendation</th>
+                <th className="px-6 py-3">Effort Time</th>
                 <th className="px-6 py-3">Create Date</th>
                 <th className="px-6 py-3">Last Update</th>
                 <th className="px-6 py-3">Owner</th>
@@ -69,11 +70,12 @@ const RemediationTable = () => {
             <tbody>
               {filteredData?.map((item) => (
                 <tr key={item.id}>
-                  <td className="p-2 text-center">{item.problemId}</td>
-                  <td className="p-2 text-start">{item.problemTitle}</td>
+                  <td className="p-2 text-center ">{item.problemId}</td>
+                  <td className="p-2 text-start truncate max-w-40">{item.problemTitle}</td>
                   <td className="p-2 text-start">{item.subProblemTitle || "N/A"}</td>
-                  <td className="p-2 text-start">{item.scriptPath}</td>
+                  <td className="p-2 text-start ">{item.scriptPath}</td>
                   <td className="p-2 text-start">{item.recommendationText}</td>
+                  <td className="p-2 text-start">{item.efforTime}</td>
                   <td className="p-2 text-start">{item.createdAt}</td>
                   <td className="p-2 text-start">{item.lastUpdateAt}</td>
                   <td className="p-2 text-start">{item.Owner} John</td>

@@ -12,12 +12,14 @@ const CreateNewRuleForm = () => {
   const dispatch = useDispatch();
   const formikRef = useRef(null);
   const navigate = useNavigate();
+
   const validationSchema = Yup.object().shape({
     resolutionScript: Yup.string().required("This feild is required"),
     recommendation: Yup.string().required("This feild is required"),
     serviceName: Yup.string().required("This feild is required"),
     subProblemTitle: Yup.string().required("This feild is required"),
     problemTitle: Yup.string().required("This feild is required"),
+    effortTime:Yup.string().required("This feild is required"),
   });
 
   const initialValues = {
@@ -26,6 +28,7 @@ const CreateNewRuleForm = () => {
     resolutionScript: "",
     recommendation: "",
     serviceName: "",
+    effortTime:""
   };
 
   useEffect(() => {
@@ -36,6 +39,7 @@ const CreateNewRuleForm = () => {
         resolutionScript: "",
         recommendation: "",
         serviceName: "",
+        effortTime:""
       });
     }
   }, [problem]);
@@ -166,6 +170,29 @@ const CreateNewRuleForm = () => {
                   <div>
                     <ErrorMessage
                       name="resolutionScript"
+                      component="div"
+                      className="text-red-500 text-xs  text-start"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex flex-col mb-2 md:max-w-md mx-auto">
+                  <div className="flex justify-start">
+                    <h3 className=" text-sm font-semibold">
+                      Effort Saving Time
+                    </h3>
+                  </div>
+                  <div>
+                    <Field
+                      className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm  focus:ring-2  focus:outline-none focus:ring-second block w-full p-2.5"
+                      name="effortTime"
+                      type="text"
+                      title="Resolution script"
+                    />
+                  </div>
+                  <div>
+                    <ErrorMessage
+                      name="effortTime"
                       component="div"
                       className="text-red-500 text-xs  text-start"
                     />
