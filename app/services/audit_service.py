@@ -275,7 +275,6 @@ def get_audit_record_by_audit_id(id):
     print(id)
     try:
         audit = Audit.query.filter_by(id=id).first()
-        print(audit,">>>>>>>>>>>")
         if(audit):
             return audit;
         else:
