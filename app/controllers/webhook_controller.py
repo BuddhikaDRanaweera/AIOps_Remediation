@@ -68,38 +68,36 @@ def webhook():
                     print("2")
                     if(validation):
                         preValidation = execute_script_validation_ssh(validation.preValidationScriptPath)
-                        print(preValidation,"3")
                         if(preValidation):
                             # update audit record
-                            print("update audit record>>>>4",pid, serviceName, problemTitle, preValidationStatus=True, preValidationStartedAt=datetime.now(ist_timezone))
+                            print("3")
                             update_audit_pre_validation_status(pid, serviceName, problemTitle, preValidationStatus=True, preValidationStartedAt=datetime.now(ist_timezone))
                             # Run the script
-                            print("Run the script")
+                            print("4")
                             scriptExecutionStartAt = datetime.now(ist_timezone)
                             # check execution of resoluition is success or not
-                            print("check execution of resoluition is success or not")
+                            print("5")
 
                             if execute_script_ssh(script_path, parametersValues):
                                 # Add execution data to the audit table
-                                print("Add execution data to the audit table")
-                                print("5  ",pid, serviceName, problemTitle, scriptExecutionStartAt, comments="Successfully Remediated", problemEndAt=datetime.now(ist_timezone),status="CLOSED")
+                                print("6")
                                 update_audit_remediation_status(pid, serviceName, problemTitle, scriptExecutionStartAt, comments="Successfully Remediated", problemEndAt=datetime.now(ist_timezone),status="CLOSED")
                                 postValidation = execute_script_validation_ssh(validation.postValidationScriptPath)
                                 if(postValidation):
-                                    print("post validation success", postValidation,"   6")
+                                    print("7")
                                     update_audit_post_validation_status(pid, serviceName, problemTitle, postValidationStatus=True, postValidationStartedAt=datetime.now(ist_timezone))
                                     return 'Remediation Script execution success', 200
                                 else:
-                                    print("post validation unsuccess")
+                                    print("8")
                                     update_audit_post_validation_status(pid, serviceName, problemTitle, postValidationStatus=False, postValidationStartedAt=datetime.now(ist_timezone))
                             else:
                                 # update audit status
-                                print("Script execution unsuccessful!")
+                                print("9")
                                 update_audit_remediation_status(pid, serviceName, problemTitle, scriptExecutionStartAt, comments="Script execution unsuccessful!", problemEndAt=None,status="IN_PROGRESS")
                                 return 'Script execution unsuccessful!', 400
                         else:
                             # update audit status
-                            print("pre validation failed. Not a valida alert")
+                            print("10")
                             update_audit_pre_validation_status(pid, serviceName, problemTitle, preValidationStatus=False, preValidationStartedAt=datetime.now(ist_timezone))
                             return 'Not a valida alert', 400
                     else:

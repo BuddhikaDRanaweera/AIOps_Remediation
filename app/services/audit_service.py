@@ -97,6 +97,7 @@ def update_audit_status_closed(pid, serviceName, problemTitle, new_status):
 def update_audit_pre_validation_status(pid, serviceName, problemTitle, preValidationStatus, preValidationStartedAt):
     try:
         audit = Audit.query.filter_by(pid = pid, status ="IN_PROGRESS" ,serviceName = serviceName, problemTitle = problemTitle).first()
+        print(audit,"AUDIT FOUND")
         if audit:
             audit.preValidationStatus = preValidationStatus
             audit.preValidationStartedAt = preValidationStartedAt
@@ -132,6 +133,7 @@ def update_audit_remediation_status(pid, serviceName, problemTitle, scriptExecut
 def update_audit_post_validation_status(pid, serviceName, problemTitle, postValidationStatus, postValidationStartedAt):
     try:
         audit = Audit.query.filter_by(pid = pid, status ="IN_PROGRESS" ,serviceName = serviceName, problemTitle = problemTitle).first()
+        print(audit,"AUDIT FOUND")
         if audit:
             audit.postValidationStartedAt = postValidationStartedAt
             audit.postValidationStatus = postValidationStatus
