@@ -61,7 +61,7 @@ def execute_script_validation_ssh(script_path):
     :return: The output of the script execution, or an error message.
     """
     print(">>>>>>>>>>>>>>>>>>>>>>>")
-    time.sleep(15)  # Add a 10-second delay here
+    time.sleep(18)  # Add a 10-second delay here
     print("Script path >>>>>", script_path)
     try:
         # Construct the bash command to execute the script
