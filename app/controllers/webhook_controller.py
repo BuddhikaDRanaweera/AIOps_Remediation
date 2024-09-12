@@ -104,22 +104,25 @@ def webhook():
                             update_audit_pre_validation_status(pid, serviceName, problemTitle, preValidationStatus=False, preValidationStartedAt=datetime.now(ist_timezone))
                             return 'Not a valida alert', 400
                     else:
+                        logger.warning("No script found in DB for validation")
+                        return 'No script specified in DB for validation', 400
+                else:
                         logger.warning("No script found in DB")
                         return 'No script specified in DB', 400
-                else:
-                    print("new problem detected")
-                    create_problem_auto(problemTitle, subProblemTitle, serviceName, "NOT_RESOLVED")
-                    create_audit(
-                        problemTitle, subProblemTitle, impactedEntity, problemImpact,
-                        problemSeverity, problemURL, problemDetectedAt, serviceName, pid,
-                        executedProblemId, displayId, actionType="MANUAL", status="OPEN",
-                        comments="The new problem will be identified/was identified and the remediation will take /took place with manual instructions", 
-                        problemEndAt=None, scriptExecutionStartAt=None
-                    )
-                    return "Problem Recorded Sucessfully", 201
             else:
-                logger.warning("No service found in webhook message")
-                return 'No service specified in webhook payload.', 400
+                print("new problem detected")
+                create_problem_auto(problemTitle, subProblemTitle, serviceName, "NOT_RESOLVED")
+                create_audit(
+                    problemTitle, subProblemTitle, impactedEntity, problemImpact,
+                    problemSeverity, problemURL, problemDetectedAt, serviceName, pid,
+                    executedProblemId, displayId, actionType="MANUAL", status="OPEN",
+                    comments="The new problem will be identified/was identified and the remediation will take /took place with manual instructions", 
+                    problemEndAt=None, scriptExecutionStartAt=None
+                )
+                return "Problem Recorded Sucessfully", 201
+        else:
+            logger.warning("No service found in webhook message")
+            return 'No service specified in webhook payload.', 400
 
     elif state == "RESOLVED":
         logger.info("Dynatrace Resolved notification received. Service up and running")
