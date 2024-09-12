@@ -13,23 +13,7 @@ const Timeline = () => {
   const url = `https://uag17776.live.dynatrace.com/api/v2/problems/${PID}`;
   const apiKey =
     "dt0c01.SXQEW54MQL5FLY2CNDD4SILS.AR67H437SVENVZIOOSWZ6GXFTQH5IVTS2UAT6RZ7CZ57DPITCOW7BPR34OGCTA7L";
-  const halfColoredCircleLeft = {
-    background: "conic-gradient(green 50%, transparent 50%)", // Shade left side
-  };
 
-  const halfColoredCircleRight = {
-    background: "conic-gradient(transparent 50%, green 50%)", // Shade right side
-  };
-  const circleStyle = {
-    width: "w-10 lg:w-10",
-    height: "h-10 lg:h-10",
-    borderRadius: "50%",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    position: "relative",
-    overflow: "hidden",
-  };
   useEffect(() => {
     const fetchData = async () => {
       try {

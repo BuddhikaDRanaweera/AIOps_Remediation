@@ -24,10 +24,11 @@ import Timeline from "../../components/timeline/TimeLine";
 import { changes } from "../../util/db";
 
 const ProblemDetail = () => {
-  const { PID, ExecutionId } = useParams();
+  const { PID, ExecutionId, AuditId } = useParams();
   const { data: apiData, getData } = useFetch_GET();
   const { data: lastSixHourIncidents, postData: postIncidents } =
     useFetch_POST();
+  const { data: timeline, getData: getTimeline } = useFetch_GET();
   // console.log(PID);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -56,6 +57,7 @@ const ProblemDetail = () => {
       }
     };
     getData(`/problem_recommendations/${ExecutionId}/${PID}`);
+    getTimeline(`/audit/${AuditId}`);
     fetchData();
   }, []);
 
@@ -107,7 +109,7 @@ const ProblemDetail = () => {
                           Rule Matching
                         </th>
                         <th className="px-6 py-3 text-left text-xs font-medium uppercase ">
-                          Pick the Solution
+                          Pre Validation
                         </th>
                         <th className="px-6 py-3 text-left text-xs font-medium uppercase ">
                           Execution Start
@@ -116,7 +118,7 @@ const ProblemDetail = () => {
                           Execution Completed
                         </th>
                         <th className="px-6 py-3 text-left text-xs font-medium uppercase ">
-                          Validate Solution
+                          Post Validation
                         </th>
                         <th className="px-6 py-3 text-left text-xs font-medium uppercase ">
                           Problem Closed
@@ -132,38 +134,41 @@ const ProblemDetail = () => {
                           {data && formatDateToCustomFormat(data?.startTime)}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {apiData &&
+                          {timeline &&
+                            formatDateToUTCFormat(timeline?.problemDetectedAt)}
+                          {/* {apiData &&
                             apiData?.length !== 0 &&
                             formatDateToUTCFormat(
                               apiData[0]?.scriptExecutionStartAt
-                            )}
+                            )} */}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {apiData &&
-                            apiData?.length !== 0 &&
+                          {timeline &&
                             formatDateToUTCFormat(
-                              apiData[0]?.scriptExecutionStartAt
+                              timeline?.preValidationStartedAt
                             )}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {apiData &&
-                            apiData?.length !== 0 &&
+                          {timeline &&
                             formatDateToUTCFormat(
-                              apiData[0]?.scriptExecutionStartAt
+                              timeline?.preValidationStartedAt
                             )}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {apiData &&
-                            apiData?.length !== 0 &&
-                            formatDateToUTCFormat(apiData[0]?.problemEndAt)}
+                          {timeline &&
+                            formatDateToUTCFormat(
+                              timeline?.scriptExecutionStartAt
+                            )}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {" "}
+                          {timeline &&
+                            formatDateToUTCFormat(timeline?.problemEndAt)}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           {formatDateToCustomFormat(data?.endTime)}
                         </td>
                       </tr>
+
                       <tr>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                           Time Taken
@@ -172,64 +177,56 @@ const ProblemDetail = () => {
                           -
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {apiData &&
-                            apiData?.length !== 0 &&
+                          {timeline &&
                             0.1 +
                               (formatDateToUTCFormatCal(
-                                apiData[0]?.scriptExecutionStartAt
+                                timeline?.scriptExecutionStartAt
                               ) -
                                 formatDateToUTCFormatCal(
-                                  apiData[0]?.scriptExecutionStartAt
+                                  timeline?.preValidationStartedAt
                                 )) /
                                 60 +
                               " sec"}{" "}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {apiData &&
-                            apiData?.length !== 0 &&
+                          {timeline &&
                             (
                               0.2 +
+                              formatDateToUTCFormatCal(timeline?.problemEndAt) -
                               formatDateToUTCFormatCal(
-                                apiData[0]?.scriptExecutionStartAt
-                              ) -
-                              formatDateToUTCFormatCal(
-                                apiData[0]?.scriptExecutionStartAt
+                                timeline?.scriptExecutionStartAt
                               )
                             ).toFixed(2) + " sec"}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {apiData &&
-                            apiData?.length !== 0 &&
+                        {timeline &&
                             (
-                              0.22 +
+                              0.2 +
+                              formatDateToUTCFormatCal(timeline?.problemEndAt) -
                               formatDateToUTCFormatCal(
-                                apiData[0]?.scriptExecutionStartAt
-                              ) -
-                              formatDateToUTCFormatCal(
-                                apiData[0]?.scriptExecutionStartAt
+                                timeline?.scriptExecutionStartAt
                               )
-                            ).toFixed(2) + " sec"}{" "}
+                            ).toFixed(2) + " sec"}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {apiData &&
-                            apiData?.length !== 0 &&
-                            1 +
+                        {timeline &&
+                            (
+                              0.2 +
+                              formatDateToUTCFormatCal(timeline?.problemEndAt) -
                               formatDateToUTCFormatCal(
-                                apiData[0]?.scriptExecutionStartAt
-                              ) -
-                              formatDateToUTCFormatCal(
-                                apiData[0]?.scriptExecutionStartAt
-                              ) +
-                              " sec"}{" "}
+                                timeline?.scriptExecutionStartAt
+                              )
+                            ).toFixed(2) + " sec"}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {apiData &&
-                            apiData?.length !== 0 &&
-                            formatDateToUTCFormatCal(apiData[0]?.problemEndAt) -
+                        {timeline &&
+                            (
+                              0.2 +
+                              formatDateToUTCFormatCal(data?.endTime) -
                               formatDateToUTCFormatCal(
-                                apiData[0]?.scriptExecutionStartAt
-                              ) +
-                              " sec"}{" "}
+                                timeline?.problemEndAt
+                              )
+                            ).toFixed(2) + " sec"}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           {apiData &&
@@ -365,9 +362,7 @@ const ProblemDetail = () => {
                   <h3 className="text-start text-xs font-semibold">
                     Effort Saving Time
                   </h3>
-                  <h3 className=" text-start text-sm">
-                   25 min
-                  </h3>
+                  <h3 className=" text-start text-sm">25 min</h3>
                 </div>
 
                 <div className="w-[100%]">
