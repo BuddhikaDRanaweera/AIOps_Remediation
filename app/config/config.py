@@ -1,12 +1,12 @@
 import os
 
 class Config:
-    # MySQL database configuration
-    MYSQL_USER = 'root'
-    MYSQL_PASSWORD = 'demoadmin'
-    MYSQL_DB = 'aiops'
-    MYSQL_HOST = '13.213.71.181'
-    MYSQL_PORT = 3306
-    SQLALCHEMY_DATABASE_URI = f"mysql://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_HOST}:{MYSQL_PORT}/{MYSQL_DB}"
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SECRET_KEY = os.urandom(24)
+    def __init__(self, mysql_user, mysql_password, mysql_host, mysql_port, mysql_db):
+        self.MYSQL_USER = mysql_user
+        self.MYSQL_PASSWORD = mysql_password
+        self.MYSQL_HOST = mysql_host
+        self.MYSQL_PORT = mysql_port
+        self.MYSQL_DB = mysql_db
+        self.SQLALCHEMY_DATABASE_URI = f"mysql://{self.MYSQL_USER}:{self.MYSQL_PASSWORD}@{self.MYSQL_HOST}:{self.MYSQL_PORT}/{self.MYSQL_DB}"
+        self.SQLALCHEMY_TRACK_MODIFICATIONS = False
+        self.SECRET_KEY = os.urandom(24)

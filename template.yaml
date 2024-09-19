@@ -1,0 +1,39 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: A simple Flask application
+
+Resources:
+  MyFlaskFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: run.lambda_handler  # Specify the handler
+      Runtime: python3.12
+      CodeUri: ./  # Use the root directory
+      MemorySize: 512
+      Timeout: 5
+      Environment:
+        # Add any environment variables your app needs
+        ENV_VAR_NAME: "value"  # Example variable
+      Policies:
+        - AWSLambdaBasicExecutionRole  # Basic execution permissions
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: ANY
+            RestApiId: !Ref MyApi  # Reference an API Gateway resource
+
+  MyApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod  # Specify the stage name
+      Cors:
+        AllowMethods: "'OPTIONS,GET,POST,PUT,DELETE'"  # Allow methods
+        AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"  # Allow headers
+        AllowOrigin: "'*'"  # Change this to a specific domain for production
+
+Outputs:
+  ApiUrl:
+    Description: "API Gateway endpoint URL for Prod stage"
+    Value: !Sub "https://${MyApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"

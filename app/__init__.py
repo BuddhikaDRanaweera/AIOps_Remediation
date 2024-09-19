@@ -1,16 +1,26 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from app.config.config import Config  # Make sure to import from the correct location
+from app.config.config import Config
+from app.util.getSecrets import get_secret
 
 db = SQLAlchemy()
 migrate = Migrate()
 
 def create_app():
     app = Flask(__name__)
+    data=get_secret()
+    
+    print()
+    # Database configuration parameters
+    mysql_user = data['username']
+    mysql_password = data['password']
+    mysql_host = data['host']
+    mysql_port = data['port']
+    mysql_db = data['dbname']
     
     # Load configuration
-    app.config.from_object(Config)  # Use the Config class directly
+    app.config.from_object(Config(mysql_user, mysql_password, mysql_host, mysql_port, mysql_db))
     
     # Initialize extensions
     db.init_app(app)

@@ -104,8 +104,13 @@ def webhook():
                             update_audit_pre_validation_status(pid, serviceName, problemTitle, preValidationStatus=False, preValidationStartedAt=datetime.now(ist_timezone))
                             return 'Not a valida alert', 400
                     else:
-                        logger.warning("No script found in DB for validation")
-                        return 'No script specified in DB for validation', 400
+                        if execute_script_ssh(script_path, parametersValues):
+                            # Add execution data to the audit table
+                            print("6")
+                            update_audit_remediation_status(pid, serviceName, problemTitle, scriptExecutionStartAt, comments="Successfully Remediated", problemEndAt=datetime.now(ist_timezone),status="IN_PROGRESS")
+                        else:        
+                            logger.warning("No script found in DB for validation")
+                            return 'No script specified in DB for validation', 400
                 else:
                         logger.warning("No script found in DB")
                         return 'No script specified in DB', 400

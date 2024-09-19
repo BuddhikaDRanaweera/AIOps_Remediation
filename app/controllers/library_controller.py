@@ -1,6 +1,7 @@
 # app/controllers/problem_controller.py
 from flask import Blueprint, jsonify, request
 from app.services.library_service import get_all_libraries_by_category, get_all_libraries
+from app.util.getSecrets import get_secret
 import logging
 
 libraries_bp = Blueprint('libraries_bp', __name__)
@@ -27,3 +28,4 @@ def get_libraries_by_category():
     except Exception as e:
         logger.error(f"Error fetching libraries: {str(e)}")
         return jsonify({"error": "Error fetching libraries"}), 500
+
