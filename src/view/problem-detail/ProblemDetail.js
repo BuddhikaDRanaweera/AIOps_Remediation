@@ -22,6 +22,7 @@ import {
 import useFetch_POST from "../../services/http/Post";
 import Timeline from "../../components/timeline/TimeLine";
 import { changes } from "../../util/db";
+import { Editor } from "@monaco-editor/react";
 
 const ProblemDetail = () => {
   const { PID, ExecutionId, AuditId } = useParams();
@@ -40,6 +41,7 @@ const ProblemDetail = () => {
     "dt0c01.SXQEW54MQL5FLY2CNDD4SILS.AR67H437SVENVZIOOSWZ6GXFTQH5IVTS2UAT6RZ7CZ57DPITCOW7BPR34OGCTA7L";
   useEffect(() => {
     dispatch(setGlobalLoading({ loading: true }));
+
     const fetchData = async () => {
       try {
         const response = await axios.get(url, {
@@ -50,7 +52,7 @@ const ProblemDetail = () => {
         // console.log(response.data, "incident data");
         setData(response?.data);
       } catch (error) {
-        alert(error?.message);
+        // alert(error?.message);
         // console.error("Error fetching data: ", error);
       } finally {
         dispatch(clearGlobalLoading());
@@ -86,9 +88,48 @@ const ProblemDetail = () => {
     }
   };
 
+  let {
+    isLoading: postLoading,
+    error: postError,
+    data: postData_,
+    postData,
+  } = useFetch_POST();
+
+  const openScriptPath = (value) => {
+    let path = {
+      filePaths: [value],
+    };
+    postData("/v2/build_script", path);
+  };
+
+  const [script, setScript] = useState();
+
+  useEffect(() => {
+    if (postData_) {
+      console.log(postData_, "script path");
+      setScript((prev) => postData_.data);
+    }
+  }, [postData_]);
+
   return (
     <>
-      <div className=" flex flex-col gap-1 justify-center">
+      <div onClick={() => setScript(null)} className=" flex flex-col gap-1 justify-center">
+        {/* modal */}
+
+        {script && (
+          <div className="overflow-y-auto overflow-x-hidden flex justify-center fixed top-0 right-0 left-0 z-50  items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full bg-[rgba(0,0,0,0.4)]">
+            <Editor
+              width={"60%"}
+              height={"60%"}
+              defaultLanguage="bash"
+              theme="vs-dark"
+              value={script}
+            />
+          </div>
+        )}
+
+        {/* end */}
+
         <div className="flex flex-col md:flex-row justify-center gap-2 px-5 pt-5">
           <div className="md:w-[100%] flex">
             <div className="mx-auto p-5 w-full bg-white shadow-sm shadow-slate-400">
@@ -199,7 +240,7 @@ const ProblemDetail = () => {
                             ).toFixed(2) + " sec"}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {timeline &&
+                          {timeline &&
                             (
                               0.2 +
                               formatDateToUTCFormatCal(timeline?.problemEndAt) -
@@ -209,7 +250,7 @@ const ProblemDetail = () => {
                             ).toFixed(2) + " sec"}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {timeline &&
+                          {timeline &&
                             (
                               0.2 +
                               formatDateToUTCFormatCal(timeline?.problemEndAt) -
@@ -219,13 +260,11 @@ const ProblemDetail = () => {
                             ).toFixed(2) + " sec"}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {timeline &&
+                          {timeline &&
                             (
                               0.2 +
                               formatDateToUTCFormatCal(data?.endTime) -
-                              formatDateToUTCFormatCal(
-                                timeline?.problemEndAt
-                              )
+                              formatDateToUTCFormatCal(timeline?.problemEndAt)
                             ).toFixed(2) + " sec"}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -556,7 +595,12 @@ const ProblemDetail = () => {
                       <span className="font-semibold text-gray-700">
                         Script Path:
                       </span>
-                      <span className="text-gray-600">{item.scriptPath}</span>
+                      <span
+                        className="text-gray-600 hover:scale-105 hover:text-green-800"
+                        onClick={() => openScriptPath(item.scriptPath)}
+                      >
+                        {item.scriptPath}
+                      </span>
                     </div>
                     <div className="flex justify-end">
                       <button

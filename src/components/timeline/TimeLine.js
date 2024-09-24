@@ -25,7 +25,7 @@ const Timeline = () => {
         console.log(response.data, "incident data");
         setData(response.data);
       } catch (error) {
-        alert(error.message);
+        // alert(error.message);
         console.error("Error fetching data: ", error);
       }
     };
