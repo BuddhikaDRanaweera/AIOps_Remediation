@@ -8,9 +8,11 @@ from app.services.problem_service import update_status_by_id
 from app.services.library_service import get_library_data, saveScriptToLib
 from app.services.audit_service import update_to_inprogress_manual_exe, get_audit_record_by_id
 from app.services.remediation_service import create_remediation
-from app.util.file_store import save_script_to_directory
+from app.util.file_store import S3_BUCKET, save_script_to_s3
 from app.util.execute_script import execute_script_ssh
-from app.util.file_store import combine_json_files
+from app.util.file_store import combine_json_files_s3
+import boto3
+S3_CLIENT = boto3.client('s3')
 
 # Create a logger
 logger = logging.getLogger(__name__)
@@ -35,7 +37,7 @@ def save_script():
     
     if content and fileName and extension:
         # Save file
-        file_path = save_script_to_directory(fileName, extension, content)
+        file_path = save_script_to_s3(fileName, extension, content)
         if file_path:
             if not all([recommendation_text, problem_id, service_name, problem_title]):
                 logger.error("Missing required fields in request data")
@@ -61,7 +63,7 @@ def save_file():
     if file:
         # Secure the filename
         # file_path = os.path.join(SAVE_DIR, file.filename)
-        # save_script_to_directory(file.filename,)
+        # save_script_to_s3(file.filename,)
         # file.save(file_path)
         return jsonify({"message": "File saved successfully"}), 200
     return jsonify({"message": "File not saved"}), 400
@@ -82,7 +84,7 @@ def combine_solutions():
         # full_file_paths = [os.path.join(SAVE_DIR, file_path) if not os.path.isabs(file_path) else file_path for file_path in file_paths]
 
         # Combine the data from the provided file paths
-        combined_data = combine_json_files(file_paths)
+        combined_data = combine_json_files_s3(file_paths)
         print(combined_data)
         if combined_data is not None:
             return combined_data, 203
@@ -91,31 +93,6 @@ def combine_solutions():
     except Exception as e:
         logger.error(f"Error processing request: {e}")
         return jsonify({"status": "error", "message": "Error processing request"}), 500
-
-# @script_bp.route('/v2/get_user_combined_script', methods=['POST'])
-# def combine_solutions():
-#     try:
-#         # Parse the incoming JSON data
-#         data = request.json
-#         print(data)
-#         file_paths = data.get('filePaths', [])
-#         if not file_paths:
-#             return jsonify({"status": "error", "message": "No file paths provided"}), 400
-
-#         # Prepend SAVE_DIR to each file path if they are relative paths
-#         # full_file_paths = [os.path.join(SAVE_DIR, file_path) if not os.path.isabs(file_path) else file_path for file_path in file_paths]
-
-#         # Combine the data from the provided file paths
-#         combined_data = combine_json_files(file_paths)
-#         other_data=get_library_data(file_paths)
-#         print(combined_data, other_data)
-#         if combined_data is not None:
-#             return {combined_data, other_data}, 203
-#         else:
-#             return jsonify({"status": "error", "message": "Failed to combine data"}), 500
-#     except Exception as e:
-#         logger.error(f"Error processing request: {e}")
-#         return jsonify({"status": "error", "message": "Error processing request"}), 500
 
 @script_bp.route('/v2/save-script', methods=['POST'])
 def save_solution():
@@ -129,7 +106,7 @@ def save_solution():
         parameterValues = data.get('parameterValues',None)
         print(script)
         # Save the data to a JSON file
-        file_path = save_script_to_directory("sh", file_name, script)
+        file_path = save_script_to_s3("sh", file_name, script)
 
         if file_path:
             saveScriptToLib(file_name,description,parameter,parameterValues,scriptPath=file_path,category="User management")
@@ -152,7 +129,7 @@ def save_solution_as_draft():
         parameterValues = data.get('parameterValues',None)
         print(parameterValues)
         # Save the data to a JSON file
-        file_path = save_script_to_directory("sh", file_name, script)
+        file_path = save_script_to_s3("sh", file_name, script)
 
         if file_path:
             saveScriptToLib(file_name,description,parameter,parameterValues,scriptPath=file_path,category="TMP")
@@ -183,7 +160,7 @@ def save_solution_as_rule_direct():
         ist_timezone = timezone('Asia/Kolkata')
         scriptExecutionStartAt = datetime.datetime.now(ist_timezone)
         # Save the data to a JSON file
-        file_path = save_script_to_directory("sh", file_name, script)
+        file_path = save_script_to_s3("sh", file_name, script)
 
         if file_path:
             saveScriptToLib(file_name,description,parameter,parameterValues,scriptPath=file_path,category="")

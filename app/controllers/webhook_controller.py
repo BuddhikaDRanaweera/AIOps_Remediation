@@ -29,9 +29,9 @@ def webhook():
     problemImpact = data.get("ProblemImpact", "Unknown")
     problemSeverity = data.get("ProblemSeverity", "Unknown")
     problemURL = data.get("ProblemURL", "No_URL")
-    timestamp = data["ProblemDetailsJSON"]["startTime"] / 1000
-    datetime_utc = datetime.fromtimestamp(timestamp, utc)
-    problemDetectedAt = datetime_utc.astimezone(ist_timezone)
+    # timestamp = data["ProblemDetailsJSON"]["startTime"] / 1000
+    # datetime_utc = datetime.fromtimestamp(timestamp, utc)
+    problemDetectedAt = datetime.now(ist_timezone)
     serviceName = data.get("ImpactedEntityNames")
     state = data.get("State", "unknown")
 
