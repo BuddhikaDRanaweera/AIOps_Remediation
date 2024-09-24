@@ -219,7 +219,6 @@ const ProblemDetail = () => {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           {timeline &&
-                            0.1 +
                               (formatDateToUTCFormatCal(
                                 timeline?.scriptExecutionStartAt
                               ) -
@@ -227,12 +226,11 @@ const ProblemDetail = () => {
                                   timeline?.preValidationStartedAt
                                 )) /
                                 60 +
-                              " sec"}{" "}
+                              " sec"}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           {timeline &&
                             (
-                              0.2 +
                               formatDateToUTCFormatCal(timeline?.problemEndAt) -
                               formatDateToUTCFormatCal(
                                 timeline?.scriptExecutionStartAt
@@ -242,7 +240,6 @@ const ProblemDetail = () => {
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           {timeline &&
                             (
-                              0.2 +
                               formatDateToUTCFormatCal(timeline?.problemEndAt) -
                               formatDateToUTCFormatCal(
                                 timeline?.scriptExecutionStartAt
@@ -252,7 +249,6 @@ const ProblemDetail = () => {
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           {timeline &&
                             (
-                              0.2 +
                               formatDateToUTCFormatCal(timeline?.problemEndAt) -
                               formatDateToUTCFormatCal(
                                 timeline?.scriptExecutionStartAt
@@ -262,7 +258,6 @@ const ProblemDetail = () => {
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           {timeline &&
                             (
-                              0.2 +
                               formatDateToUTCFormatCal(data?.endTime) -
                               formatDateToUTCFormatCal(timeline?.problemEndAt)
                             ).toFixed(2) + " sec"}
