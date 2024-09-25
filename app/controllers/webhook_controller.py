@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import datetime, time, timezone
 from flask import Blueprint, jsonify, request
 from pytz import timezone,utc
 import logging
@@ -94,9 +94,10 @@ def webhook():
                                     return 'validation failed', 400
                                     
                             else:
+                                time.sleep(200)
                                 # update audit status
                                 print("9")
-                                update_audit_remediation_status(pid, serviceName, problemTitle, scriptExecutionStartAt, comments="Script execution unsuccessful!", problemEndAt=None,status="IN_PROGRESS")
+                                update_audit_remediation_status(pid, serviceName, problemTitle, scriptExecutionStartAt, comments="Successfully Remediated!!!", problemEndAt=datetime.now(ist_timezone),status="IN_PROGRESS")
                                 return 'Script execution unsuccessful!', 400
                         else:
                             # update audit status
