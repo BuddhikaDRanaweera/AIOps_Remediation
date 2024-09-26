@@ -1,8 +1,12 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS  # Import CORS
 import logging
 from utils import execute_script_validation_ssh
 
 app = Flask(__name__)
+
+# Enable CORS for all routes
+CORS(app)
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -11,7 +15,7 @@ logging.basicConfig(level=logging.INFO)
 def execute_script():
     data = request.json
     script_path = data.get('scriptPath')
-    parameters_values = data.get('parametersValues')
+    parameters_values = data.get('parametersValues', None)
 
     if not script_path:
         logging.error("Missing script path in request data.")
