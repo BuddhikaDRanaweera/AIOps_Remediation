@@ -105,11 +105,11 @@ const HomePage = () => {
     const fetchDataMetrics = async () => {
       try {
         const response = await axios.get(
-          `https://ojv87763.live.dynatrace.com/api/v2/metrics/query?metricSelector=log.Stuck_Order_Onhold_Stage&resolution=10m&from=now-1d&to=now&entitySelector: type("HOST")`,
+          `https://zxd97598.live.dynatrace.com/api/v2/metrics/query?metricSelector=log.OnholdStageMetric&resolution=10m&from=now-1d&to=now&entitySelector: type("HOST")`,
           {
             params: {
               "Api-Token":
-                "dt0c01.TX74GIROEDIE2UPBUDXMXBAJ.4TOBDPZBNY3YPLSKWCFZ43UOOXYMQPQIMW52XTVBMZUELBY3LCANDDOB42PLS4AA",
+                "dt0c01.POCZ4VADXFFGNIJD675DREU7.IPHH2YGQ346FC6K6YTMPOMIJN2MC7C2MSUJXWVZRJ5IEDIVRMSX2FIFP77G6XO6C",
             },
           }
         );
@@ -129,11 +129,11 @@ const HomePage = () => {
     const fetchDataMetrics2 = async () => {
       try {
         const response = await axios.get(
-          `https://ojv87763.live.dynatrace.com/api/v2/metrics/query?metricSelector=log.Stuck_Order_Implementation_Stage&resolution=10m&from=now-1d&to=now&entitySelector:`,
+          `https://zxd97598.live.dynatrace.com/api/v2/metrics/query?metricSelector=log.ImplementationStageMetric&resolution=10m&from=now-1d&to=now&entitySelector:`,
           {
             params: {
               "Api-Token":
-                "dt0c01.TX74GIROEDIE2UPBUDXMXBAJ.4TOBDPZBNY3YPLSKWCFZ43UOOXYMQPQIMW52XTVBMZUELBY3LCANDDOB42PLS4AA",
+                "dt0c01.POCZ4VADXFFGNIJD675DREU7.IPHH2YGQ346FC6K6YTMPOMIJN2MC7C2MSUJXWVZRJ5IEDIVRMSX2FIFP77G6XO6C",
             },
           }
         );

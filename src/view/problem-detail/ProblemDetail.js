@@ -35,10 +35,10 @@ const ProblemDetail = () => {
   const navigate = useNavigate();
   const [data, setData] = useState();
   console.log(apiData, "apiData");
-  const url = `https://ojv87763.live.dynatrace.com/api/v2/problems/${PID}`;
+  const url = `https://zxd97598.live.dynatrace.com/api/v2/problems/${PID}`;
   // https://xdy01853.live.dynatrace.com/api/v2/apiTokens
   const apiKey =
-    "dt0c01.TX74GIROEDIE2UPBUDXMXBAJ.4TOBDPZBNY3YPLSKWCFZ43UOOXYMQPQIMW52XTVBMZUELBY3LCANDDOB42PLS4AA";
+    "dt0c01.POCZ4VADXFFGNIJD675DREU7.IPHH2YGQ346FC6K6YTMPOMIJN2MC7C2MSUJXWVZRJ5IEDIVRMSX2FIFP77G6XO6C";
   useEffect(() => {
     dispatch(setGlobalLoading({ loading: true }));
 
