@@ -61,11 +61,14 @@ def webhook():
             result = find_problem_id(problemTitle, serviceName, pvt_dns)            
             # Check it is existing problem or not
             print("Check it is existing problem or not")
-            
+            result = find_problem_id(problemTitle, serviceName, pvt_dns)
+
+            # Check if it is an existing problem or not
+            print("Check if it is an existing problem or not")
+            prob_id = result.get('id', None)
+            private_dns = result.get('pvt_dns', None)
+            executedProblemId = prob_id
             if result:
-                prob_id = result['id']
-                private_dns = result['pvt_dns']
-                executedProblemId = prob_id
                 remediation = get_script_path_by_prob_id(prob_id)
                 parametersValues = remediation.parameters
                 script_path = remediation.scriptPath
