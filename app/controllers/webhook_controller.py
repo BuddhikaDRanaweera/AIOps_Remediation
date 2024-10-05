@@ -68,6 +68,7 @@ def webhook():
             prob_id = result.get('id', None)
             private_dns = result.get('pvt_dns', None)
             executedProblemId = prob_id
+            print(prob_id,private_dns)
             if result:
                 remediation = get_script_path_by_prob_id(prob_id)
                 parametersValues = remediation.parameters
