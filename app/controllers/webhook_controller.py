@@ -60,15 +60,17 @@ def webhook():
             logger.info("Received webhook notification. Service to restart: %s", serviceName)
             result = find_problem_id(problemTitle, serviceName, pvt_dns)            
             # Check it is existing problem or not
-            print("Check it is existing problem or not")
             result = find_problem_id(problemTitle, serviceName, pvt_dns)
-
-            # Check if it is an existing problem or not
-            print("Check if it is an existing problem or not")
-            prob_id = result.get('id', None)
-            private_dns = result.get('pvt_dns', None)
-            executedProblemId = prob_id
-            print(prob_id,private_dns)
+            
+            # Check if a valid result was returned
+            if result is None:
+                print("No existing problem found.")
+                prob_id = None
+                private_dns = None
+            else:
+                prob_id = result.get('id', None)
+                private_dns = result.get('pvt_dns', None)
+            
             if result:
                 remediation = get_script_path_by_prob_id(prob_id)
                 parametersValues = remediation.parameters
