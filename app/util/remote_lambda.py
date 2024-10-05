@@ -10,8 +10,9 @@ print('Loading function')
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)  # You can set the logging level to DEBUG for more verbose output
  
-ec2 = boto3.client('ec2')
-ssm = boto3.client('ssm')
+ec2 = boto3.client('ec2', region_name='ap-southeast-1')
+ssm = boto3.client('ssm', region_name='ap-southeast-1')
+
  
 def get_instance_id_from_dns(private_dns):
     response = ec2.describe_instances(
