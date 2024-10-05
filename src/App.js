@@ -12,6 +12,7 @@ import CustomScript from "./view/build-solution/CreateCustomScript.js";
 import BuildSolutionWithLibraries from "./view/build-solution/LibraryIntegration.js";
 import SolutionRepository from "./view/build-solution/SolutionRepository.js";
 import { clearProblem } from "./app/features/problem/ProblemSlice.js";
+import Metrics from "./view/metrics/Metrics.js";
 
 const HomePage = lazy(() => import("./pages/remediation-hompage/HomePage.js"));
 const EditRuleForm = lazy(() =>
@@ -130,6 +131,12 @@ function App() {
               name="Solution-Repository"
               element={<SolutionRepository />}
             />
+            <Route
+            exact
+            path="/metric-explore"
+            name='Metrics-Explore'
+            element={<Metrics />}
+             />
             <Route
               exact
               path="/assisted-analysis/:PID"

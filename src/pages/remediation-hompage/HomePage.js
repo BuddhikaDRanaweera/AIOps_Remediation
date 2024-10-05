@@ -84,15 +84,6 @@ const HomePage = () => {
     navigate(url);
   };
 
-  // const getPID = (serviceName) => {
-  //   if (data) {
-  //     const find = data?.activity?.find(
-  //       (item) => item.serviceName == serviceName
-  //     );
-  //     return find.pid;
-  //   }
-  // };
-
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -248,13 +239,6 @@ const HomePage = () => {
     }
   }, [implementationStageMetrics]);
 
-  // useEffect(()=>{
-  //   setInterval(()=>{
-  //     getDataActiveProblems("/get_new_problems");
-
-  //   }, 5000)
-  // },[])
-
   useEffect(() => {
     if (ptData) console.log(ptData, "title");
   }, [ptData]);
@@ -279,6 +263,13 @@ const HomePage = () => {
       path: "/audit",
       title: "Remediation Audit Records",
       des: "View all remediations history",
+      icon: "fa fa-table",
+    },
+    {
+      id: 5,
+      path: "/metric-explore",
+      title: "Metric Explore",
+      des: "View Anomaly Metrics",
       icon: "fa fa-table",
     },
   ];
@@ -317,11 +308,6 @@ const HomePage = () => {
   };
 
   useEffect(() => {
-    // if(selectedStatus !== ''){
-    //  const fil = data?.activity?.filter((item) => item.status == selectedStatus);
-    //  setRecent(prev => fil);
-    // }
-
     const filteredData = data?.activity?.filter((item) => {
       return (
         (selectedStatus === "" || item.status === selectedStatus) &&
@@ -425,32 +411,6 @@ const HomePage = () => {
               </div>
             ))}
           </div>
-          <div className=" p-2 shadow-sm h-[100px] shadow-slate-400 bg-white flex flex-col">
-            <div className="mb-2">
-              <h3 className="text-sm font-semibold">Metrics</h3>
-            </div>
-            <div className="grid grid-cols-2 gap-2">
-              <div
-                onClick={() => {
-                  setViewMetric((prev) => ({ type: "onHold", view: true }));
-                }}
-                className=" bg-slate-50 p-2 rounded-sm shadow-sm shadow-slate-400 flex justify-center cursor-pointer hover:bg-slate-100"
-              >
-                <p>Onhold Stage Metrics</p>
-              </div>
-              <div
-                onClick={() => {
-                  setViewMetric((prev) => ({
-                    type: "implementation",
-                    view: true,
-                  }));
-                }}
-                className=" bg-slate-50 p-2 rounded-sm shadow-sm shadow-slate-400 flex justify-center cursor-pointer hover:bg-slate-100"
-              >
-                <p>Implementation Stage Metrics</p>
-              </div>
-            </div>
-          </div>
 
           <div className="bg-white cursor-pointer p-5 h-[calc(100vh-380px)] shadow-sm shadow-slate-400">
             <div className="flex flex-col gap-2">
@@ -459,7 +419,7 @@ const HomePage = () => {
                   <h3 className="text-sm font-semibold">Open Problems</h3>
                 </div>
                 <div className="w-[33%]">
-                  <h3 className="text-sm font-semibold">Inprogress Problems</h3>
+                  <h3 className="text-sm font-semibold">In Progress Problems</h3>
                 </div>
                 <div className="w-[33%]">
                   <h3 className="text-sm font-semibold">Remediated Problems</h3>
@@ -499,59 +459,8 @@ const HomePage = () => {
               </div>
             </div>
             <div className="pt-5">
-              <h3 className="text-sm font-bold">New Problems</h3>
+              <h3 className="text-sm font-bold">Unresolved Problems</h3>
             </div>
-            {/* <div className="py-2 h-[calc(100vh-400px)] overflow-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="bg-slate-200 text-sm">
-                    <th className="p-2">id</th>
-                    <th>title</th>
-                    <th>service</th>
-                    <th>sevirity level</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {dataActiveProblems?.map((incident, index) => (
-                    <tr
-                     
-                      key={index}
-                      onClick={() =>
-                        setSelectedProblem(
-                          incident?.problemTitle,
-                          incident?.serviceName,
-                          incident.id
-                        )
-                      }
-                      className="bg-white cursor-pointer hover:bg-slate-50 text-xs border-b border-gray-300"
-                    >
-                      <td className="p-2">{incident?.id}</td>
-                      <td>{incident?.problemTitle}</td>
-                      <td>{incident?.serviceName}</td>
-                      <td>
-                        {incident?.serviceName == "apache2" ? (
-                          <div className="flex">
-                            <p className=" m-auto text-center w-12 bg-red-400 p-1 text-xs rounded-full text-white">
-                              High
-                            </p>
-                          </div>
-                        ) : (
-                          <div className="flex">
-                            <p className=" m-auto  text-center w-12 bg-amber-600 p-1 text-xs rounded-full text-white">
-                              Low
-                            </p>
-                          </div>
-                        )}
-                      </td>
-                      <td>
-                        <BsArrowUpRightSquareFill className="text-lg" />
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div> */}
             <div className="py-2 overflow-auto h-[calc(100vh-400px)]">
               <table className="w-full hidden md:table">
                 <thead>
@@ -644,185 +553,11 @@ const HomePage = () => {
             </div>
           </div>
         </div>
-        {/*  */}
-        {/* <div className="w-full cursor-pointer md:w-[calc(100vw-660px)] h-[calc(100vh-102px)] min-h-[469px] p-5 bg-white shadow-sm shadow-slate-400">
-          <div className="flex flex-col md:flex-row justify-between ">
-            <h3 className="text-sm text-start font-semibold">
-              Recent Incidents
-            </h3>
-            <div className="flex flex-wrap justify-end gap-2">
-              <div className="flex items-center gap-2 px-2 border h-[29px] bg-slate-50 border-gray-200">
-                <input
-                  id="bordered-checkbox-1"
-                  type="checkbox"
-                  defaultValue={""}
-                  checked={isHighlightChecked}
-                  onChange={handleHighlightChange}
-                  name="bordered-checkbox"
-                  className=" text-blue-600 bg-gray-100 border-gray-300"
-                />
-                <label className="w-full text-gray-900">
-                  <p className="text-xs p-0 m-0">Highlight</p>
-                </label>
-              </div>
-              <select
-                id="problem-title"
-                defaultValue={""}
-                value={selectedTitle}
-                onChange={handleChangeTitle}
-                className="bg-gray-50 border border-gray-300 text-gray-900 mb-2 text-sm w-[150px]  focus:outline-none  block  p-1"
-              >
-                <option disabled value="">
-                  Select Title
-                </option>
-                {ptData?.map((item, index) => (
-                  <option key={index} value={item}>
-                    {item}
-                  </option>
-                ))}
-              </select>
-              <select
-                id="problem-title"
-                defaultValue={""}
-                value={selectedActionType}
-                onChange={handleChangeActionType}
-                className="bg-gray-50 border border-gray-300 text-gray-900 mb-2 text-sm w-[150px]  focus:outline-none  block  p-1"
-              >
-                <option disabled value="">
-                  Select Action Type
-                </option>
-                {["MANUAL", "AUTOMATIC"].map((item, index) => (
-                  <option key={index} value={item}>
-                    {item.toUpperCase()}
-                  </option>
-                ))}
-              </select>
-              <select
-                id="problem-title"
-                defaultValue={""}
-                value={selectedStatus}
-                onChange={handleChange}
-                className="bg-gray-50 border border-gray-300 text-gray-900 mb-2 text-sm w-[150px]  focus:outline-none  block  p-1"
-              >
-                <option disabled value="">
-                  Select Status
-                </option>
-                {["OPEN", "CLOSED", "IN_PROGRESS"].map((item, index) => (
-                  <option key={index} value={item}>
-                    {item}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
 
-          <div className="flex flex-col gap-2">
-            <div className="relative">
-              <div className="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-                <svg
-                  className="w-4 h-4 text-gray-500 dark:text-gray-400"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                  />
-                </svg>
-              </div>
-              <input
-                type="text"
-                id="email-address-icon"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm block w-[60%] ps-10 p-1"
-                placeholder="search problems by service name"
-              />
-            </div>
-            <div className="flex gap-2">
-              {selectedStatus !== "" && (
-                <div
-                  onClick={() => setSelectedStatus("")}
-                  className="flex  text-xs items-center gap-2 px-2 border h-[29px] bg-slate-50 border-gray-200"
-                >
-                  {selectedStatus} <IoMdClose />
-                </div>
-              )}
-              {selectedActionType !== "" && (
-                <div
-                  onClick={() => setSelectedActionType("")}
-                  className="flex  text-xs items-center gap-2 px-2 border h-[29px] bg-slate-50 border-gray-200"
-                >
-                  {selectedActionType} <IoMdClose />
-                </div>
-              )}
-              {selectedTitle !== "" && (
-                <div
-                  onClick={() => setSelectedTitle("")}
-                  className="flex  text-xs items-center gap-2 px-2 border h-[29px] bg-slate-50 border-gray-200"
-                >
-                  {selectedTitle} <IoMdClose />
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="py-2">
-            <table className="w-full">
-              <thead>
-                <tr className="bg-slate-200 text-sm">
-                  <th className="p-2">id</th>
-                  <th>title</th>
-                  <th>service</th>
-                  <th>status</th>
-                  <th>action</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {recent?.map((incident, index) => (
-                  <tr
-                    key={index}
-                    onClick={() => {
-                      navigateTo(
-                        `/${incident?.pid}/${incident?.executedProblemId}`
-                      );
-                    }}
-                    className={`${
-                      incident?.status == "OPEN" &&
-                      isHighlightChecked &&
-                      "bg-red-50"
-                    } ${
-                      incident?.status == "CLOSED" &&
-                      isHighlightChecked &&
-                      "bg-green-50"
-                    } ${
-                      incident?.status == "IN_PROGRESS" &&
-                      isHighlightChecked &&
-                      "bg-orange-50"
-                    } hover:bg-slate-50 text-xs border-b border-gray-300`}
-                  >
-                    <td className="p-2">{incident?.id}</td>
-                    <td>{incident?.problemTitle}</td>
-                    <td>{incident?.serviceName}</td>
-                    <td>{incident?.status}</td>
-                    <td>{incident?.actionType}</td>
-                    <td>
-                      <BsArrowUpRightSquareFill className="text-lg" />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div> */}
         <div className="w-full cursor-pointer md:w-[calc(100vw-660px)] h-[calc(100vh-102px)] min-h-[469px] p-5 bg-white shadow-sm shadow-slate-400">
           <div className="flex flex-col md:flex-row justify-between ">
             <h3 className="text-sm text-start font-semibold">
-              Recent Incidents
+              Recent Problems
             </h3>
             <div className="flex flex-wrap justify-end gap-2">
               <div className="flex items-center gap-2 px-2 border h-[29px] bg-slate-50 border-gray-200">
@@ -953,7 +688,7 @@ const HomePage = () => {
               <thead>
                 <tr className="bg-slate-200 text-xs">
                   {/* <th className="p-2">ID</th> */}
-                  <th className=" text-start p-2 ">Alert Details</th>
+                  <th className=" text-start p-2 ">Problem Title</th>
                   <th className=" text-start p-2  max-w-44">Service</th>
                   <th className=" text-start p-2">Status</th>
                   <th className=" text-start p-2 ">Effort Saving</th>
@@ -994,7 +729,9 @@ const HomePage = () => {
                       {incident?.serviceName}
                     </td>
                     <td className=" text-start p-2">{incident?.status}</td>
-                    <td className="p-2 text-start">{incident?.efforTime || 25 } min</td>
+                    <td className="p-2 text-start">
+                      {incident?.efforTime || 25} min
+                    </td>
                     <td className=" text-start p-2">
                       {formatDateToCustomFormat(incident?.problemDetectedAt)}
                     </td>

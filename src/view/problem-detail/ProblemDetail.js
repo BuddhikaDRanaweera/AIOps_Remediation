@@ -113,7 +113,10 @@ const ProblemDetail = () => {
 
   return (
     <>
-      <div onClick={() => setScript(null)} className=" flex flex-col gap-1 justify-center">
+      <div
+        onClick={() => setScript(null)}
+        className=" flex flex-col gap-1 justify-center"
+      >
         {/* modal */}
 
         {script && (
@@ -219,13 +222,13 @@ const ProblemDetail = () => {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           {timeline &&
-                              (formatDateToUTCFormatCal(
-                                timeline?.scriptExecutionStartAt
-                              ) -
-                                formatDateToUTCFormatCal(
-                                  timeline?.preValidationStartedAt
-                                )) /
-                                60 +
+                            (formatDateToUTCFormatCal(
+                              timeline?.scriptExecutionStartAt
+                            ) -
+                              formatDateToUTCFormatCal(
+                                timeline?.preValidationStartedAt
+                              )) /
+                              60 +
                               " sec"}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -497,7 +500,11 @@ const ProblemDetail = () => {
                     </tr>
                   ))}
                   {lastSixHourIncidents?.data?.length === 0 &&
-                    "No data recorded in last 6 hours"}
+                     <tr className="p-2">
+                     <th className=" col-span-5 p-5">
+                     No data recorded in last 6 hours 
+                     </th>
+                   </tr>}
                 </tbody>
               </table>
             )}
@@ -521,7 +528,11 @@ const ProblemDetail = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr className="p-2">No data recorded in last 6 hours </tr>
+                <tr className="p-2">
+                  <th className=" col-span-5 p-5">
+                  No data recorded in last 6 hours 
+                  </th>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -536,58 +547,45 @@ const ProblemDetail = () => {
                 {apiData?.map((item, index) => (
                   <div
                     key={index}
-                    className="border-b hover:bg-gray-50 p-4 flex flex-col space-y-2"
+                    className="border-b hover:bg-gray-50 p-4 flex flex-col md:grid grid-cols-4 gap-2 space-y-2"
                   >
-                    <div className="flex flex-wrap justify-between">
-                      <span className="font-semibold text-gray-700">
+                    <div className="flex flex-col">
+                      <span className="font-semibold text-gray-700 text-xs">
                         Problem Title:
                       </span>
                       <span className="text-gray-600">{item.problemTitle}</span>
                     </div>
-                    <div className="flex flex-wrap justify-between">
-                      <span className="font-semibold text-gray-700">
-                        Recommendation:
-                      </span>
-                      <span className="text-gray-600">
-                        {item.recommendationText}
-                      </span>
-                    </div>
-                    <div className="flex flex-wrap justify-between">
-                      <span className="font-semibold text-gray-700">
+
+                    <div className="flex flex-col">
+                      <span className="font-semibold text-gray-700 text-xs">
                         Service Name:
                       </span>
                       <span className="text-gray-600">{item.serviceName}</span>
                     </div>
-                    <div className="flex flex-wrap justify-between">
-                      <span className="font-semibold text-gray-700">
+                    <div className="flex flex-col">
+                      <span className="font-semibold text-gray-700 text-xs">
                         Sub Problem Title:
                       </span>
                       <span className="text-gray-600">
                         {item.subProblemTitle}
                       </span>
                     </div>
-                    <div className="flex flex-wrap justify-between">
-                      <span className="font-semibold text-gray-700">
+                    <div className="flex flex-col">
+                      <span className="font-semibold text-gray-700 text-xs">
                         Remediation Start Time:
                       </span>
                       <span className="text-gray-600">
                         {item.scriptExecutionStartAt}
                       </span>
                     </div>
-                    <div className="flex flex-wrap justify-between">
-                      <span className="font-semibold text-gray-700">
+                    <div className="flex flex-col">
+                      <span className="font-semibold text-gray-700 text-xs">
                         Remediation End Time:
                       </span>
                       <span className="text-gray-600">{item.problemEndAt}</span>
                     </div>
-                    {/* <div className="flex flex-wrap justify-between">
-                      <span className="font-semibold text-gray-700">
-                        Effort Saving Time
-                      </span>
-                      <span className="text-gray-600">25 min</span>
-                    </div> */}
-                    <div className="flex flex-wrap justify-between">
-                      <span className="font-semibold text-gray-700">
+                    <div className="flex flex-col col-span-2">
+                      <span className="font-semibold text-gray-700 text-xs">
                         Script Path:
                       </span>
                       <span
@@ -597,7 +595,18 @@ const ProblemDetail = () => {
                         {item.scriptPath}
                       </span>
                     </div>
-                    <div className="flex justify-end">
+                    <div className="flex flex-col col-span-4">
+                      <span className="font-semibold text-gray-700 text-xs">
+                        Recommendation:
+                      </span>
+                      <div
+                        className="text-gray-600"
+                        dangerouslySetInnerHTML={{
+                          __html: item.recommendationText,
+                        }}
+                      />
+                    </div>
+                    <div className="flex justify-end col-span-4">
                       <button
                         className="edit-button text-gray-600"
                         onClick={() => {

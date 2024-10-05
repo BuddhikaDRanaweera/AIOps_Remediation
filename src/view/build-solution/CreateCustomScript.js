@@ -7,6 +7,9 @@ import useFetch_POST from "../../services/http/Post";
 // import "./BuildSolution.css";
 import SolutionRepository from "./SolutionRepository";
 
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+
 function CustomScript({ back }) {
   const navigate = useNavigate();
   const { isLoading, error, data, postData } = useFetch_POST();
@@ -58,29 +61,59 @@ function CustomScript({ back }) {
   const onChangeFile = (value) => {
     setFileName((prev) => value);
   };
+  const [validationType, setValidationType] = useState("remediation");
+
+  const handleCheckboxChange = (event) => {
+    const { name, checked } = event.target;
+
+    setValidationType(name);
+  };
 
   const saveSolution = () => {
     let data1 = {
-      recommendation: "This is for server start",
+      recommendation: editorHtml,
       resolutionScript: filePath,
       problemTitle: problem.problemTitle,
       problemId: problem.problemId,
       serviceName: problem.serviceName,
       parametersValue: parameters,
+      
+
     };
 
-    console.log(data1, "solution");
-    postData(`/insert_remediation`, data1);
+    // console.log(data1, "solution");
+    if(validationType == 'remediation'){
+      postData(`/insert_remediation`, data1);
+    }
+
+    if(validationType == 'postValidation'){
+      postData(`/postvalidations`, data1);
+    }
+
+    if(validationType == 'preValidation'){
+      postData(`/prevalidations`, data1);
+    }
+  
   };
 
   if (data?.status == 200 || data?.status == 201) {
     navigate("/new-problem");
   }
+  const [editorHtml, setEditorHtml] = useState();
 
+  const handleChange = (html) => {
+    setEditorHtml(html);
+  };
+  const modules = {
+    toolbar: [
+      ["bold", "italic", "underline"], // Formatting options
+      ["bullet"], // Bullet points
+    ],
+  };
   const popup = (topic, action, fnc, value, onChange) => {
     return (
       <div className="overflow-y-auto bg-blur flex overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-lvh">
-        <div class="relative p-4 w-full max-w-md max-h-full">
+        <div class="relative p-4 w-full md:w-[60%] max-h-full">
           <div class="relative bg-white rounded-lg shadow-sm shadow-black overflow-hidden">
             <div className="bg-main p-1 flex justify-between">
               <h3 className="text-lg text-white my-auto text-start px-2">
@@ -127,9 +160,38 @@ function CustomScript({ back }) {
                 />
               </div>
             )}
-            <div className="flex p-5">
+            <div className="p-5">
               {action == "Save As Rule" && (
                 <div className="text-start m-auto">
+                  <div className=" flex gap-2 mb-2">
+                    <label className="flex gap-1">
+                      <input
+                        type="checkbox"
+                        name="preValidation"
+                        checked={validationType == 'preValidation'}
+                        onChange={handleCheckboxChange}
+                      />
+                      Pre-validation
+                    </label>
+                    <label className="flex gap-1">
+                      <input
+                        type="checkbox"
+                        name="postValidation"
+                        checked={validationType == 'postValidation'}
+                        onChange={handleCheckboxChange}
+                      />
+                      Post-validation
+                    </label>
+                    <label className="flex gap-1">
+                      <input
+                        type="checkbox"
+                        name="remediation"
+                        checked={validationType == 'remediation'}
+                        onChange={handleCheckboxChange}
+                      />
+                      Remediation
+                    </label>
+                  </div>
                   <h3 className="flex flex-row gap-2">
                     <p className=" font-semibold">Title :</p>
                     {problem?.problemTitle}
@@ -138,6 +200,19 @@ function CustomScript({ back }) {
                     <p className=" font-semibold">Service Name :</p>
                     {problem?.serviceName}
                   </h3>
+                  <h3 className="flex flex-row gap-2 ">
+                    <p className=" font-semibold">Recommendation Text:</p>
+                    {problem?.serviceName}
+                  </h3>
+                  <div className="w-full">
+                    <ReactQuill
+                      value={editorHtml}
+                      onChange={handleChange}
+                      theme="snow"
+                      modules={modules}
+                      placeholder="Write comment..."
+                    />
+                  </div>
                 </div>
               )}
             </div>
@@ -159,92 +234,90 @@ function CustomScript({ back }) {
 
   return (
     <>
-     <div className=" hidden md:flex flex-col md:flex-row justify-between">
-      <div
-        onClick={() => {
-          if (isOpenAction) setIsOpenAction(false);
-        }}
-        className="md:w-[60%] p-2"
-      >
-        <div className="relative flex justify-end bg-slate-300 px-3">
-          <div className=" hover:bg-blur hover:text-white rounded-md p-1 m-1 ">
-            <HiDotsHorizontal
-              onClick={() => setIsOpenAction((prev) => !prev)}
-              className=" text-2xl "
-            />
-          </div>
+      <div className=" hidden md:flex flex-col md:flex-row justify-between">
+        <div
+          onClick={() => {
+            if (isOpenAction) setIsOpenAction(false);
+          }}
+          className="md:w-[60%] p-2"
+        >
+          <div className="relative flex justify-end bg-slate-300 px-3">
+            <div className=" hover:bg-blur hover:text-white rounded-md p-1 m-1 ">
+              <HiDotsHorizontal
+                onClick={() => setIsOpenAction((prev) => !prev)}
+                className=" text-2xl "
+              />
+            </div>
 
-          {isOpenAction && (
-            <div className=" cursor-pointer absolute top-9 right-4 flex flex-col gap-1 w-32 z-40 bg-white p-3 rounded-md text-start">
-              <h3
-                onClick={() => setIsOpenPopup((prev) => "save")}
-                className=" hover:text-main"
-              >
-                Save
-              </h3>
-              {filePath !== "" && filePath && (
+            {isOpenAction && (
+              <div className=" cursor-pointer absolute top-9 right-4 flex flex-col gap-1 w-32 z-40 bg-white p-3 rounded-md text-start">
                 <h3
-                  onClick={() => setIsOpenPopup((prev) => "saveAsRule")}
+                  onClick={() => setIsOpenPopup((prev) => "save")}
                   className=" hover:text-main"
                 >
-                  Save As Rule
+                  Save
                 </h3>
-              )}
-              <h3 onClick={() => clearNotepad()} className=" hover:text-main">
-                Clear
-              </h3>
+                {filePath !== "" && filePath && (
+                  <h3
+                    onClick={() => setIsOpenPopup((prev) => "saveAsRule")}
+                    className=" hover:text-main"
+                  >
+                    Save As Rule
+                  </h3>
+                )}
+                <h3 onClick={() => clearNotepad()} className=" hover:text-main">
+                  Clear
+                </h3>
+              </div>
+            )}
+          </div>
+
+          <Editor
+            height={"80%"}
+            defaultLanguage="bash"
+            theme="vs-dark"
+            value={script}
+            onChange={handleInputChange}
+          />
+
+          {parameters?.length !== 0 && (
+            <div className="bg-white h-10 overflow-auto flex p-2">
+              <div className="my-auto px-5">
+                <h3 className="text-sm font-semibold">Parameters</h3>
+              </div>
+              <div className="flex gap-1">
+                {parameters?.map((item) => (
+                  <h3 className="bg-slate-100 px-2 font-semibold">{item}</h3>
+                ))}
+              </div>
             </div>
           )}
         </div>
 
-        <Editor
-          height={'80%'}
-          defaultLanguage="bash"
-          theme="vs-dark"
-          value={script}
-          onChange={handleInputChange}
-          
-        />
+        <div className=" md:w-[40%] pe-2 pt-2  overflow-auto h-[calc(100vh-150px)]">
+          <SolutionRepository
+            handleInputChange={handleInputChange_}
+            setPath={setPath}
+          />
+        </div>
 
-        {parameters?.length !== 0 && (
-          <div className="bg-white h-10 overflow-auto flex p-2">
-            <div className="my-auto px-5">
-              <h3 className="text-sm font-semibold">Parameters</h3>
-            </div>
-            <div className="flex gap-1">
-              {parameters?.map((item) => (
-                <h3 className="bg-slate-100 px-2 font-semibold">
-                  {item}
-                </h3>
-              ))}
-            </div>
-          </div>
-        )}
+        {isOpenPopup == "save" &&
+          popup("Create Custom Script", "Save", save, fileName, onChangeFile)}
+        {isOpenPopup == "saveAsRule" &&
+          popup(
+            "Create Custom Script As Rule",
+            "Save As Rule",
+            saveSolution,
+            fileName,
+            onChangeFile
+          )}
       </div>
-
-      <div className=" md:w-[40%] pe-2 pt-2  overflow-auto h-[calc(100vh-150px)]">
-        <SolutionRepository
-          handleInputChange={handleInputChange_}
-          setPath={setPath}
-        />
+      <div className="flex md:hidden justify-center ">
+        <h3 className="text-gray-500 text-sm m-5">
+          You can not access this in mobile view.
+        </h3>
       </div>
-
-      {isOpenPopup == "save" &&
-        popup("Create Custom Script", "Save", save, fileName, onChangeFile)}
-      {isOpenPopup == "saveAsRule" &&
-        popup(
-          "Create Custom Script As Rule",
-          "Save As Rule",
-          saveSolution,
-          fileName,
-          onChangeFile
-        )}
-    </div>
-    <div className="flex md:hidden justify-center ">
-        <h3 className="text-gray-500 text-sm m-5">You can not access this in mobile view.</h3> 
-    </div>
     </>
-   
 
     //
   );
