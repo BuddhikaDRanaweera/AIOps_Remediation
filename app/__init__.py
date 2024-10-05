@@ -25,8 +25,8 @@ def create_app():
     # mysql_db = data.get('dbname')
 
     # Ensure credentials are provided
-    if not mysql_user or not mysql_password:
-        raise Exception("Missing required database credentials")
+    # if not mysql_user or not mysql_password:
+    #     raise Exception("Missing required database credentials")
 
     # Load configuration
     # app.config.from_object(Config(mysql_user, mysql_password, mysql_host, mysql_port, mysql_db))
