@@ -61,7 +61,7 @@ def webhook():
             result = find_problem_id(problemTitle, serviceName, pvt_dns)            
             # Check it is existing problem or not
             result = find_problem_id(problemTitle, serviceName, pvt_dns)
-            
+            executedProblemId = None
             # Check if a valid result was returned
             if result is None:
                 print("No existing problem found.")
@@ -69,6 +69,7 @@ def webhook():
                 private_dns = None
             else:
                 prob_id = result.get('id', None)
+                executedProblemId = prob_id
                 private_dns = result.get('pvt_dns', None)
             
             if result:
