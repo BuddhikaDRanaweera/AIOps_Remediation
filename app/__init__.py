@@ -16,7 +16,7 @@ def create_app():
 
     # Get secrets from AWS Secret Manager or other storage
     data = get_secret()
-    print(data)
+    print(data,"hi")
     # Provide fallback/defaults in case secrets are not fetched properly
     mysql_user = data.get('username')
     mysql_password = data.get('password')
@@ -30,6 +30,7 @@ def create_app():
 
     # Load configuration
     app.config.from_object(Config(mysql_user, mysql_password, mysql_host, mysql_port, mysql_db))
+    # app.config.from_object(Config('root', 'MS%T&X9bVk', 'localhost', '3306', 'aiops'))
 
     # Initialize extensions
     db.init_app(app)

@@ -104,12 +104,13 @@ def save_solution():
         script = data.get('content')
         parameter = data.get('parameter',None)
         parameterValues = data.get('parameterValues',None)
+        category = data.get('category',"User management")
         print(script)
         # Save the data to a JSON file
         file_path = save_script_to_s3("sh", file_name, script)
 
         if file_path:
-            saveScriptToLib(file_name,description,parameter,parameterValues,scriptPath=file_path,category="User management")
+            saveScriptToLib(file_name,description,parameter,parameterValues,scriptPath=file_path,category=category)
             return "Script Saved Successfully", 201
         else:
             return jsonify({"status": "error", "message": "Failed to save data"}), 500

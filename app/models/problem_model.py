@@ -5,4 +5,5 @@ class Problem(db.Model):
     problemTitle = db.Column(db.String(255), nullable=False)
     subProblemTitle = db.Column(db.String(255), default="N/A")
     serviceName = db.Column(db.String(255), nullable=False)
+    pvt_dns = db.Column(db.String(255), nullable=True)
     status = db.Column(db.String(255), nullable=False)

@@ -53,7 +53,7 @@ def service_state_check_exe(script_path, serviceName):
         logging.error("Error happened while executing the script: %s", error_message)
         return False
 
-def execute_script_validation_ssh(script_path):
+def execute_script_validation_ssh(script_path, private_dns):
     """
     Executes a bash script on the local machine and returns the result.
 

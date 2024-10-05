@@ -6,12 +6,13 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-def create_problem_auto(problem_title, sub_problem_title, service_name, status):
+def create_problem_auto(problem_title, sub_problem_title, service_name, pvt_dns, status):
     try:
         new_problem = Problem(
             problemTitle=problem_title,
             subProblemTitle=sub_problem_title,
             serviceName=service_name,
+            pvt_dns=pvt_dns,
             status=status
         )
         db.session.add(new_problem)
@@ -65,11 +66,14 @@ def update_status_by_id(id):
         logger.error(f"Error updating problem status: {str(e)}")
         return {"error": str(e)}
 
-def find_problem_id(problem_title, service_name):
+def find_problem_id(problem_title, service_name, pvt_dns):
     try:
-        problem = Problem.query.filter_by(problemTitle=problem_title, serviceName=service_name).first()
+        problem = Problem.query.filter_by(problemTitle=problem_title, serviceName=service_name, pvt_dns=pvt_dns).first()
         if problem:
-            return problem.id
+            return {
+                "id": problem.id,
+                "pvt_dns": problem.pvt_dns
+            }
         else:
             return None
     except SQLAlchemyError as e:
