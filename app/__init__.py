@@ -29,8 +29,8 @@ def create_app():
         raise Exception("Missing required database credentials")
 
     # Load configuration
-    app.config.from_object(Config(mysql_user, mysql_password, mysql_host, mysql_port, mysql_db))
-    # app.config.from_object(Config('root', 'MS%T&X9bVk', 'localhost', '3306', 'aiops'))
+    # app.config.from_object(Config(mysql_user, mysql_password, mysql_host, mysql_port, mysql_db))
+    app.config.from_object(Config('root', 'Demoadmin!0', 'localhost', '3306', 'aiops'))
 
     # Initialize extensions
     db.init_app(app)
