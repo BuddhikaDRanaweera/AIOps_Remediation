@@ -58,14 +58,14 @@ def webhook():
     if state == "OPEN":
         if "ImpactedEntityNames" in data and "ProblemID" in data:
             logger.info("Received webhook notification. Service to restart: %s", serviceName)
-            result = find_problem_id(problemTitle, serviceName, pvt_dns)
-            prob_id = result['prob_id']
-            private_dns = result['pvt_dns']
-            executedProblemId = prob_id
+            result = find_problem_id(problemTitle, serviceName, pvt_dns)            
             # Check it is existing problem or not
             print("Check it is existing problem or not")
             
             if result:
+                prob_id = result['prob_id']
+                private_dns = result['pvt_dns']
+                executedProblemId = prob_id
                 remediation = get_script_path_by_prob_id(prob_id)
                 parametersValues = remediation.parameters
                 script_path = remediation.scriptPath
