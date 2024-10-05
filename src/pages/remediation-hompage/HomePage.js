@@ -270,7 +270,7 @@ const HomePage = () => {
       path: "/metric-explore",
       title: "Metric Explore",
       des: "View Anomaly Metrics",
-      icon: "fa fa-table",
+      icon: "fa fa-bar-chart",
     },
   ];
 
