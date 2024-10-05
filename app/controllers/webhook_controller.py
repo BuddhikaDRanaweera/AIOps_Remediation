@@ -63,7 +63,7 @@ def webhook():
             print("Check it is existing problem or not")
             
             if result:
-                prob_id = result['prob_id']
+                prob_id = result['id']
                 private_dns = result['pvt_dns']
                 executedProblemId = prob_id
                 remediation = get_script_path_by_prob_id(prob_id)
