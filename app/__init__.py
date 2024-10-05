@@ -30,7 +30,7 @@ def create_app():
 
     # Load configuration
     # app.config.from_object(Config(mysql_user, mysql_password, mysql_host, mysql_port, mysql_db))
-    app.config.from_object(Config('root', 'Demoadmin!0', 'localhost', '3306', 'aiops'))
+    app.config.from_object(Config('root', 'Demoadmin!0', '47.128.251.66', '3306', 'aiops'))
 
     # Initialize extensions
     db.init_app(app)
@@ -44,6 +44,7 @@ def create_app():
     from app.controllers.remediation_problem_controller import remediation_problem_bp
     from app.controllers.script_controller import script_bp
     from app.controllers.library_controller import libraries_bp
+    from app.controllers.validation_controller import validation_bp
 
     # Register Blueprints
     app.register_blueprint(webhook_bp)
@@ -53,6 +54,7 @@ def create_app():
     app.register_blueprint(audit_bp)
     app.register_blueprint(libraries_bp)
     app.register_blueprint(remediation_problem_bp)
+    app.register_blueprint(validation_bp)
 
     # Create the database tables
     with app.app_context():

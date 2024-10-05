@@ -1,12 +1,15 @@
 from flask import Blueprint, request, jsonify
 import datetime
 from app.services.remediation_service import create_remediation, get_problem_with_remediation
-from app.services.problem_service import update_status_by_id
+from app.services.problem_service import update_status_by_id, findBy_problem_id
 from app.services.audit_service import update_to_inprogress_manual_exe, get_audit_record_by_id
 from app.util.execute_script import execute_script_ssh
+from app.util.remote_lambda import lambda_handler
 from pytz import timezone
 
 import logging
+
+from app.util.file_store import combine_json_files_s3
 
 # Set up logging
 logger = logging.getLogger(__name__)
@@ -31,12 +34,20 @@ def create_remediation_controller():
         logger.error("Missing required fields in request data")
         return jsonify({"error": "Missing required fields"}), 400
     scriptExecutionStartAt = datetime.datetime.now(ist_timezone)
-    
-    if(execute_script_ssh(script_path, parametersValues)):
+    result = findBy_problem_id(problem_id)
+    private_dns = result.get('pvt_dns', None)
+    script = combine_json_files_s3([script_path])
+    print(script)
+    if(lambda_handler(script_path, parametersValues, private_dns)):
         create_remediation(recommendation_text, script_path, problem_id, parametersValues)
         update_status_by_id(problem_id)
         update_to_inprogress_manual_exe(service_name, problem_id, problem_title, scriptExecutionStartAt)
         return "Remediation Saved Successfully", 201
+    # if(execute_script_ssh(script_path, parametersValues)):
+    #     create_remediation(recommendation_text, script_path, problem_id, parametersValues)
+    #     update_status_by_id(problem_id)
+    #     update_to_inprogress_manual_exe(service_name, problem_id, problem_title, scriptExecutionStartAt)
+    #     return "Remediation Saved Successfully", 201
     else:
         return "Cannot run script", 403
     

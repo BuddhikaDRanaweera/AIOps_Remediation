@@ -17,6 +17,7 @@ validation_bp = Blueprint('validation', __name__)
 
 @validation_bp.route('/prevalidations', methods=['POST'])
 def create_prevalidation_controller():
+    print("hiii")
     data = request.json
     comments = data.get('resolutionScript')
     pre_validation_script_path = data.get('resolutionScript')
@@ -85,7 +86,7 @@ def get_prevalidation_controller(validation_id):
     return jsonify(result), 200
 
 @validation_bp.route('/postvalidations/<int:validation_id>', methods=['GET'])
-def get_prevalidation_controller(validation_id):
+def get_postvalidation_controller(validation_id):
     validation = get_postvalidation_by_id(validation_id)
     
     if isinstance(validation, dict) and 'error' in validation:

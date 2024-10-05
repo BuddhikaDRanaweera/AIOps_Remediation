@@ -80,6 +80,19 @@ def find_problem_id(problem_title, service_name, pvt_dns):
         logger.error(f"Error finding problem ID: {str(e)}")
         return {"error": str(e)}
 
+def findBy_problem_id(id):
+    try:
+        problem = Problem.query.filter_by(id=id).first()
+        if problem:
+            return {
+                "pvt_dns": problem.pvt_dns
+            }
+        else:
+            return None
+    except SQLAlchemyError as e:
+        logger.error(f"Error finding problem ID: {str(e)}")
+        return {"error": str(e)}
+
 
 def get_not_resolved_problems():
     try:

@@ -8,7 +8,7 @@ class PreValidation(db.Model):
     validationId = db.Column(db.Integer, primary_key=True)
     comments = db.Column(db.String(255), nullable=False)
     parameters = db.Column(MutableList.as_mutable(JSON), nullable=True)
-    postValidationScriptPath = db.Column(db.String(255), nullable=False)
+    preValidationScriptPath = db.Column(db.String(255), nullable=False)
     probId = db.Column(db.Integer, db.ForeignKey('problem.id'), nullable=False)
     createdAt = db.Column(db.DateTime, default=current_time, nullable=False)
     lastUpdateAt = db.Column(db.DateTime, default=current_time, onupdate=current_time, nullable=False)
