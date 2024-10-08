@@ -233,7 +233,9 @@ def lambda_handler(script_path, parameters_values, pvt_dns):
         
         # Retrieve the output of the command
         output = invocation_response['StandardOutputContent'].strip()
-        print(output,"><><><><")
+        error_output = invocation_response['StandardErrorContent'].strip()  # Capture any error output
+        print(output, "><><><><")
+        print(error_output, "ERROR OUTPUT")
         logger.info(f"Command output: {output}")
 
         # Return the output as "true" or "false"
