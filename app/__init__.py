@@ -15,22 +15,22 @@ def create_app():
     app = Flask(__name__)
 
     # Get secrets from AWS Secret Manager or other storage
-    data = get_secret()
-    print(data,"hi")
-    # Provide fallback/defaults in case secrets are not fetched properly
-    mysql_user = data.get('username')
-    mysql_password = data.get('password')
-    mysql_host = data.get('host')
-    mysql_port = data.get('port', '3306')
-    mysql_db = data.get('dbname')
+    # data = get_secret()
+    # print(data,"hi")
+    # # Provide fallback/defaults in case secrets are not fetched properly
+    # mysql_user = data.get('username')
+    # mysql_password = data.get('password')
+    # mysql_host = data.get('host')
+    # mysql_port = data.get('port', '3306')
+    # mysql_db = data.get('dbname')
 
-    # Ensure credentials are provided
-    if not mysql_user or not mysql_password:
-        raise Exception("Missing required database credentials")
+    # # Ensure credentials are provided
+    # if not mysql_user or not mysql_password:
+    #     raise Exception("Missing required database credentials")
 
-    # Load configuration
-    app.config.from_object(Config(mysql_user, mysql_password, mysql_host, mysql_port, mysql_db))
-    # app.config.from_object(Config('root', 'Demoadmin!0', '3.1.83.205', '3306', 'aiops'))
+    # # Load configuration
+    # app.config.from_object(Config(mysql_user, mysql_password, mysql_host, mysql_port, mysql_db))
+    app.config.from_object(Config('root', 'Demoadmin!0', '3.1.83.205', '3306', 'aiops'))
 
     # Initialize extensions
     db.init_app(app)
