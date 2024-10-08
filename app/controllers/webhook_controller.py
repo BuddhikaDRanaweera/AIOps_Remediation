@@ -99,7 +99,7 @@ def webhook():
                         print(preValidationResult,"hiii")
                         #Entering to remediation exe stage after verfying this with pre validation
                         if(preValidationResult.strip()=="true"):
-                            update_audit_pre_validation_status(pid, serviceName, problemTitle, preValidationStatus=True, preValidationStartedAt=preValidationStartedAt)
+                            update_audit_pre_validation_status(pid, serviceName, problemTitle, preValidationStatus=True, preValidationStartedAt=preValidationStartedAt, comments="Successfully Remediated and pre validation success")
                             scriptExecutionStartAt = datetime.now(ist_timezone)
                             
                             if lambda_handler(remediationScript, remediationParametersValues, private_dns):
@@ -111,13 +111,13 @@ def webhook():
                                     postValidationParametersValues = postvalidation.parameters
                                     postValidationResult = lambda_handler(postValidationScript, postValidationParametersValues, private_dns)
                                     if(postValidationResult.strip()=="true"):
-                                        update_audit_post_validation_status(pid, serviceName, problemTitle, postValidationStatus=True, postValidationStartedAt=postValidationScriptStartedAt)
+                                        update_audit_post_validation_status(pid, serviceName, problemTitle, postValidationStatus=True, postValidationStartedAt=postValidationScriptStartedAt, comments="Successfully Remediated and post validation success")
                                         return 'Remediation Script execution success', 200
                                     else:
-                                        update_audit_post_validation_status(pid, serviceName, problemTitle, postValidationStatus=False, postValidationStartedAt=datetime.now(ist_timezone))
+                                        update_audit_post_validation_status(pid, serviceName, problemTitle, postValidationStatus=False, postValidationStartedAt=datetime.now(ist_timezone), comments="Successfully Remediated and post validation failed")
                                         return 'validation failed', 400
                                 else:
-                                    update_audit_post_validation_status(pid, serviceName, problemTitle, postValidationStatus=False, postValidationStartedAt=datetime.now(ist_timezone))
+                                    update_audit_post_validation_status(pid, serviceName, problemTitle, postValidationStatus=False, postValidationStartedAt=datetime.now(ist_timezone), comments="Successfully Remediated and post validation script not found")
                                     return 'No validation script found to execute', 200
                             else:
                                 # update audit status
@@ -125,7 +125,7 @@ def webhook():
                                 return 'Script execution unsuccessful!', 400
                         else:
                             # update audit status
-                            update_audit_pre_validation_status(pid, serviceName, problemTitle, preValidationStatus=False, preValidationStartedAt=datetime.now(ist_timezone))
+                            update_audit_pre_validation_status(pid, serviceName, problemTitle, preValidationStatus=False, preValidationStartedAt=datetime.now(ist_timezone), comments="Successfully Remediated and pre validation failed")
                             return 'Not a valida alert', 400
                     else:
                         # if no validations detedcted directly exe remediation script
@@ -139,13 +139,12 @@ def webhook():
                         logger.warning("No script found in DB")
                         return 'No script specified in DB', 400
             else:
-                print("new problem detected")
                 create_problem_auto(problemTitle, subProblemTitle, serviceName, pvt_dns, "NOT_RESOLVED")
                 create_audit(
                     problemTitle, subProblemTitle, impactedEntity, problemImpact,
                     problemSeverity, problemURL, problemDetectedAt, serviceName, pid,
                     executedProblemId, displayId, actionType="MANUAL", status="OPEN",
-                    comments="The new problem will be identified/was identified and the remediation will take /took place with manual instructions", 
+                    comments="The new problem was identified", 
                     problemEndAt=None, scriptExecutionStartAt=None
                 )
                 return "Problem Recorded Sucessfully", 201

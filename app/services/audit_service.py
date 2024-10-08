@@ -130,7 +130,7 @@ def update_audit_remediation_status(pid, serviceName, problemTitle, scriptExecut
         return {"error": str(e)}
 
 
-def update_audit_post_validation_status(pid, serviceName, problemTitle, postValidationStatus, postValidationStartedAt):
+def update_audit_post_validation_status(pid, serviceName, problemTitle, postValidationStatus, postValidationStartedAt , comments):
     print(postValidationStatus, postValidationStartedAt,">><<<<<---------------------")
     try:
         audit = Audit.query.filter_by(pid = pid, status ="IN_PROGRESS" ,serviceName = serviceName, problemTitle = problemTitle).first()
@@ -139,6 +139,7 @@ def update_audit_post_validation_status(pid, serviceName, problemTitle, postVali
         if audit:
             audit.postValidationStatus = postValidationStatus
             audit.postValidationStartedAt = postValidationStartedAt
+            audit.comments = comments
             db.session.commit()
             logger.info(f"Updated audit post_validation status for PID {pid} successfully")
             return {"message": f"Audit with PID {pid} updated successfully"}
