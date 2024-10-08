@@ -93,7 +93,7 @@ def webhook():
                     preValidation = get_prevalidation_script_path_by_prob_id(prob_id)
                     if(preValidation):
                         preValidationStartedAt=datetime.now(ist_timezone)
-                        preValidationScript = combine_json_files_s3([preValidation.postValidationScriptPath])
+                        preValidationScript = combine_json_files_s3([preValidation.preValidationScriptPath])
                         preValidationParametersValues = remediation.parameters
                         preValidationResult = lambda_handler(preValidationScript, preValidationParametersValues, private_dns)
 
