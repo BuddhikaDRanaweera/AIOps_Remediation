@@ -63,7 +63,23 @@ def lambda_handler(script, parametersValues, pvt_dns):
  
         # Wait for the command to execute
         time.sleep(5)  # Adjust this time as needed
- 
+        while True:
+            invocation_response = ssm.get_command_invocation(
+                CommandId=command_id,
+                InstanceId=instance_id
+            )
+            
+            # Check the status of the command invocation
+            status = invocation_response['Status']
+            
+            if status in ['Success', 'Failed', 'Cancelled', 'TimedOut']:
+                break
+            
+            time.sleep(2)  # Wait before checking the status again
+        
+        # Retrieve the output of the command
+        output = invocation_response['StandardOutputContent'].strip()
+        print(f"Command output: {output}")
         # Check command invocation
         command_invocation = ssm.list_command_invocations(CommandId=command_id, Details=True)
  
