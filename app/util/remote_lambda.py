@@ -205,17 +205,21 @@ def lambda_handler(script_path, parameters_values, pvt_dns):
 
         # Prepare commands to download the script, set execute permissions, execute it, and capture the output
         script_name = script_path.split('/')[-1]
-        download_command = f'aws s3 cp {script_path} /tmp/{script_name} && chmod +x /tmp/{script_name} && /tmp/{script_name}'
-
-        # Execute the commands on the EC2 instance
+        download_command = [
+            f'aws s3 cp {script_path} /tmp/{script_name}',
+            f'chmod +x /tmp/{script_name}',
+            f'/tmp/{script_name}'
+        ]
+        
         response = ssm.send_command(
             InstanceIds=[instance_id],
             DocumentName="AWS-RunShellScript",
-            Parameters={'commands': [download_command]}
+            Parameters={'commands': download_command}
         )
+        
         command_id = response['Command']['CommandId']
         logger.info(f'Sent command to download and execute script on instance: {instance_id}, Command ID: {command_id}')
-
+        
         # Wait for the command to execute
         time.sleep(5)
         while True:
@@ -223,17 +227,20 @@ def lambda_handler(script_path, parameters_values, pvt_dns):
                 CommandId=command_id,
                 InstanceId=instance_id
             )
-
+        
             # Check the status of the command invocation
             status = invocation_response['Status']
             if status in ['Success', 'Failed', 'Cancelled', 'TimedOut']:
                 break
             
-            time.sleep(2)  # Wait before checking the status again
+            time.sleep(2)
         
-        # Retrieve the output of the command
+        # Retrieve and log output
         output = invocation_response['StandardOutputContent'].strip()
-        error_output = invocation_response['StandardErrorContent'].strip()  # Capture any error output
+        error_output = invocation_response['StandardErrorContent'].strip()
+        logger.info(f"Command output: {output}")
+        logger.info(f"Command error output: {error_output}")
+
         print(output, "><><><><")
         print(error_output, "ERROR OUTPUT")
         logger.info(f"Command output: {output}")
