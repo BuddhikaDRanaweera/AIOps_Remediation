@@ -57,7 +57,7 @@ def lambda_handler(script, parametersValues, pvt_dns):
             DocumentName="AWS-RunShellScript",
             Parameters={'commands': [script]}
         )
- 
+        print(response,"response")
         command_id = response['Command']['CommandId']
         logger.info(f'Sent command to start httpd on instance: {instance_id}, Command ID: {command_id}')
  
