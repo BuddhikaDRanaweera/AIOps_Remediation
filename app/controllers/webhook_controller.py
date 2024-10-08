@@ -96,7 +96,7 @@ def webhook():
                         preValidationScript = combine_json_files_s3([preValidation.preValidationScriptPath])
                         preValidationParametersValues = remediation.parameters
                         preValidationResult = lambda_handler(preValidationScript, preValidationParametersValues, private_dns)
-
+                        print(preValidationResult,"hiii")
                         #Entering to remediation exe stage after verfying this with pre validation
                         if(preValidationResult.strip()=="true"):
                             update_audit_pre_validation_status(pid, serviceName, problemTitle, preValidationStatus=True, preValidationStartedAt=preValidationStartedAt)
