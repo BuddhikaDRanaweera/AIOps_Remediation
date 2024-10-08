@@ -7,8 +7,8 @@ from app.services.problem_service import create_problem_auto, find_problem_id
 from app.services.remediation_service import get_script_path_by_prob_id
 from app.services.validation_service import get_prevalidation_script_path_by_prob_id, get_postvalidation_script_path_by_prob_id
 from app.services.audit_service import create_audit, update_audit_status_closed,update_audit_status_to_failed, update_audit_pre_validation_status, update_audit_remediation_status,update_audit_post_validation_status
-from app.util.execute_script import execute_script_ssh, execute_script_validation_ssh
-from app.util.dateConvertor import convert_timestamp_to_datetime
+from app.util.file_store import combine_json_files_s3
+from app.util.remote_lambda import lambda_handler
  
 # Create a logger
 logger = logging.getLogger(__name__)
@@ -39,8 +39,9 @@ def webhook():
     ranked_events = data.get("ProblemDetailsJSON", {}).get('rankedEvents', [])
     print(ranked_events, "ranked_events")
 
-    # Extract the IP from annotationDescription
+    # Extract the IP from annotationDescription DT JSON
     pvt_dns = None
+    script = None
 
     if ranked_events:  # Check if there are any ranked events
         # Access the first event's annotationDescription
@@ -52,9 +53,6 @@ def webhook():
     else:
         print('No ranked events available')
 
-    # Print the extracted pvt_dns
-    print(pvt_dns)
-    print(serviceName,pid,"pid")
     if state == "OPEN":
         if "ImpactedEntityNames" in data and "ProblemID" in data:
             logger.info("Received webhook notification. Service to restart: %s", serviceName)
@@ -71,18 +69,18 @@ def webhook():
                 prob_id = result.get('id', None)
                 executedProblemId = prob_id
                 private_dns = result.get('pvt_dns', None)
+                
             
             if result:
                 remediation = get_script_path_by_prob_id(prob_id)
-                parametersValues = remediation.parameters
-                script_path = remediation.scriptPath
+                remediationParametersValues = remediation.parameters
+                remediation_script_path = remediation.scriptPath
+                remediationScript = combine_json_files_s3([remediation_script_path])
                 # pick resolution script
                 print("pick resolution script")
                     
-                if script_path:
+                if remediation_script_path:
                     # Create audit records
-                    print("script_path>>> 1")
-                        
                     create_audit(
                         problemTitle, subProblemTitle, impactedEntity, problemImpact,
                         problemSeverity, problemURL, problemDetectedAt, serviceName, pid,
@@ -90,56 +88,49 @@ def webhook():
                         comments="Problem Detacted, Rule Picked",
                         problemEndAt=None, scriptExecutionStartAt=None
                     )
-                    print("pre validation rule picking  and execution")
-                    # pre validation rule picking  and execution
-                    validation = get_prevalidation_script_path_by_prob_id(prob_id)
-                    print("2")
-                    if(validation):
-                        preValidationStartedAt=datetime.now(ist_timezone)
-                        preValidation = execute_script_validation_ssh(validation.preValidationScriptPath, private_dns)
-                        if(preValidation.strip()=="true"):
-                            # update audit record
-                            print("3")
-                            update_audit_pre_validation_status(pid, serviceName, problemTitle, preValidationStatus=True, preValidationStartedAt=preValidationStartedAt)
-                            # Run the script
-                            print("4")
-                            scriptExecutionStartAt = datetime.now(ist_timezone)
-                            # check execution of resoluition is success or not
-                            print("5")
 
-                            if execute_script_ssh(script_path, parametersValues):
-                                # Add execution data to the audit table
-                                print("6")
+                    # pre validation rule picking  and execution
+                    preValidation = get_prevalidation_script_path_by_prob_id(prob_id)
+                    if(preValidation):
+                        preValidationStartedAt=datetime.now(ist_timezone)
+                        preValidationScript = combine_json_files_s3([preValidation.postValidationScriptPath])
+                        preValidationParametersValues = remediation.parameters
+                        preValidationResult = lambda_handler(preValidationScript, preValidationParametersValues, private_dns)
+
+                        #Entering to remediation exe stage after verfying this with pre validation
+                        if(preValidationResult.strip()=="true"):
+                            update_audit_pre_validation_status(pid, serviceName, problemTitle, preValidationStatus=True, preValidationStartedAt=preValidationStartedAt)
+                            scriptExecutionStartAt = datetime.now(ist_timezone)
+                            
+                            if lambda_handler(remediationScript, remediationParametersValues, private_dns):
                                 update_audit_remediation_status(pid, serviceName, problemTitle, scriptExecutionStartAt, comments="Successfully Remediated", problemEndAt=datetime.now(ist_timezone),status="IN_PROGRESS")
                                 postvalidation = get_postvalidation_script_path_by_prob_id(prob_id)
                                 if(postvalidation):
-                                    postValidation = execute_script_validation_ssh(postvalidation.postValidationScriptPath, private_dns)
-                                    if(postValidation.strip()=="true"):
-                                        print("7")
-                                        update_audit_post_validation_status(pid, serviceName, problemTitle, postValidationStatus=True, postValidationStartedAt=datetime.now(ist_timezone))
+                                    postValidationScriptStartedAt=datetime.now(ist_timezone)
+                                    postValidationScript = combine_json_files_s3([postvalidation.postValidationScriptPath])
+                                    postValidationParametersValues = postvalidation.parameters
+                                    postValidationResult = lambda_handler(postValidationScript, postValidationParametersValues, private_dns)
+                                    if(postValidationResult.strip()=="true"):
+                                        update_audit_post_validation_status(pid, serviceName, problemTitle, postValidationStatus=True, postValidationStartedAt=postValidationScriptStartedAt)
                                         return 'Remediation Script execution success', 200
                                     else:
-                                        print("8")
                                         update_audit_post_validation_status(pid, serviceName, problemTitle, postValidationStatus=False, postValidationStartedAt=datetime.now(ist_timezone))
                                         return 'validation failed', 400
                                 else:
-                                    print("8")
                                     update_audit_post_validation_status(pid, serviceName, problemTitle, postValidationStatus=False, postValidationStartedAt=datetime.now(ist_timezone))
                                     return 'No validation script found to execute', 200
                             else:
                                 # update audit status
-                                print("9")
                                 update_audit_remediation_status(pid, serviceName, problemTitle, scriptExecutionStartAt, comments="Script execution unsuccessful!", problemEndAt=None,status="IN_PROGRESS")
                                 return 'Script execution unsuccessful!', 400
                         else:
                             # update audit status
-                            print("10")
                             update_audit_pre_validation_status(pid, serviceName, problemTitle, preValidationStatus=False, preValidationStartedAt=datetime.now(ist_timezone))
                             return 'Not a valida alert', 400
                     else:
-                        if execute_script_ssh(script_path, parametersValues):
+                        # if no validations detedcted directly exe remediation script
+                        if lambda_handler(remediationScript, remediationParametersValues, private_dns):
                             # Add execution data to the audit table
-                            print("6")
                             update_audit_remediation_status(pid, serviceName, problemTitle, scriptExecutionStartAt, comments="Successfully Remediated", problemEndAt=datetime.now(ist_timezone),status="IN_PROGRESS")
                         else:        
                             update_audit_remediation_status(pid, serviceName, problemTitle, scriptExecutionStartAt, comments="Script execution unsuccessful!", problemEndAt=None,status="IN_PROGRESS")

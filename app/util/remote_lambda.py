@@ -8,7 +8,7 @@ print('Loading function')
  
 # Set up logging
 logger = logging.getLogger()
-logger.setLevel(logging.INFO)  # You can set the logging level to DEBUG for more verbose output
+logger.setLevel(logging.INFO)
  
 ec2 = boto3.client('ec2', region_name='ap-southeast-1')
 ssm = boto3.client('ssm', region_name='ap-southeast-1')
@@ -42,18 +42,14 @@ def is_instance_running(instance_id):
     print(state,"state")
     return state == 'running'
 
- 
 def lambda_handler(script, parametersValues, pvt_dns):
     # Log the start time
     start_time = datetime.now()
     logger.info(f'Lambda function started at {start_time.isoformat()}')
  
-    private_dns = 'ip-172-31-36-1.ec2.internal'
     try:
         instance_id = get_instance_id_from_dns(pvt_dns)
  
-        # command = "sudo systemctl start httpd"
-        command = script
         is_instance_running(instance_id)
         
         response = ssm.send_command(
