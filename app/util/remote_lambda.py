@@ -136,6 +136,62 @@ def is_instance_running(instance_id):
     logger.info(f'Instance state: {state}')
     return state == 'running'
 
+# def lambda_handler(script_path, parameters_values, pvt_dns):
+#     # Log the start time
+#     start_time = datetime.now()
+#     logger.info(f'Lambda function started at {start_time.isoformat()}')
+
+#     try:
+#         instance_id = get_instance_id_from_dns(pvt_dns)
+
+#         if not is_instance_running(instance_id):
+#             raise Exception(f'Instance {instance_id} is not running')
+
+#         # Prepare commands to download the script, set execute permissions, and execute it
+#         script_name = script_path.split('/')[-1]
+#         download_command = f'aws s3 cp {script_path} /tmp/{script_name} && chmod +x /tmp/{script_name} && /tmp/{script_name} && rm -f /tmp/{script_name}'
+
+#         # Execute the commands on the EC2 instance
+#         response = ssm.send_command(
+#             InstanceIds=[instance_id],
+#             DocumentName="AWS-RunShellScript",
+#             Parameters={'commands': [download_command]}
+#         )
+#         command_id = response['Command']['CommandId']
+#         logger.info(f'Sent command to download and execute script on instance: {instance_id}, Command ID: {command_id}')
+
+#         # Wait for the command to execute
+#         time.sleep(5)  # Adjust this time as needed
+#         while True:
+#             invocation_response = ssm.get_command_invocation(
+#                 CommandId=command_id,
+#                 InstanceId=instance_id
+#             )
+
+#             # Check the status of the command invocation
+#             status = invocation_response['Status']
+#             if status in ['Success', 'Failed', 'Cancelled', 'TimedOut']:
+#                 break
+            
+#             time.sleep(2)  # Wait before checking the status again
+        
+#         # Retrieve the output of the command
+#         output = invocation_response['StandardOutputContent'].strip()
+#         print(output,">>>>>>>>><<<<<<<<<<")
+#         logger.info(f"Command output: {output}")
+
+#         # Log command invocation details
+#         command_invocation = ssm.list_command_invocations(CommandId=command_id, Details=True)
+#         command_invocation_serializable = json.loads(json.dumps(command_invocation, default=convert_datetime))
+#         logger.info(json.dumps(command_invocation_serializable, indent=4))
+
+#         return "true"
+#         # return output
+#     except Exception as e:
+#         logger.error(f'Error executing script: {str(e)}')
+#         return False
+
+
 def lambda_handler(script_path, parameters_values, pvt_dns):
     # Log the start time
     start_time = datetime.now()
@@ -147,7 +203,7 @@ def lambda_handler(script_path, parameters_values, pvt_dns):
         if not is_instance_running(instance_id):
             raise Exception(f'Instance {instance_id} is not running')
 
-        # Prepare commands to download the script, set execute permissions, and execute it
+        # Prepare commands to download the script, set execute permissions, execute it, and capture the output
         script_name = script_path.split('/')[-1]
         download_command = f'aws s3 cp {script_path} /tmp/{script_name} && chmod +x /tmp/{script_name} && /tmp/{script_name}'
 
@@ -161,7 +217,7 @@ def lambda_handler(script_path, parameters_values, pvt_dns):
         logger.info(f'Sent command to download and execute script on instance: {instance_id}, Command ID: {command_id}')
 
         # Wait for the command to execute
-        time.sleep(5)  # Adjust this time as needed
+        time.sleep(5)
         while True:
             invocation_response = ssm.get_command_invocation(
                 CommandId=command_id,
@@ -177,16 +233,12 @@ def lambda_handler(script_path, parameters_values, pvt_dns):
         
         # Retrieve the output of the command
         output = invocation_response['StandardOutputContent'].strip()
-        print(output,">>>>>>>>><<<<<<<<<<")
+        print(output,"><><><><")
         logger.info(f"Command output: {output}")
 
-        # Log command invocation details
-        command_invocation = ssm.list_command_invocations(CommandId=command_id, Details=True)
-        command_invocation_serializable = json.loads(json.dumps(command_invocation, default=convert_datetime))
-        logger.info(json.dumps(command_invocation_serializable, indent=4))
-
-        return "true"
-        # return output
+        # Return the output as "true" or "false"
+        return output  # This will return either "true" or "false"
+        
     except Exception as e:
         logger.error(f'Error executing script: {str(e)}')
         return False
