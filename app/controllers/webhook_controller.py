@@ -102,7 +102,7 @@ def webhook():
                         #Entering to remediation exe stage after verfying this with pre validation
                         if(preValidationResult.strip()=="true"):
                             print("Successfully Remediated and pre validation success")
-                            update_audit_pre_validation_status(pid, serviceName, problemTitle, preValidationStatus=True, preValidationStartedAt=preValidationStartedAt, comments="Successfully Remediated and pre validation success")
+                            update_audit_pre_validation_status(pid, serviceName, problemTitle, preValidationStatus=True, preValidationStartedAt=preValidationStartedAt, comments="Pre validation success")
                             scriptExecutionStartAt = datetime.now(ist_timezone)
                             
                             if lambda_handler(remediationScript, remediationParametersValues, private_dns):
@@ -133,8 +133,8 @@ def webhook():
                                 return 'Script execution unsuccessful!', 400
                         else:
                             # update audit status
-                            print("Successfully Remediated and pre validation failed")
-                            update_audit_pre_validation_status(pid, serviceName, problemTitle, preValidationStatus=False, preValidationStartedAt=datetime.now(ist_timezone), comments="Successfully Remediated and pre validation failed")
+                            print("Pre validation failed")
+                            update_audit_pre_validation_status(pid, serviceName, problemTitle, preValidationStatus=False, preValidationStartedAt=datetime.now(ist_timezone), comments="Pre validation failed")
                             return 'Not a valida alert', 400
                     else:
                         # if no validations detedcted directly exe remediation script

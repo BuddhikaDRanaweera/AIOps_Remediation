@@ -62,7 +62,6 @@ def lambda_handler(script, parametersValues, pvt_dns):
         logger.info(f'Sent command to start httpd on instance: {instance_id}, Command ID: {command_id}')
  
         # Wait for the command to execute
-        time.sleep(5)  # Adjust this time as needed
         while True:
             invocation_response = ssm.get_command_invocation(
                 CommandId=command_id,
@@ -75,8 +74,6 @@ def lambda_handler(script, parametersValues, pvt_dns):
             if status in ['Success', 'Failed', 'Cancelled', 'TimedOut']:
                 break
             
-            time.sleep(2)  # Wait before checking the status again
-        
         # Retrieve the output of the command
         output = invocation_response['StandardOutputContent'].strip()
         print(f"Command output: {output}")
