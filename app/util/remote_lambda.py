@@ -184,7 +184,8 @@ def lambda_handler(script_path, parameters_values, pvt_dns):
         command_invocation_serializable = json.loads(json.dumps(command_invocation, default=convert_datetime))
         logger.info(json.dumps(command_invocation_serializable, indent=4))
 
-        return output
+        return "true"
+        # return output
     except Exception as e:
         logger.error(f'Error executing script: {str(e)}')
         return False
