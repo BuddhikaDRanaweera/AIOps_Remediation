@@ -94,13 +94,14 @@ def update_audit_status_closed(pid, serviceName, problemTitle, new_status):
         return {"error": str(e)}
 
 
-def update_audit_pre_validation_status(pid, serviceName, problemTitle, preValidationStatus, preValidationStartedAt):
+def update_audit_pre_validation_status(pid, serviceName, problemTitle, preValidationStatus, preValidationStartedAt, comments):
     try:
         audit = Audit.query.filter_by(pid = pid, status ="IN_PROGRESS" ,serviceName = serviceName, problemTitle = problemTitle).first()
         print(audit,"AUDIT FOUND")
         if audit:
             audit.preValidationStatus = preValidationStatus
             audit.preValidationStartedAt = preValidationStartedAt
+            audit.comments = comments
             db.session.commit()
             logger.info(f"Updated audit pre_validation status for PID {pid} successfully")
             return {"message": f"Audit with PID {pid} updated successfully"}

@@ -89,6 +89,8 @@ def webhook():
                         problemEndAt=None, scriptExecutionStartAt=None
                     )
 
+                    print("Problem Detacted, Rule Picked")
+                    
                     # pre validation rule picking  and execution
                     preValidation = get_prevalidation_script_path_by_prob_id(prob_id)
                     if(preValidation):
@@ -99,10 +101,12 @@ def webhook():
                         print(preValidationResult,"hiii")
                         #Entering to remediation exe stage after verfying this with pre validation
                         if(preValidationResult.strip()=="true"):
+                            print("Successfully Remediated and pre validation success")
                             update_audit_pre_validation_status(pid, serviceName, problemTitle, preValidationStatus=True, preValidationStartedAt=preValidationStartedAt, comments="Successfully Remediated and pre validation success")
                             scriptExecutionStartAt = datetime.now(ist_timezone)
                             
                             if lambda_handler(remediationScript, remediationParametersValues, private_dns):
+                                print("Successfully Remediated")
                                 update_audit_remediation_status(pid, serviceName, problemTitle, scriptExecutionStartAt, comments="Successfully Remediated", problemEndAt=datetime.now(ist_timezone),status="IN_PROGRESS")
                                 postvalidation = get_postvalidation_script_path_by_prob_id(prob_id)
                                 if(postvalidation):
@@ -111,20 +115,25 @@ def webhook():
                                     postValidationParametersValues = postvalidation.parameters
                                     postValidationResult = lambda_handler(postValidationScript, postValidationParametersValues, private_dns)
                                     if(postValidationResult.strip()=="true"):
+                                        print("Successfully Remediated and post validation success")
                                         update_audit_post_validation_status(pid, serviceName, problemTitle, postValidationStatus=True, postValidationStartedAt=postValidationScriptStartedAt, comments="Successfully Remediated and post validation success")
                                         return 'Remediation Script execution success', 200
                                     else:
+                                        print("Successfully Remediated and post validation failed")
                                         update_audit_post_validation_status(pid, serviceName, problemTitle, postValidationStatus=False, postValidationStartedAt=datetime.now(ist_timezone), comments="Successfully Remediated and post validation failed")
                                         return 'validation failed', 400
                                 else:
+                                    print("Successfully Remediated and post validation script not found")
                                     update_audit_post_validation_status(pid, serviceName, problemTitle, postValidationStatus=False, postValidationStartedAt=datetime.now(ist_timezone), comments="Successfully Remediated and post validation script not found")
                                     return 'No validation script found to execute', 200
                             else:
                                 # update audit status
+                                print("Script execution unsuccessful!")
                                 update_audit_remediation_status(pid, serviceName, problemTitle, scriptExecutionStartAt, comments="Script execution unsuccessful!", problemEndAt=None,status="IN_PROGRESS")
                                 return 'Script execution unsuccessful!', 400
                         else:
                             # update audit status
+                            print("Successfully Remediated and pre validation failed")
                             update_audit_pre_validation_status(pid, serviceName, problemTitle, preValidationStatus=False, preValidationStartedAt=datetime.now(ist_timezone), comments="Successfully Remediated and pre validation failed")
                             return 'Not a valida alert', 400
                     else:
@@ -136,6 +145,7 @@ def webhook():
                             update_audit_remediation_status(pid, serviceName, problemTitle, scriptExecutionStartAt, comments="Script execution unsuccessful!", problemEndAt=None,status="IN_PROGRESS")
                             return 'Script execution unsuccessful!', 400
                 else:
+                        print("NO script found 2024")
                         logger.warning("No script found in DB")
                         return 'No script specified in DB', 400
             else:
