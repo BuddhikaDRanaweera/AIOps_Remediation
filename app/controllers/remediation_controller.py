@@ -37,7 +37,7 @@ def create_remediation_controller():
     result = findBy_problem_id(problem_id)
     private_dns = result.get('pvt_dns', None)
     script = combine_json_files_s3([script_path])
-    print(script)
+    # Your remediation script needs to return "true" always if success
     if(lambda_handler(script, parametersValues, private_dns)):
         create_remediation(recommendation_text, script_path, problem_id, parametersValues)
         update_status_by_id(problem_id)
