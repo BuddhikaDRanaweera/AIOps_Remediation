@@ -98,7 +98,8 @@ def webhook():
                         preValidationResult = lambda_handler(preValidationScript, preValidationParametersValues, private_dns)
                         print(preValidationResult,"hiii")
                         #Entering to remediation exe stage after verfying this with pre validation
-                        if(preValidationResult.strip()=="true"):
+                        # if(preValidationResult.strip()=="true"):
+                        if(preValidationResult):
                             update_audit_pre_validation_status(pid, serviceName, problemTitle, preValidationStatus=True, preValidationStartedAt=preValidationStartedAt)
                             scriptExecutionStartAt = datetime.now(ist_timezone)
                             
@@ -110,7 +111,7 @@ def webhook():
                                     postValidationScript = combine_json_files_s3([postvalidation.postValidationScriptPath])
                                     postValidationParametersValues = postvalidation.parameters
                                     postValidationResult = lambda_handler(postValidationScript, postValidationParametersValues, private_dns)
-                                    if(postValidationResult.strip()=="true"):
+                                    if(postValidationResult):
                                         update_audit_post_validation_status(pid, serviceName, problemTitle, postValidationStatus=True, postValidationStartedAt=postValidationScriptStartedAt)
                                         return 'Remediation Script execution success', 200
                                     else:
