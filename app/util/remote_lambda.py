@@ -149,7 +149,7 @@ def lambda_handler(script_path, parameters_values, pvt_dns):
 
         # Prepare commands to download the script, set execute permissions, and execute it
         script_name = script_path.split('/')[-1]
-        download_command = f'aws s3 cp {script_path} /tmp/{script_name} && chmod +x /tmp/{script_name} && /tmp/{script_name} && rm -f /tmp/{script_name}'
+        download_command = f'aws s3 cp {script_path} /tmp/{script_name} && chmod +x /tmp/{script_name} && /tmp/{script_name}'
 
         # Execute the commands on the EC2 instance
         response = ssm.send_command(
@@ -177,6 +177,7 @@ def lambda_handler(script_path, parameters_values, pvt_dns):
         
         # Retrieve the output of the command
         output = invocation_response['StandardOutputContent'].strip()
+        print(output,">>>>>>>>><<<<<<<<<<")
         logger.info(f"Command output: {output}")
 
         # Log command invocation details
