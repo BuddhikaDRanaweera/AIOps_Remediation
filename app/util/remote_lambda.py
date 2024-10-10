@@ -174,6 +174,8 @@ def lambda_handler(script_path, parameters_values, pvt_dns):
             raise Exception(f'Instance {instance_id} is not running')
         
         script_name = script_path.split('/')[-1]
+        print(script_name, "name")
+        print(script_path, "path")
         
         # Ensure the target directory exists
         create_directory_command = 'mkdir -p /home/ubuntu/scripts'
