@@ -75,7 +75,7 @@ def webhook():
                 remediation = get_script_path_by_prob_id(prob_id)
                 remediationParametersValues = remediation.parameters
                 remediation_script_path = remediation.scriptPath
-                remediationScript = combine_json_files_s3([remediation_script_path])
+                # remediationScript = combine_json_files_s3([remediation_script_path])
                 # pick resolution script
                 print("pick resolution script")
                     
@@ -95,7 +95,7 @@ def webhook():
                     preValidation = get_prevalidation_script_path_by_prob_id(prob_id)
                     if(preValidation):
                         preValidationStartedAt=datetime.now(ist_timezone)
-                        preValidationScript = combine_json_files_s3([preValidation.preValidationScriptPath])
+                        # preValidationScript = combine_json_files_s3([preValidation.preValidationScriptPath])
                         preValidationParametersValues = remediation.parameters
                         preValidationResult = lambda_handler(preValidation.preValidationScriptPath, preValidationParametersValues, private_dns)
                         print(preValidationResult,"hiii")
@@ -111,7 +111,7 @@ def webhook():
                                 postvalidation = get_postvalidation_script_path_by_prob_id(prob_id)
                                 if(postvalidation):
                                     postValidationScriptStartedAt=datetime.now(ist_timezone)
-                                    postValidationScript = combine_json_files_s3([postvalidation.postValidationScriptPath])
+                                    # postValidationScript = combine_json_files_s3([postvalidation.postValidationScriptPath])
                                     postValidationParametersValues = postvalidation.parameters
                                     postValidationResult = lambda_handler(postvalidation.postValidationScriptPath, postValidationParametersValues, private_dns)
                                     if(postValidationResult.strip()=="true"):
@@ -138,7 +138,7 @@ def webhook():
                             return 'Not a valida alert', 400
                     else:
                         # if no validations detedcted directly exe remediation script
-                        if lambda_handler(remediationScript, remediationParametersValues, private_dns):
+                        if lambda_handler(remediation_script_path, remediationParametersValues, private_dns):
                             # Add execution data to the audit table
                             update_audit_remediation_status(pid, serviceName, problemTitle, scriptExecutionStartAt, comments="Successfully Remediated", problemEndAt=datetime.now(ist_timezone),status="IN_PROGRESS")
                         else:        
