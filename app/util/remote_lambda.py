@@ -199,8 +199,15 @@ def lambda_handler(script_path, parameters_values, pvt_dns):
             logger.error(f'Failed to change permissions: {error_output}')
             return False
 
+       # Prepare the execution command
+        if parameters_values:  # Check if there are parameters
+            params_str = ' '.join(parameters_values)  # Join parameters into a string
+            print(params_str,"hiii param")
+            execute_command_str = f'/home/ubuntu/scripts/{script_name} {params_str}'
+        else:
+            execute_command_str = f'/home/ubuntu/scripts/{script_name}'  # No parameters
+
         # Execute the script
-        execute_command_str = f'/home/ubuntu/scripts/{script_name}'
         output, error_output, status = execute_command(instance_id, execute_command_str)
         
         if status == 'Success':
