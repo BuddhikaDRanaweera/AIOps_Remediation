@@ -140,18 +140,25 @@ def execute_command(instance_id, command):
     logger.info(f'Sent command to instance: {instance_id}, Command ID: {command_id}')
     
     # Poll for command completion
-    while True:
-        invocation_response = ssm.get_command_invocation(
-            CommandId=command_id,
-            InstanceId=instance_id
-        )
-        status = invocation_response['Status']
-        if status in ['Success', 'Failed', 'Cancelled', 'TimedOut']:
-            break
-        time.sleep(2)
+    attempts = 0
+    while attempts < 10:  # Limit the number of attempts
+        time.sleep(2)  # Wait before checking the command status
+        try:
+            invocation_response = ssm.get_command_invocation(
+                CommandId=command_id,
+                InstanceId=instance_id
+            )
+            status = invocation_response['Status']
+            if status in ['Success', 'Failed', 'Cancelled', 'TimedOut']:
+                break
+        except ssm.exceptions.InvocationDoesNotExist:
+            logger.warning('Command invocation does not exist yet, retrying...')
+        
+        attempts += 1
     
-    output = invocation_response['StandardOutputContent'].strip()
-    error_output = invocation_response['StandardErrorContent'].strip()
+    # Retrieve command output
+    output = invocation_response.get('StandardOutputContent', '').strip()
+    error_output = invocation_response.get('StandardErrorContent', '').strip()
     logger.info(f"Command output: {output}")
     logger.info(f"Command error output: {error_output}")
     
@@ -170,26 +177,25 @@ def lambda_handler(script_path, parameters_values, pvt_dns):
         
         # Ensure the target directory exists
         create_directory_command = 'mkdir -p /home/ubuntu/scripts'
-        time.sleep(1)
         output, error_output, status = execute_command(instance_id, create_directory_command)
         if status != 'Success':
             logger.error(f'Failed to create directory: {error_output}')
             return False
-        time.sleep(2)
+        
         # Download script to the new path
         download_command = f'aws s3 cp {script_path} /home/ubuntu/scripts/{script_name}'
         output, error_output, status = execute_command(instance_id, download_command)
         if status != 'Success':
             logger.error(f'Failed to download script: {error_output}')
             return False
-        time.sleep(2)
+
         # Give execute permission
         permission_command = f'chmod +x /home/ubuntu/scripts/{script_name}'
         output, error_output, status = execute_command(instance_id, permission_command)
         if status != 'Success':
             logger.error(f'Failed to change permissions: {error_output}')
             return False
-        time.sleep(2)
+
         # Execute the script
         execute_command_str = f'/home/ubuntu/scripts/{script_name}'
         output, error_output, status = execute_command(instance_id, execute_command_str)
