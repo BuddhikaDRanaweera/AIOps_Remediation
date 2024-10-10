@@ -97,7 +97,7 @@ def webhook():
                         preValidationStartedAt=datetime.now(ist_timezone)
                         preValidationScript = combine_json_files_s3([preValidation.preValidationScriptPath])
                         preValidationParametersValues = remediation.parameters
-                        preValidationResult = lambda_handler(preValidationScript, preValidationParametersValues, private_dns)
+                        preValidationResult = lambda_handler(preValidation.preValidationScriptPath, preValidationParametersValues, private_dns)
                         print(preValidationResult,"hiii")
                         #Entering to remediation exe stage after verfying this with pre validation
                         if(preValidationResult.strip()=="true"):
@@ -105,7 +105,7 @@ def webhook():
                             update_audit_pre_validation_status(pid, serviceName, problemTitle, preValidationStatus=True, preValidationStartedAt=preValidationStartedAt, comments="Pre validation success")
                             scriptExecutionStartAt = datetime.now(ist_timezone)
                             
-                            if lambda_handler(remediationScript, remediationParametersValues, private_dns):
+                            if lambda_handler(remediation_script_path, remediationParametersValues, private_dns):
                                 print("Successfully Remediated")
                                 update_audit_remediation_status(pid, serviceName, problemTitle, scriptExecutionStartAt, comments="Successfully Remediated", problemEndAt=datetime.now(ist_timezone),status="IN_PROGRESS")
                                 postvalidation = get_postvalidation_script_path_by_prob_id(prob_id)
@@ -113,7 +113,7 @@ def webhook():
                                     postValidationScriptStartedAt=datetime.now(ist_timezone)
                                     postValidationScript = combine_json_files_s3([postvalidation.postValidationScriptPath])
                                     postValidationParametersValues = postvalidation.parameters
-                                    postValidationResult = lambda_handler(postValidationScript, postValidationParametersValues, private_dns)
+                                    postValidationResult = lambda_handler(postvalidation.postValidationScriptPath, postValidationParametersValues, private_dns)
                                     if(postValidationResult.strip()=="true"):
                                         print("Successfully Remediated and post validation success")
                                         update_audit_post_validation_status(pid, serviceName, problemTitle, postValidationStatus=True, postValidationStartedAt=postValidationScriptStartedAt, comments="Successfully Remediated and post validation success")
