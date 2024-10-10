@@ -170,25 +170,26 @@ def lambda_handler(script_path, parameters_values, pvt_dns):
         
         # Ensure the target directory exists
         create_directory_command = 'mkdir -p /home/ubuntu/scripts'
+        time.sleep(1)
         output, error_output, status = execute_command(instance_id, create_directory_command)
         if status != 'Success':
             logger.error(f'Failed to create directory: {error_output}')
             return False
-        
+        time.sleep(2)
         # Download script to the new path
         download_command = f'aws s3 cp {script_path} /home/ubuntu/scripts/{script_name}'
         output, error_output, status = execute_command(instance_id, download_command)
         if status != 'Success':
             logger.error(f'Failed to download script: {error_output}')
             return False
-
+        time.sleep(2)
         # Give execute permission
         permission_command = f'chmod +x /home/ubuntu/scripts/{script_name}'
         output, error_output, status = execute_command(instance_id, permission_command)
         if status != 'Success':
             logger.error(f'Failed to change permissions: {error_output}')
             return False
-
+        time.sleep(2)
         # Execute the script
         execute_command_str = f'/home/ubuntu/scripts/{script_name}'
         output, error_output, status = execute_command(instance_id, execute_command_str)
