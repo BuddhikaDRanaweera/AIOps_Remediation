@@ -43,22 +43,23 @@ def webhook():
     problemDetectedAt = datetime_utc.astimezone(ist_timezone)
     serviceName = data.get("ImpactedEntityNames")
     state = data.get("State", "unknown")
+    pvt_dns = data.get("DNS", "ip-172-31-28-116.ap-southeast-1.compute.internal")
 
     # Access 'rankedEvents'
-    ranked_events = data.get("ProblemDetailsJSON", {}).get('rankedEvents', [])
-    print(ranked_events, "ranked_events")
+    # ranked_events = data.get("ProblemDetailsJSON", {}).get('rankedEvents', [])
+    print(pvt_dns, "pvt_dns")
 
     # Extract the IP from annotationDescription DT JSON
-    pvt_dns = None
-    if ranked_events:  # Check if there are any ranked events
-        # Access the first event's annotationDescription
-        annotation_description = ranked_events[0].get('annotationDescription', '')
-        print(annotation_description, "annotation_description")
-        match = re.search(r'host (.+?) has been', annotation_description)
-        if match:
-            pvt_dns = match.group(1)
-    else:
-        print('No ranked events available')
+    # pvt_dns = None
+    # if ranked_events:  # Check if there are any ranked events
+    #     # Access the first event's annotationDescription
+    #     annotation_description = ranked_events[0].get('annotationDescription', '')
+    #     print(annotation_description, "annotation_description")
+    #     match = re.search(r'host (.+?) has been', annotation_description)
+    #     if match:
+    #         pvt_dns = match.group(1)
+    # else:
+    #     print('No ranked events available')
 
     if state == "OPEN":
         if "ImpactedEntityNames" in data and "ProblemID" in data:

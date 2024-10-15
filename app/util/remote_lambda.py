@@ -70,68 +70,7 @@ def execute_command(instance_id, command):
     
     return output, error_output, status
 
-# def lambda_handler(script_path, parameters_values, pvt_dns):
-#     print("heyy")
-#     start_time = datetime.now()
-#     logger.info(f'Lambda function started at {start_time.isoformat()}')
-
-#     try:
-#         instance_id = get_instance_id_from_dns(pvt_dns)
-#         if not is_instance_running(instance_id):
-#             raise Exception(f'Instance {instance_id} is not running')
-        
-#         script_name = script_path.split('/')[-1]
-#         print(script_name, "name")
-#         print(script_path, "path")
-        
-#         # Ensure the target directory exists
-#         create_directory_command = 'mkdir -p /home/ubuntu/scripts'
-#         output, error_output, status = execute_command(instance_id, create_directory_command)
-#         if status != 'Success':
-#             logger.error(f'Failed to create directory: {error_output}')
-#             return False
-        
-#         # Download script to the new path
-#         download_command = f'aws s3 cp {script_path} /home/ubuntu/scripts/{script_name}'
-#         output, error_output, status = execute_command(instance_id, download_command)
-#         if status != 'Success':
-#             logger.error(f'Failed to download script: {error_output}')
-#             return False
-
-#         # Give execute permission
-#         permission_command = f'chmod +x /home/ubuntu/scripts/{script_name}'
-#         output, error_output, status = execute_command(instance_id, permission_command)
-#         if status != 'Success':
-#             logger.error(f'Failed to change permissions: {error_output}')
-#             return False
-
-#        # Prepare the execution command
-#         if parameters_values:  # Check if there are parameters
-#             params_str = ' '.join(parameters_values)  # Join parameters into a string
-#             execute_command_str = f'/home/ubuntu/scripts/{script_name} {params_str}'
-#         else:
-#             execute_command_str = f'/home/ubuntu/scripts/{script_name}'  # No parameters
-
-#         # Execute the script
-#         output, error_output, status = execute_command(instance_id, execute_command_str)
-        
-#         if status == 'Success':
-#             return output
-#         else:
-#             logger.error(f'Script execution failed: {error_output}')
-#             return False
-            
-#     except Exception as e:
-#         logger.error(f'Error executing script: {str(e)}')
-#         return False
-
 def lambda_handler(script_path, parameters_values, pvt_dns):
-    logger.info(f'Starting lambda_handler with pvt_dns: {pvt_dns}')
-    
-    if not pvt_dns:
-        logger.error('Private DNS cannot be None')
-        return False
-
     start_time = datetime.now()
     logger.info(f'Lambda function started at {start_time.isoformat()}')
 
@@ -141,6 +80,8 @@ def lambda_handler(script_path, parameters_values, pvt_dns):
             raise Exception(f'Instance {instance_id} is not running')
         
         script_name = script_path.split('/')[-1]
+        print(script_name, "name")
+        print(script_path, "path")
         
         # Ensure the target directory exists
         create_directory_command = 'mkdir -p /home/ubuntu/scripts'
@@ -163,10 +104,12 @@ def lambda_handler(script_path, parameters_values, pvt_dns):
             logger.error(f'Failed to change permissions: {error_output}')
             return False
 
-        # Prepare the execution command
-        params_str = ' '.join(parameters_values) if parameters_values else ''
-        execute_command_str = f'/home/ubuntu/scripts/{script_name} {params_str}'
-        logger.info(f'Executing script with command: {execute_command_str}')
+       # Prepare the execution command
+        if parameters_values:  # Check if there are parameters
+            params_str = ' '.join(parameters_values)  # Join parameters into a string
+            execute_command_str = f'/home/ubuntu/scripts/{script_name} {params_str}'
+        else:
+            execute_command_str = f'/home/ubuntu/scripts/{script_name}'  # No parameters
 
         # Execute the script
         output, error_output, status = execute_command(instance_id, execute_command_str)
