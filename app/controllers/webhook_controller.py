@@ -124,6 +124,8 @@ def webhook():
                                 for attempt in range(max_retries):
                                     postValidationResult = lambda_handler(postValidation.postValidationScriptPath, postValidationParametersValues, private_dns)
                                     print(postValidationResult,"result")
+                                    print(postValidationResult.strip() == "true","result?>")
+                                    print("=======================================================")
                                     if postValidationResult.strip() == "true":
                                         print("Successfully Remediated and post validation success")
                                         update_audit_post_validation_status(pid, serviceName, problemTitle, postValidationStatus=True, postValidationStartedAt=postValidationScriptStartedAt, comments="Successfully Remediated and post validation success")
