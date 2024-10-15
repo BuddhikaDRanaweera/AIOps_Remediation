@@ -29,7 +29,7 @@ def create_app():
 
     # # Load configuration
     # app.config.from_object(Config(mysql_user, mysql_password, mysql_host, mysql_port, mysql_db))
-    app.config.from_object(Config('root', 'Demoadmin!0', '52.221.217.181', '3306', 'aiops'))
+    app.config.from_object(Config('root', 'Demoadmin!0', 'localhost', '3306', 'aiops'))
 
     # Initialize extensions
     db.init_app(app)
