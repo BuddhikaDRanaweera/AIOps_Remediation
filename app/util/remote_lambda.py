@@ -71,6 +71,7 @@ def execute_command(instance_id, command):
     return output, error_output, status
 
 def lambda_handler(script_path, parameters_values, pvt_dns):
+    print("heyy")
     start_time = datetime.now()
     logger.info(f'Lambda function started at {start_time.isoformat()}')
 

@@ -21,7 +21,7 @@ venv/
 .venv/
 env/
 .env/
-
+myenv/
 # For virtual environment directories created by Poetry
 .venv/
 
