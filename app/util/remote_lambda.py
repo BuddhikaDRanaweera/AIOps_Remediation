@@ -88,6 +88,7 @@ def lambda_handler(script_path, parameters_values, pvt_dns):
         output, error_output, status = execute_command(instance_id, create_directory_command)
         if status != 'Success':
             logger.error(f'Failed to create directory: {error_output}')
+            print("Failed to create directory")
             return False
         
         # Download script to the new path
@@ -95,6 +96,7 @@ def lambda_handler(script_path, parameters_values, pvt_dns):
         output, error_output, status = execute_command(instance_id, download_command)
         if status != 'Success':
             logger.error(f'Failed to download script: {error_output}')
+            print("Failed to download script")
             return False
 
         # Give execute permission
@@ -102,6 +104,7 @@ def lambda_handler(script_path, parameters_values, pvt_dns):
         output, error_output, status = execute_command(instance_id, permission_command)
         if status != 'Success':
             logger.error(f'Failed to change permissions: {error_output}')
+            print("Failed to change permissions")
             return False
 
        # Prepare the execution command
@@ -113,13 +116,15 @@ def lambda_handler(script_path, parameters_values, pvt_dns):
 
         # Execute the script
         output, error_output, status = execute_command(instance_id, execute_command_str)
-        
+        print(status,"status sucees da")
         if status == 'Success':
             return output
         else:
             logger.error(f'Script execution failed: {error_output}')
+            print("Script execution failed")
             return False
             
     except Exception as e:
         logger.error(f'Error executing script: {str(e)}')
+        print("Error executing script")
         return False

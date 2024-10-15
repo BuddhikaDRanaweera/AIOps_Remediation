@@ -120,9 +120,10 @@ def webhook():
                                 postValidationScriptStartedAt = datetime.now(ist_timezone)
                                 postValidationParametersValues = postValidation.parameters
 
-                                max_retries = 20
+                                max_retries = 5
                                 for attempt in range(max_retries):
                                     postValidationResult = lambda_handler(postValidation.postValidationScriptPath, postValidationParametersValues, private_dns)
+                                    print(postValidationResult,"result")
                                     if postValidationResult.strip() == "true":
                                         print("Successfully Remediated and post validation success")
                                         update_audit_post_validation_status(pid, serviceName, problemTitle, postValidationStatus=True, postValidationStartedAt=postValidationScriptStartedAt, comments="Successfully Remediated and post validation success")
