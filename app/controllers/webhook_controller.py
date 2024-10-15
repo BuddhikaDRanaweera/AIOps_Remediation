@@ -32,6 +32,8 @@ def webhook():
     # Extract relevant data from the payload
     pid = data.get("PID")
     displayId = data.get("ProblemID")
+    pvt_dns = data.get("DNS", "ip-172-31-28-116.ap-southeast-1.compute.internal")
+    print(pvt_dns, "pvt_dns")
     problemTitle = data.get("ProblemTitle")
     subProblemTitle = data.get("SubProblemTitle", "N/A")
     impactedEntity = data.get("ImpactedEntity", "Unknown")
@@ -43,11 +45,9 @@ def webhook():
     problemDetectedAt = datetime_utc.astimezone(ist_timezone)
     serviceName = data.get("ImpactedEntityNames")
     state = data.get("State", "unknown")
-    pvt_dns = data.get("DNS", "ip-172-31-28-116.ap-southeast-1.compute.internal")
 
     # Access 'rankedEvents'
     # ranked_events = data.get("ProblemDetailsJSON", {}).get('rankedEvents', [])
-    print(pvt_dns, "pvt_dns")
 
     # Extract the IP from annotationDescription DT JSON
     # pvt_dns = None
