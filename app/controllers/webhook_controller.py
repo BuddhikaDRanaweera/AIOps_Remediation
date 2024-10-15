@@ -67,8 +67,15 @@ def webhook():
             executedProblemId = None
 
             if result is None:
-                print("No existing problem found.")
-                return 'No existing problem', 404
+                create_problem_auto(problemTitle, subProblemTitle, serviceName, pvt_dns, "NOT_RESOLVED")
+                create_audit(
+                    problemTitle, subProblemTitle, impactedEntity, problemImpact,
+                    problemSeverity, problemURL, problemDetectedAt, serviceName, pid,
+                    executedProblemId, displayId, actionType="MANUAL", status="OPEN",
+                    comments="The new problem was identified", 
+                    problemEndAt=None, scriptExecutionStartAt=None
+                )
+                return "Problem Recorded Sucessfully", 201
             
             prob_id = result.get('id', None)
             executedProblemId = prob_id
