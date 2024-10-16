@@ -41,7 +41,8 @@ ChartJS.register(
 const HomePage = () => {
   const navigate = useNavigate();
   const { isLoading, error, data, getData } = useFetch_GET();
-
+  const baseDTUrl = process.env.REACT_APP_DT_BASE_URL;
+  const apiKey = process.env.REACT_APP_DT_TOKEN;
   const [onholdStageMetrics, setOnholdStageMetrics] = useState();
   const [onholdStageMetricsView, setOnholdStageMetricsView] = useState();
 
@@ -96,11 +97,11 @@ const HomePage = () => {
     const fetchDataMetrics = async () => {
       try {
         const response = await axios.get(
-          `https://zxd97598.live.dynatrace.com/api/v2/metrics/query?metricSelector=log.OnholdStageMetric&resolution=10m&from=now-1d&to=now&entitySelector: type("HOST")`,
+          `${baseDTUrl}/api/v2/metrics/query?metricSelector=log.OnholdStageMetric&resolution=10m&from=now-1d&to=now&entitySelector: type("HOST")`,
           {
             params: {
-              "Api-Token":
-                "dt0c01.POCZ4VADXFFGNIJD675DREU7.IPHH2YGQ346FC6K6YTMPOMIJN2MC7C2MSUJXWVZRJ5IEDIVRMSX2FIFP77G6XO6C",
+              "Api-Token": apiKey,
+              // "dt0c01.POCZ4VADXFFGNIJD675DREU7.IPHH2YGQ346FC6K6YTMPOMIJN2MC7C2MSUJXWVZRJ5IEDIVRMSX2FIFP77G6XO6C",
             },
           }
         );
@@ -120,11 +121,11 @@ const HomePage = () => {
     const fetchDataMetrics2 = async () => {
       try {
         const response = await axios.get(
-          `https://zxd97598.live.dynatrace.com/api/v2/metrics/query?metricSelector=log.ImplementationStageMetric&resolution=10m&from=now-1d&to=now&entitySelector:`,
+          `${baseDTUrl}/api/v2/metrics/query?metricSelector=log.ImplementationStageMetric&resolution=10m&from=now-1d&to=now&entitySelector:`,
           {
             params: {
-              "Api-Token":
-                "dt0c01.POCZ4VADXFFGNIJD675DREU7.IPHH2YGQ346FC6K6YTMPOMIJN2MC7C2MSUJXWVZRJ5IEDIVRMSX2FIFP77G6XO6C",
+              "Api-Token": apiKey,
+              // "dt0c01.POCZ4VADXFFGNIJD675DREU7.IPHH2YGQ346FC6K6YTMPOMIJN2MC7C2MSUJXWVZRJ5IEDIVRMSX2FIFP77G6XO6C",
             },
           }
         );
@@ -419,7 +420,9 @@ const HomePage = () => {
                   <h3 className="text-sm font-semibold">Open Problems</h3>
                 </div>
                 <div className="w-[33%]">
-                  <h3 className="text-sm font-semibold">In Progress Problems</h3>
+                  <h3 className="text-sm font-semibold">
+                    In Progress Problems
+                  </h3>
                 </div>
                 <div className="w-[33%]">
                   <h3 className="text-sm font-semibold">Remediated Problems</h3>

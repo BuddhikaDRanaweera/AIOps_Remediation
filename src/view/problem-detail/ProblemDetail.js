@@ -31,14 +31,18 @@ const ProblemDetail = () => {
     useFetch_POST();
   const { data: timeline, getData: getTimeline } = useFetch_GET();
   // console.log(PID);
+  const baseDTUrl=process.env.REACT_APP_DT_BASE_URL
+  const apiKey =process.env.REACT_APP_DT_TOKEN
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [data, setData] = useState();
   console.log(apiData, "apiData");
-  const url = `https://zxd97598.live.dynatrace.com/api/v2/problems/${PID}`;
+  console.log(apiKey,baseDTUrl);
+  
+  const url = `${baseDTUrl}/api/v2/problems/${PID}`;
   // https://xdy01853.live.dynatrace.com/api/v2/apiTokens
-  const apiKey =
-    "dt0c01.POCZ4VADXFFGNIJD675DREU7.IPHH2YGQ346FC6K6YTMPOMIJN2MC7C2MSUJXWVZRJ5IEDIVRMSX2FIFP77G6XO6C";
+  // const apiKey =
+    // "dt0c01.POCZ4VADXFFGNIJD675DREU7.IPHH2YGQ346FC6K6YTMPOMIJN2MC7C2MSUJXWVZRJ5IEDIVRMSX2FIFP77G6XO6C";
   useEffect(() => {
     dispatch(setGlobalLoading({ loading: true }));
 
@@ -261,8 +265,8 @@ const ProblemDetail = () => {
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           {timeline &&
                             (
-                              formatDateToUTCFormatCal(data?.endTime) -
-                              formatDateToUTCFormatCal(timeline?.problemEndAt)
+                              formatDateToUTCFormatCal(timeline?.postValidationStartedAt) -
+                              formatDateToUTCFormatCal(timeline?.preValidationStartedAt)
                             ).toFixed(2) + " sec"}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

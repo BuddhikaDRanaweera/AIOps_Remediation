@@ -36,7 +36,8 @@ ChartJS.register(
 
 function AssistedAnalysis() {
   const { PID, ExecutionId } = useParams();
-
+  const baseDTUrl=process.env.REACT_APP_DT_BASE_URL
+  const apiKey =process.env.REACT_APP_DT_TOKEN
   const dispatch = useDispatch();
   const [data, setData] = useState();
   const [dataCPU, setDataCPU] = useState();
@@ -257,8 +258,8 @@ function AssistedAnalysis() {
     }
   }, [dataCPU]);
 
-  const url = `https://zxd97598.live.dynatrace.com/api/v2/problems/${PID}`;
-  const apiKey = 'dt0c01.POCZ4VADXFFGNIJD675DREU7.IPHH2YGQ346FC6K6YTMPOMIJN2MC7C2MSUJXWVZRJ5IEDIVRMSX2FIFP77G6XO6C'
+  const url = `${baseDTUrl}/api/v2/problems/${PID}`;
+  // const apiKey = 'dt0c01.POCZ4VADXFFGNIJD675DREU7.IPHH2YGQ346FC6K6YTMPOMIJN2MC7C2MSUJXWVZRJ5IEDIVRMSX2FIFP77G6XO6C'
 
 
 
@@ -310,7 +311,7 @@ function AssistedAnalysis() {
         try {
           console.log(endDate, 'end date')
           const response = await axios.get(
-            `https://zxd97598.live.dynatrace.com/api/v2/metrics/query?metricSelector=builtin:host.cpu.(idle,user,system)&resolution=1h&from=${startDate}&to=${endDate}`,
+            `${baseDTUrl}/api/v2/metrics/query?metricSelector=builtin:host.cpu.(idle,user,system)&resolution=1h&from=${startDate}&to=${endDate}`,
             {
               params: {
                 "Api-Token": apiKey,
@@ -338,7 +339,7 @@ function AssistedAnalysis() {
       const fetchDataMemory = async () => {
         try {
           const response = await axios.get(
-            `https://zxd97598.live.dynatrace.com/api/v2/metrics/query?metricSelector=builtin:host.mem.usage&resolution=1h&from=${startDate}&to=${endDate}`,
+            `${baseDTUrl}/api/v2/metrics/query?metricSelector=builtin:host.mem.usage&resolution=1h&from=${startDate}&to=${endDate}`,
             {
               params: {
                 "Api-Token": apiKey,
@@ -366,7 +367,7 @@ function AssistedAnalysis() {
       const fetchDataErrorRate = async () => {
         try {
           const response = await axios.get(
-            `https://zxd97598.live.dynatrace.com/api/v2/metrics/query?metricSelector=builtin:service.errors.total.rate&from=${startDate}&to=${endDate}`,
+            `${baseDTUrl}/api/v2/metrics/query?metricSelector=builtin:service.errors.total.rate&from=${startDate}&to=${endDate}`,
             {
               params: {
                 "Api-Token": apiKey,

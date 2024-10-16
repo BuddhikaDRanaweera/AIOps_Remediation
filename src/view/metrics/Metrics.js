@@ -16,8 +16,8 @@ import {
 import DateRange from "../../components/date-range/DateRange";
 import { convertToIST } from "../../util/helper-func/DateConverter";
 import axios from "axios";
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css'; 
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 ChartJS.register(
   CategoryScale,
@@ -30,8 +30,6 @@ ChartJS.register(
   RadialLinearScale // Add this line
 );
 
-
-
 const Metrics = () => {
   const [onholdStageMetrics, setOnholdStageMetrics] = useState();
   const [refreshOnhoald, setRefreshOnhoald] = useState(false);
@@ -39,6 +37,8 @@ const Metrics = () => {
     refreshImplementationStageMetrics,
     setRefreshImplementationStageMetrics,
   ] = useState(false);
+  const baseDTUrl = process.env.REACT_APP_DT_BASE_URL;
+  const apiKey = process.env.REACT_APP_DT_TOKEN;
   const [onholdStageMetricsView, setOnholdStageMetricsView] = useState();
 
   const [implementationStageMetrics, setImplementationStageMetrics] =
@@ -67,11 +67,11 @@ const Metrics = () => {
     const fetchDataMetrics = async () => {
       try {
         const response = await axios.get(
-          `https://zxd97598.live.dynatrace.com/api/v2/metrics/query?metricSelector=log.OnholdStageMetric&resolution=10m&from=now-1d&to=now&entitySelector: type("HOST")`,
+          `${baseDTUrl}/api/v2/metrics/query?metricSelector=log.OnholdStageMetric&resolution=10m&from=now-1d&to=now&entitySelector: type("HOST")`,
           {
             params: {
-              "Api-Token":
-                "dt0c01.POCZ4VADXFFGNIJD675DREU7.IPHH2YGQ346FC6K6YTMPOMIJN2MC7C2MSUJXWVZRJ5IEDIVRMSX2FIFP77G6XO6C",
+              "Api-Token": apiKey,
+              // "dt0c01.POCZ4VADXFFGNIJD675DREU7.IPHH2YGQ346FC6K6YTMPOMIJN2MC7C2MSUJXWVZRJ5IEDIVRMSX2FIFP77G6XO6C",
             },
           }
         );
@@ -94,11 +94,11 @@ const Metrics = () => {
     const fetchDataMetrics = async () => {
       try {
         const response = await axios.get(
-          `https://zxd97598.live.dynatrace.com/api/v2/metrics/query?metricSelector=log.ImplementationStageMetric&resolution=10m&from=now-1d&to=now&entitySelector:`,
+          `${baseDTUrl}/api/v2/metrics/query?metricSelector=log.ImplementationStageMetric&resolution=10m&from=now-1d&to=now&entitySelector:`,
           {
             params: {
-              "Api-Token":
-                "dt0c01.POCZ4VADXFFGNIJD675DREU7.IPHH2YGQ346FC6K6YTMPOMIJN2MC7C2MSUJXWVZRJ5IEDIVRMSX2FIFP77G6XO6C",
+              "Api-Token": apiKey
+                // "dt0c01.POCZ4VADXFFGNIJD675DREU7.IPHH2YGQ346FC6K6YTMPOMIJN2MC7C2MSUJXWVZRJ5IEDIVRMSX2FIFP77G6XO6C",
             },
           }
         );
@@ -201,15 +201,15 @@ const Metrics = () => {
   };
   const modules = {
     toolbar: [
-      ['bold', 'italic', 'underline'], // Formatting options
-      ['bullet'], // Bullet points
+      ["bold", "italic", "underline"], // Formatting options
+      ["bullet"], // Bullet points
     ],
   };
-  
+
   return (
     <div className="p-3">
       <h3 className="text-lg font-semibold mb-2">Anomaly Metrics</h3>
-      
+
       <div className="flex flex-col md:grid grid-cols-3 gap-2">
         <div className="bg-white shadow-sm shadow-slate-200 flex flex-col gap-2">
           <div className="flex justify-between p-2">
@@ -257,9 +257,14 @@ const Metrics = () => {
               >
                 <IoMdRefresh />
               </h3>
-              <h3 onClick={() => {
-                  setRecentMetricsView((prev) => implementationStageMetricsView);
-                }} className=" text-sm font-semibold my-auto hover:text-orange-700 hover:scale-110">
+              <h3
+                onClick={() => {
+                  setRecentMetricsView(
+                    (prev) => implementationStageMetricsView
+                  );
+                }}
+                className=" text-sm font-semibold my-auto hover:text-orange-700 hover:scale-110"
+              >
                 <SlSizeFullscreen />
               </h3>
             </div>
@@ -272,7 +277,10 @@ const Metrics = () => {
         </div>
       </div>
       {recentMetricsView && (
-        <div onClick={() => setRecentMetricsView(null)} className="bg-blur flex h-lvh justify-center overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50  items-center w-full md:inset-0 p-2   max-h-full">
+        <div
+          onClick={() => setRecentMetricsView(null)}
+          className="bg-blur flex h-lvh justify-center overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50  items-center w-full md:inset-0 p-2   max-h-full"
+        >
           <div className="m-auto  relative  w-full md:w-[80%]  max-h-full overflow-hidden bg-white shadow-sm shadow-slate-400">
             {recentMetricsView && <Line data={recentMetricsView} />}
           </div>

@@ -10,9 +10,10 @@ const Timeline = () => {
 
   const [data, setData] = useState();
   const { PID, ExecutionId, AuditId } = useParams();
-  const url = `https://zxd97598.live.dynatrace.com/api/v2/problems/${PID}`;
-  const apiKey =
-    "dt0c01.POCZ4VADXFFGNIJD675DREU7.IPHH2YGQ346FC6K6YTMPOMIJN2MC7C2MSUJXWVZRJ5IEDIVRMSX2FIFP77G6XO6C";
+  const baseDTUrl=process.env.REACT_APP_DT_BASE_URL
+  const apiKey =process.env.REACT_APP_DT_TOKEN
+  const url = `${baseDTUrl}/api/v2/problems/${PID}`;
+    // "dt0c01.POCZ4VADXFFGNIJD675DREU7.IPHH2YGQ346FC6K6YTMPOMIJN2MC7C2MSUJXWVZRJ5IEDIVRMSX2FIFP77G6XO6C";
 
   useEffect(() => {
     const fetchData = async () => {
