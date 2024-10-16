@@ -62,6 +62,7 @@ def webhook():
     #     print('No ranked events available')
 
     if state == "OPEN":
+        print(state,"state")
         if "ImpactedEntityNames" in data and "ProblemID" in data:
             logger.info("Received webhook notification. Service to restart: %s", serviceName)
             result = find_problem_id(problemTitle, serviceName, pvt_dns)
@@ -88,19 +89,18 @@ def webhook():
 
             if remediation_script_path:
                 # Create audit records
-                create_audit(
-                    problemTitle, subProblemTitle, impactedEntity, problemImpact,
-                    problemSeverity, problemURL, problemDetectedAt, serviceName, pid,
-                    executedProblemId, displayId, actionType="AUTOMATIC", status="IN_PROGRESS",
-                    comments="Problem Detected, Rule Picked",
-                    problemEndAt=None, scriptExecutionStartAt=None
-                )
-
-                print("Problem Detected, Rule Picked")
 
                 # Pre-validation
                 preValidation = get_prevalidation_script_path_by_prob_id(prob_id)
                 if preValidation:
+                    create_audit(
+                        problemTitle, subProblemTitle, impactedEntity, problemImpact,
+                        problemSeverity, problemURL, problemDetectedAt, serviceName, pid,
+                        executedProblemId, displayId, actionType="AUTOMATIC", status="IN_PROGRESS",
+                        comments="Problem Detected, Rule Picked",
+                        problemEndAt=None, scriptExecutionStartAt=None
+                    )
+                    print("Problem Detected, Rule Picked")
                     preValidationStartedAt = datetime.now(ist_timezone)
                     preValidationParametersValues = remediation.parameters
                     preValidationResult = lambda_handler(preValidation.preValidationScriptPath, preValidationParametersValues, private_dns)
@@ -120,7 +120,7 @@ def webhook():
                                 postValidationScriptStartedAt = datetime.now(ist_timezone)
                                 postValidationParametersValues = postValidation.parameters
 
-                                max_retries = 5
+                                max_retries = 20
                                 for attempt in range(max_retries):
                                     postValidationResult = lambda_handler(postValidation.postValidationScriptPath, postValidationParametersValues, private_dns)
                                     print(postValidationResult,"result")
@@ -148,12 +148,13 @@ def webhook():
                         update_audit_pre_validation_status(pid, serviceName, problemTitle, preValidationStatus=False, preValidationStartedAt=datetime.now(ist_timezone), comments="Pre validation failed")
                         return 'Not a valid alert', 400
                 else:
-                    # If no validations detected, directly execute remediation script
-                    if lambda_handler(remediation_script_path, remediationParametersValues, private_dns):
-                        update_audit_remediation_status(pid, serviceName, problemTitle, scriptExecutionStartAt, comments="Successfully Remediated", problemEndAt=datetime.now(ist_timezone), status="IN_PROGRESS")
-                    else:
-                        update_audit_remediation_status(pid, serviceName, problemTitle, scriptExecutionStartAt, comments="Script execution unsuccessful!", problemEndAt=None, status="IN_PROGRESS")
-                        return 'Script execution unsuccessful!', 400
+                    return 'Invalid alert', 400
+                    # # If no validations detected, directly execute remediation script
+                    # if lambda_handler(remediation_script_path, remediationParametersValues, private_dns):
+                    #     update_audit_remediation_status(pid, serviceName, problemTitle, scriptExecutionStartAt, comments="Successfully Remediated", problemEndAt=datetime.now(ist_timezone), status="IN_PROGRESS")
+                    # else:
+                    #     update_audit_remediation_status(pid, serviceName, problemTitle, scriptExecutionStartAt, comments="Script execution unsuccessful!", problemEndAt=None, status="IN_PROGRESS")
+                    #     return 'Script execution unsuccessful!', 400
             else:
                 print("NO script found 2024")
                 logger.warning("No script found in DB")
