@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 import re
+import subprocess
 from flask import Blueprint, jsonify, request
 from pytz import timezone as pytz_timezone, utc
 import logging
@@ -166,4 +167,10 @@ def webhook():
 def test():
     data = request.json
     print(data)
+    try:
+        subprocess.run(['ssh', 'ec2-user@3.88.17.233', 'sudo', 'sh', '/opt/apache-tomcat-10.1.31/bin/startup.sh'], check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"An error occurred: {e}")
+        return "Error executing command", 500
+    
     return "recievd", 200
