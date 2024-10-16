@@ -28,6 +28,7 @@ def webhook():
     # Get the JSON data from the request
     data = request.json
     ist_timezone = pytz_timezone('Asia/Kolkata')
+    print(data, "data")
 
     # Extract relevant data from the payload
     pid = data.get("PID")
@@ -48,7 +49,6 @@ def webhook():
     # Access 'rankedEvents'
     # ranked_events = data.get("ProblemDetailsJSON", {}).get('rankedEvents', [])
     print(pvt_dns, "pvt_dns")
-    print(data, "data")
 
     # Extract the IP from annotationDescription DT JSON
     # pvt_dns = None
