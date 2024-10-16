@@ -93,6 +93,21 @@ def update_audit_status_closed(pid, serviceName, problemTitle, new_status):
         logger.error(f"Error updating audit status: {str(e)}")
         return {"error": str(e)}
 
+# identified a issue when running on lambda that why this check
+def quick_check_audit_status(pid, serviceName, problemTitle):
+    try:
+        audit = Audit.query.filter_by(pid = pid, status ="IN_PROGRESS" ,serviceName = serviceName, problemTitle = problemTitle).first()
+        print(audit,"AUDIT FOUND")
+        if audit:
+            db.session.commit()
+            logger.info(f"Updated audit pre_validation status for PID {pid} successfully")
+            return True
+        else:
+            return False
+    except SQLAlchemyError as e:
+        db.session.rollback()
+        logger.error(f"Error updating pre_validation audit status: {str(e)}")
+        return {"error": str(e)}
 
 def update_audit_pre_validation_status(pid, serviceName, problemTitle, preValidationStatus, preValidationStartedAt, comments):
     try:
