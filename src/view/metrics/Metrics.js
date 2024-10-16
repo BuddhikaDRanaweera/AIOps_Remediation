@@ -32,7 +32,10 @@ ChartJS.register(
 
 const Metrics = () => {
   const [onholdStageMetrics, setOnholdStageMetrics] = useState();
+  const [invalidFileMetircs, setInvalidFileMetircs] = useState();
+  const [invalidFileMetircsView, setInvalidFileMetircsView] = useState();
   const [refreshOnhoald, setRefreshOnhoald] = useState(false);
+  const [refreshInvalidFileMetircs, setRefreshInvalidFileMetircs] = useState(false);
   const [
     refreshImplementationStageMetrics,
     setRefreshImplementationStageMetrics,
@@ -90,6 +93,37 @@ const Metrics = () => {
     };
     fetchDataMetrics();
   }, [refreshOnhoald]);
+  
+  
+  useEffect(() => {
+    const fetchDataMetrics = async () => {
+      try {
+        const response = await axios.get(
+          `${baseDTUrl}/api/v2/metrics/query?metricSelector=log.invalid_file&resolution=10m&from=now-1d&to=now&entitySelector: type("HOST")`,
+          {
+            params: {
+              "Api-Token": apiKey,
+              // "dt0c01.POCZ4VADXFFGNIJD675DREU7.IPHH2YGQ346FC6K6YTMPOMIJN2MC7C2MSUJXWVZRJ5IEDIVRMSX2FIFP77G6XO6C",
+            },
+          }
+        );
+
+        const Invalid_File_Detect_Metric = response?.data?.result[0]?.data[0];
+        // console.log(Stuck_Order_Onhold_Stage, "Metrics data");
+        setInvalidFileMetircs((prev) => ({
+          label: Invalid_File_Detect_Metric?.timestamps,
+          data: Invalid_File_Detect_Metric?.values,
+        }));
+      } catch (error) {
+        // alert(error.message);
+        console.error("Error fetching data: ", error);
+      } finally {
+      }
+    };
+    fetchDataMetrics();
+  }, [refreshInvalidFileMetircs]);
+
+
   useEffect(() => {
     const fetchDataMetrics = async () => {
       try {
@@ -157,6 +191,44 @@ const Metrics = () => {
   }, [onholdStageMetrics]);
 
   useEffect(() => {
+    if (invalidFileMetircs) {
+      const lebInvalidFileMetircs = convertTimestamps(
+        invalidFileMetircs?.label
+      );
+      const dataInvalidFileMetircs = replaceNullWithZero(
+        invalidFileMetircs?.data
+      );
+
+      setInvalidFileMetircsView((prev) => ({
+        labels: lebInvalidFileMetircs,
+        datasets: [
+          {
+            label: "Invalid files",
+            fill: false,
+            lineTension: 0.1,
+            backgroundColor: "rgba(75,192,192,0.4)",
+            borderColor: "rgba(75,192,192,1)",
+            borderCapStyle: "butt",
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderJoinStyle: "miter",
+            pointBorderColor: "rgba(75,192,192,1)",
+            pointBackgroundColor: "#fff",
+            pointBorderWidth: 1,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: "rgba(75,192,192,1)",
+            pointHoverBorderColor: "rgba(220,220,220,1)",
+            pointHoverBorderWidth: 2,
+            pointRadius: 1,
+            pointHitRadius: 10,
+            data: dataInvalidFileMetircs,
+          },
+        ],
+      }));
+    }
+  }, [invalidFileMetircs]);
+
+  useEffect(() => {
     if (implementationStageMetrics) {
       const lebOnholdStageMetrics = convertTimestamps(
         implementationStageMetrics?.label
@@ -211,7 +283,7 @@ const Metrics = () => {
       <h3 className="text-lg font-semibold mb-2">Anomaly Metrics</h3>
 
       <div className="flex flex-col md:grid grid-cols-3 gap-2">
-        <div className="bg-white shadow-sm shadow-slate-200 flex flex-col gap-2">
+        {/* <div className="bg-white shadow-sm shadow-slate-200 flex flex-col gap-2">
           <div className="flex justify-between p-2">
             <div>
               <h3 className="font-thin text-sm">On hold stage metric</h3>
@@ -239,8 +311,9 @@ const Metrics = () => {
           <div>
             {onholdStageMetricsView && <Line data={onholdStageMetricsView} />}
           </div>
-        </div>
-        <div className="bg-white shadow-sm shadow-slate-200 flex flex-col gap-2">
+        </div> */}
+
+        {/* <div className="bg-white shadow-sm shadow-slate-200 flex flex-col gap-2">
           <div className="flex justify-between p-2">
             <div>
               <h3 className=" font-thin text-sm">
@@ -274,7 +347,44 @@ const Metrics = () => {
               <Line data={implementationStageMetricsView} />
             )}
           </div>
+        </div> */}
+
+        <div className="bg-white shadow-sm shadow-slate-200 flex flex-col gap-2">
+          <div className="flex justify-between p-2">
+            <div>
+              <h3 className=" font-thin text-sm">
+                Invalid file detection
+              </h3>
+            </div>
+            <div className="my-auto flex justify-end gap-2">
+              <h3
+                onClick={() => {
+                  setInvalidFileMetircsView(null);
+                  setRefreshInvalidFileMetircs((prev) => !prev);
+                }}
+                className=" text-xl hover:text-orange-700 my-auto hover:scale-110"
+              >
+                <IoMdRefresh />
+              </h3>
+              <h3
+                onClick={() => {
+                  setRecentMetricsView(
+                    (prev) => invalidFileMetircsView
+                  );
+                }}
+                className=" text-sm font-semibold my-auto hover:text-orange-700 hover:scale-110"
+              >
+                <SlSizeFullscreen />
+              </h3>
+            </div>
+          </div>
+          <div>
+            {invalidFileMetircsView && (
+              <Line data={invalidFileMetircsView} />
+            )}
+          </div>
         </div>
+
       </div>
       {recentMetricsView && (
         <div
