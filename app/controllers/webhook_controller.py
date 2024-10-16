@@ -161,3 +161,9 @@ def webhook():
         logger.info("Dynatrace unknown notification received.")
         update_audit_status_to_failed(pid)
         return 'Dynatrace message', 200
+
+@webhook_bp.route('/test', methods=['POST'])
+def test():
+    data = request.json
+    print(data)
+    return "recievd", 200
