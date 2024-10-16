@@ -28,8 +28,6 @@ def webhook():
     # Get the JSON data from the request
     data = request.json
     ist_timezone = pytz_timezone('Asia/Kolkata')
-    print(data, "data")
-
     # Extract relevant data from the payload
     pid = data.get("PID")
     displayId = data.get("ProblemID")
@@ -46,25 +44,10 @@ def webhook():
     state = data.get("State", "unknown")
     pvt_dns = data.get("DNS", "ip-172-31-28-116.ap-southeast-1.compute.internal")
 
-    # Access 'rankedEvents'
-    # ranked_events = data.get("ProblemDetailsJSON", {}).get('rankedEvents', [])
-    print(pvt_dns, "pvt_dns")
-
-    # Extract the IP from annotationDescription DT JSON
-    # pvt_dns = None
-    # if ranked_events:  # Check if there are any ranked events
-    #     # Access the first event's annotationDescription
-    #     annotation_description = ranked_events[0].get('annotationDescription', '')
-    #     print(annotation_description, "annotation_description")
-    #     match = re.search(r'host (.+?) has been', annotation_description)
-    #     if match:
-    #         pvt_dns = match.group(1)
-    # else:
-    #     print('No ranked events available')
-
+    print(state,"state")
     if state == "OPEN":
-        print(state,"state")
         if quick_check_audit_status:
+            print(quick_check_audit_status,"quick_check_audit_status")
             return "Already Recorded", 204
         else:
             if "ImpactedEntityNames" in data and "ProblemID" in data:
