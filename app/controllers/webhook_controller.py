@@ -63,7 +63,7 @@ def webhook():
 
     if state == "OPEN":
         print(state,"state")
-        if quick_check_audit_status == True:
+        if quick_check_audit_status:
             return "Already Recorded", 204
         else:
             if "ImpactedEntityNames" in data and "ProblemID" in data:
