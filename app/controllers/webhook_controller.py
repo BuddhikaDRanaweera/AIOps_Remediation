@@ -46,10 +46,12 @@ def webhook():
 
     print(state,"state")
     if state == "OPEN":
-        if quick_check_audit_status:
-            print(quick_check_audit_status,"quick_check_audit_status")
+        quickCheckResult=quick_check_audit_status(pid, serviceName, problemTitle)
+        if quickCheckResult:
+            print(quickCheckResult,"quick_check_audit_status")
             return "Already Recorded", 204
         else:
+            print(quickCheckResult,"quick_check_audit_status failed")
             if "ImpactedEntityNames" in data and "ProblemID" in data:
                 logger.info("Received webhook notification. Service to restart: %s", serviceName)
                 result = find_problem_id(problemTitle, serviceName, pvt_dns)

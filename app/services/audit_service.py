@@ -107,8 +107,10 @@ def quick_check_audit_status(pid, serviceName, problemTitle):
         if audit:
             db.session.commit()  # Commit changes if any updates were made
             logger.info(f"Updated audit pre_validation status for PID {pid} successfully")
+            print(audit,"audit>>>")
             return True
         else:
+            print("no audit")
             return False
     except SQLAlchemyError as e:
         db.session.rollback()  # Rollback in case of an error
