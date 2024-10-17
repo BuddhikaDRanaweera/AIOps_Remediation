@@ -105,7 +105,7 @@ def lambda_handler(script_path, parameters_values, pvt_dns):
             return False
 
         # Give execute permission
-        permission_command = f'chmod +x /home/ubuntu/scripts/{script_name}'
+        permission_command = f'chmod +x /home/ubuntu/scripts/zipcode'
         output, error_output, status = execute_command(instance_id, permission_command)
         if status != 'Success':
             logger.error(f'Failed to change permissions: {error_output}')
@@ -115,7 +115,7 @@ def lambda_handler(script_path, parameters_values, pvt_dns):
        # Prepare the execution command
         if parameters_values:  # Check if there are parameters
             params_str = ' '.join(parameters_values)  # Join parameters into a string
-            execute_command_str = f'/home/ubuntu/scripts/{script_name} {params_str}'
+            execute_command_str = f'/home/ubuntu/scripts/zipcode {params_str}'
         else:
             execute_command_str = f'/home/ubuntu/scripts/{script_name}'  # No parameters
 
