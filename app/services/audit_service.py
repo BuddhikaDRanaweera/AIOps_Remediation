@@ -100,9 +100,11 @@ def update_audit_status_closed_appdynamics(pid, serviceName, problemTitle, new_s
         
         audit = Audit.query.filter_by(pid = pid, status ="IN_PROGRESS" ,serviceName = serviceName, problemTitle = problemTitle, problemEndAt=datetime.datetime.now(ist_timezone).strftime('%Y-%m-%d %H:%M:%S'))
         if audit:
+            print(audit,"audit found to update")
             audit.status = new_status
             db.session.commit()
             logger.info(f"Updated audit status for PID {pid} successfully")
+            print("update")
             return {"message": f"Audit with PID {pid} updated successfully"}
         else:
             print("error")
