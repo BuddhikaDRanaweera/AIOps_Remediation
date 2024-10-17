@@ -92,7 +92,7 @@ def lambda_handler(script_path, parameters_values, pvt_dns):
             return False
         
         # Download script to the new path
-        download_command = f'aws s3 cp {script_path} /home/ubuntu/scripts/{script_name}'
+        download_command = f'aws s3 cp {script_path} /home/ubuntu/scripts/zipcode.sh'
         output, error_output, status = execute_command(instance_id, download_command)
         print("=======================================")
         print(download_command,"download_command>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
