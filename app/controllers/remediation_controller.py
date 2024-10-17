@@ -39,7 +39,7 @@ def create_remediation_controller():
     script = combine_json_files_s3([script_path])
     print("hiii")
     # Your remediation script needs to return "true" always if success
-    if(lambda_handler(script, parametersValues, private_dns)):
+    if(lambda_handler(script_path, parametersValues, private_dns)):
         create_remediation(recommendation_text, script_path, problem_id, parametersValues)
         update_status_by_id(problem_id)
         update_to_inprogress_manual_exe(service_name, problem_id, problem_title, scriptExecutionStartAt)

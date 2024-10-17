@@ -92,7 +92,7 @@ def lambda_handler(script_path, parameters_values, pvt_dns):
             return False
         
         # Download script to the new path
-        download_command = f'aws s3 cp {script_path} /home/ubuntu/scripts/zipcode'
+        download_command = f'aws s3 cp {script_path} /home/ubuntu/scripts/{script_name}'
         output, error_output, status = execute_command(instance_id, download_command)
         print("=======================================")
         print(download_command,"download_command>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
@@ -105,7 +105,7 @@ def lambda_handler(script_path, parameters_values, pvt_dns):
             return False
 
         # Give execute permission
-        permission_command = f'chmod +x /home/ubuntu/scripts/zipcode'
+        permission_command = f'chmod +x /home/ubuntu/scripts/{script_name}'
         output, error_output, status = execute_command(instance_id, permission_command)
         if status != 'Success':
             logger.error(f'Failed to change permissions: {error_output}')
@@ -115,7 +115,7 @@ def lambda_handler(script_path, parameters_values, pvt_dns):
        # Prepare the execution command
         if parameters_values:  # Check if there are parameters
             params_str = ' '.join(parameters_values)  # Join parameters into a string
-            execute_command_str = f'/home/ubuntu/scripts/zipcode {params_str}'
+            execute_command_str = f'/home/ubuntu/scripts/{script_name} {params_str}'
         else:
             execute_command_str = f'/home/ubuntu/scripts/{script_name}'  # No parameters
 
