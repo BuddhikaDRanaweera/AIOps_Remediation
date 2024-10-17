@@ -94,6 +94,7 @@ def update_audit_status_closed(pid, serviceName, problemTitle, new_status):
         return {"error": str(e)}
 
 def update_audit_status_closed_appdynamics(pid, serviceName, problemTitle, new_status):
+    print(pid, serviceName, problemTitle, new_status)
     try:
         ist_timezone = timezone('Asia/Kolkata')
         
@@ -104,9 +105,11 @@ def update_audit_status_closed_appdynamics(pid, serviceName, problemTitle, new_s
             logger.info(f"Updated audit status for PID {pid} successfully")
             return {"message": f"Audit with PID {pid} updated successfully"}
         else:
+            print("error")
             return {"error": f"Audit with PID {pid} not found"}, 404
     except SQLAlchemyError as e:
         db.session.rollback()
+        print("Error updating audit status:")
         logger.error(f"Error updating audit status: {str(e)}")
         return {"error": str(e)}
 
