@@ -11,7 +11,7 @@ from app.services.validation_service import (
     get_postvalidation_script_path_by_prob_id
 )
 from app.services.audit_service import (
-    create_audit, quick_check_audit_status, update_audit_status_closed, update_audit_status_to_failed,
+    create_audit, quick_check_audit_status, update_audit_status_closed, update_audit_status_closed_appdynamics, update_audit_status_to_failed,
     update_audit_pre_validation_status, update_audit_remediation_status,
     update_audit_post_validation_status
 )
@@ -199,7 +199,7 @@ def appDynamics():
         return "Problem Recorded Sucessfully", 201
     elif state == "RESOLVED":
         logger.info("Dynatrace Resolved notification received. Service up and running")
-        update_audit_status_closed(10000, serviceName, problemTitle, "RESOLVED")
+        update_audit_status_closed_appdynamics(10000, serviceName, problemTitle, "CLOSED")
         return 'Dynatrace Resolved Confirmation', 200
 
     else:

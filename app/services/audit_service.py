@@ -93,6 +93,23 @@ def update_audit_status_closed(pid, serviceName, problemTitle, new_status):
         logger.error(f"Error updating audit status: {str(e)}")
         return {"error": str(e)}
 
+def update_audit_status_closed_appdynamics(pid, serviceName, problemTitle, new_status):
+    try:
+        ist_timezone = timezone('Asia/Kolkata')
+        
+        audit = Audit.query.filter_by(pid = pid, status ="IN_PROGRESS" ,serviceName = serviceName, problemTitle = problemTitle, problemEndAt=datetime.datetime.now(ist_timezone).strftime('%Y-%m-%d %H:%M:%S').first())
+        if audit:
+            audit.status = new_status
+            db.session.commit()
+            logger.info(f"Updated audit status for PID {pid} successfully")
+            return {"message": f"Audit with PID {pid} updated successfully"}
+        else:
+            return {"error": f"Audit with PID {pid} not found"}, 404
+    except SQLAlchemyError as e:
+        db.session.rollback()
+        logger.error(f"Error updating audit status: {str(e)}")
+        return {"error": str(e)}
+
 # identified a issue when running on lambda that why this check
 def quick_check_audit_status(pid, serviceName, problemTitle):
     try:
