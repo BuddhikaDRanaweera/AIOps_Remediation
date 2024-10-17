@@ -98,10 +98,11 @@ def update_audit_status_closed_appdynamics(pid, serviceName, problemTitle, new_s
     try:
         ist_timezone = timezone('Asia/Kolkata')
         
-        audit = Audit.query.filter_by(status ="IN_PROGRESS" ,serviceName = serviceName, problemTitle = problemTitle, problemEndAt=datetime.datetime.now(ist_timezone))
+        audit = Audit.query.filter_by(pid, status ="IN_PROGRESS" ,serviceName = serviceName, problemTitle = problemTitle)
         if audit:
             print(datetime.datetime.now(ist_timezone).strftime('%Y-%m-%d %H:%M:%S'),"audit found to update")
             audit.status = new_status
+            audit.problemEndAt=datetime.datetime.now(ist_timezone).strftime('%Y-%m-%d %H:%M:%S')
             db.session.commit()
             logger.info(f"Updated audit status for PID {pid} successfully")
             print(f"Audit with PID {pid} updated successfully")
